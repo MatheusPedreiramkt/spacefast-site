@@ -197,10 +197,10 @@ export default function Hero() {
         <div className="grid lg:grid-cols-2 gap-14 lg:gap-10 items-center">
 
           {/* ── Left: Text ─────────────────────────────────────────────────── */}
-          <div className="space-y-7 lg:space-y-8">
+          <div className="space-y-7 lg:space-y-8 text-center lg:text-left">
 
             {/* Badge */}
-            <motion.div {...animProps(0)} className="inline-block">
+            <motion.div {...animProps(0)} className="flex justify-center lg:justify-start">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/8 text-blue-300 text-sm font-medium">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse shrink-0" />
                 Especialistas em Geração de Clientes
@@ -222,7 +222,7 @@ export default function Hero() {
             {/* Subtitle */}
             <motion.p
               {...animProps(0.2)}
-              className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px]"
+              className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px] mx-auto lg:mx-0"
             >
               A SpaceFast cria sites estratégicos que{" "}
               <span className="text-gray-200 font-medium">trabalham por você 24h</span> —
@@ -234,7 +234,7 @@ export default function Hero() {
             {/* CTAs */}
             <motion.div
               {...animProps(0.3)}
-              className="flex flex-col sm:flex-row gap-3"
+              className="flex flex-col sm:flex-row gap-3 items-center lg:items-start"
             >
               {/* Primary CTA */}
               <a
@@ -271,7 +271,7 @@ export default function Hero() {
             {/* Social proof */}
             <motion.div
               {...animProps(0.45)}
-              className="flex items-center gap-4 pt-1"
+              className="flex items-center gap-4 pt-1 justify-center lg:justify-start"
             >
               <div className="flex -space-x-2.5" aria-hidden>
                 {(["bg-blue-500", "bg-indigo-500", "bg-cyan-500", "bg-violet-500"] as const).map(
