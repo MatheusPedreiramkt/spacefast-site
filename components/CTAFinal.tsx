@@ -37,7 +37,7 @@ export default function CTAFinal() {
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
-          transition={{ duration: 0.65, ease: EASE }}
+          transition={{ duration: 0.85, ease: EASE }}
         >
           {/* Card wrapper for depth */}
           <div className="text-center glass-strong rounded-3xl border border-white/8 px-8 py-14 sm:px-14 shadow-2xl shadow-blue-500/5">
@@ -45,7 +45,7 @@ export default function CTAFinal() {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={VIEWPORT}
-              transition={{ delay: 0.1, duration: 0.45, ease: EASE }}
+              transition={{ delay: 0.12, duration: 0.6, ease: EASE }}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/28 bg-blue-500/8 text-blue-300 text-sm font-medium mb-8"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse shrink-0" />

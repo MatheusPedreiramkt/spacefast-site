@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { testimonials } from "@/lib/data"
 import { Star } from "lucide-react"
-import { stagger, fadeUp, VIEWPORT } from "@/lib/motion"
+import { stagger, fadeUp, VIEWPORT, SECTION_ANIM } from "@/lib/motion"
 
 export default function Testimonials() {
   return (
@@ -13,10 +13,8 @@ export default function Testimonials() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          {...SECTION_ANIM}
           viewport={VIEWPORT}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           className="text-center max-w-2xl mx-auto mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-yellow-500/28 bg-yellow-500/8 text-yellow-300 text-sm font-medium mb-6">
@@ -84,7 +82,7 @@ export default function Testimonials() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={VIEWPORT}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.4, duration: 0.65 }}
           className="mt-10 flex items-center justify-center gap-3"
         >
           <div className="flex gap-0.5" aria-hidden>

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { faqItems } from "@/lib/data"
 import { WHATSAPP_URL } from "@/lib/constants"
 import { ChevronDown } from "lucide-react"
-import { VIEWPORT, EASE } from "@/lib/motion"
+import { VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
@@ -17,10 +17,8 @@ export default function FAQ() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          {...SECTION_ANIM}
           viewport={VIEWPORT}
-          transition={{ duration: 0.55, ease: EASE }}
           className="text-center max-w-2xl mx-auto mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/8 text-blue-300 text-sm font-medium mb-6">
@@ -49,7 +47,7 @@ export default function FAQ() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={VIEWPORT}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.65, delay: 0.12 }}
           className="max-w-3xl mx-auto space-y-2.5"
         >
           {/* índices 0,1,2,5 — as 4 perguntas mais relevantes para conversão */}

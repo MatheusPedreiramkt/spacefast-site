@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Globe, Rocket, BarChart2, Megaphone } from "lucide-react"
-import { stagger, fadeUp, VIEWPORT } from "@/lib/motion"
+import { stagger, fadeUp, VIEWPORT, SECTION_ANIM } from "@/lib/motion"
 import type { LucideIcon } from "lucide-react"
 
 interface SolutionCard {
@@ -47,10 +47,8 @@ export default function Solutions() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          {...SECTION_ANIM}
           viewport={VIEWPORT}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           className="text-center max-w-2xl mx-auto mb-10"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/8 text-purple-300 text-sm font-medium mb-5">

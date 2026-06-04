@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import { solutions } from "@/lib/data"
 import { WHATSAPP_URL } from "@/lib/constants"
 import { ArrowRight } from "lucide-react"
-import { stagger, fadeUp, VIEWPORT } from "@/lib/motion"
+import { stagger, fadeUp, VIEWPORT, SECTION_ANIM } from "@/lib/motion"
 
 export default function Solution() {
   return (
@@ -21,10 +21,8 @@ export default function Solution() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          {...SECTION_ANIM}
           viewport={VIEWPORT}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           className="text-center max-w-3xl mx-auto mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/8 text-blue-300 text-sm font-medium mb-6">
@@ -66,7 +64,7 @@ export default function Solution() {
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
-          transition={{ delay: 0.3, duration: 0.5 }}
+          transition={{ delay: 0.3, duration: 0.65 }}
           className="mt-12 text-center"
         >
           <a

@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import { monthlyPlanFeatures } from "@/lib/data"
 import { WHATSAPP_URL } from "@/lib/constants"
 import { CheckCircle2, ArrowRight, Sparkles, TrendingUp } from "lucide-react"
-import { staggerFast, fadeUp, VIEWPORT } from "@/lib/motion"
+import { staggerFast, fadeUp, VIEWPORT, SECTION_ANIM } from "@/lib/motion"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 import { trackPlanClick, trackWhatsAppClick } from "@/lib/analytics"
 
@@ -24,10 +24,8 @@ export default function MonthlyPlan() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          {...SECTION_ANIM}
           viewport={VIEWPORT}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           className="text-center max-w-2xl mx-auto mb-12"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/8 text-emerald-300 text-sm font-medium mb-6">
@@ -50,7 +48,7 @@ export default function MonthlyPlan() {
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
-          transition={{ duration: 0.65, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.85, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-5xl mx-auto"
         >
           <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-blue-500/8">
@@ -131,7 +129,7 @@ export default function MonthlyPlan() {
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
-          transition={{ delay: 0.35, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ delay: 0.35, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-5xl mx-auto mt-6"
         >
           <div className="rounded-2xl border border-white/8 bg-white/[0.03] backdrop-blur-sm px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">

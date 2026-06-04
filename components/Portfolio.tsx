@@ -5,7 +5,7 @@ import Image from "next/image"
 import { portfolioProjects } from "@/lib/data"
 import { WHATSAPP_URL } from "@/lib/constants"
 import { ArrowRight, CheckCircle2, ExternalLink } from "lucide-react"
-import { stagger, fadeUp, VIEWPORT, EASE } from "@/lib/motion"
+import { stagger, fadeUp, VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
 import type { PortfolioProject } from "@/lib/data"
 import { trackPortfolioClick } from "@/lib/analytics"
 
@@ -188,10 +188,8 @@ export default function Portfolio() {
 
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          {...SECTION_ANIM}
           viewport={VIEWPORT}
-          transition={{ duration: 0.6, ease: EASE }}
           className="text-center max-w-3xl mx-auto mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/8 text-cyan-300 text-sm font-medium mb-6">
@@ -230,7 +228,7 @@ export default function Portfolio() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={VIEWPORT}
-          transition={{ duration: 0.5, delay: 0.35 }}
+          transition={{ duration: 0.65, delay: 0.3 }}
           className="mt-12 text-center"
         >
           <a
