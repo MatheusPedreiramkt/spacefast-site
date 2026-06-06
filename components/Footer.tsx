@@ -15,14 +15,14 @@ const QUICK_LINKS = [
   { label: "Contato", href: "#contato" },
 ]
 
-const SERVICE_LINKS = [
-  "Criação de sites",
-  "Landing pages",
-  "Google Ads",
-  "Facebook & Instagram Ads",
-  "SEO básico",
-  "Manutenção e suporte",
-  "Pacote mensal",
+const SERVICE_LINKS: { label: string; href?: string }[] = [
+  { label: "Criação de sites", href: "/criacao-de-sites" },
+  { label: "Landing pages" },
+  { label: "Google Ads" },
+  { label: "Facebook & Instagram Ads" },
+  { label: "SEO básico" },
+  { label: "Manutenção e suporte" },
+  { label: "Pacote mensal" },
 ]
 
 // Inline SVG for Instagram brand icon (not available in lucide-react v1.17)
@@ -122,8 +122,17 @@ export default function Footer() {
             <h4 className="text-white text-sm font-semibold mb-4">Serviços</h4>
             <ul className="space-y-2.5">
               {SERVICE_LINKS.map((s) => (
-                <li key={s}>
-                  <span className="text-gray-600 text-sm">{s}</span>
+                <li key={s.label}>
+                  {s.href ? (
+                    <a
+                      href={s.href}
+                      className="text-gray-500 text-sm hover:text-gray-300 transition-colors focus-visible:text-white"
+                    >
+                      {s.label}
+                    </a>
+                  ) : (
+                    <span className="text-gray-600 text-sm">{s.label}</span>
+                  )}
                 </li>
               ))}
             </ul>
