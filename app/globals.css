@@ -199,3 +199,83 @@ body {
 @media (min-width: 641px) and (max-width: 1023px) {
   .card-grid-3 { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ─── Course landing page tokens ─────────────────────────────────────── */
+@theme {
+  --color-neon: #00e676;
+  --color-neon-light: #69f0ae;
+  --color-neon-dark: #00a152;
+  --color-course-bg: #080808;
+  --color-course-bg-alt: #0d0d0d;
+  --color-course-card: #111111;
+  --color-course-card-2: #141414;
+  --color-course-border: #1e1e1e;
+}
+
+/* Course landing utilities */
+.glow-neon {
+  box-shadow: 0 0 25px rgba(0, 230, 118, 0.35), 0 0 50px rgba(0, 230, 118, 0.12);
+}
+
+.glow-neon-sm {
+  box-shadow: 0 0 12px rgba(0, 230, 118, 0.25), 0 0 24px rgba(0, 230, 118, 0.06);
+}
+
+.text-neon-gradient {
+  background: linear-gradient(135deg, #00e676 0%, #69f0ae 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.neon-btn {
+  background: linear-gradient(135deg, #00e676 0%, #00a152 100%);
+  color: #000;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.neon-btn:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 30px rgba(0, 230, 118, 0.45), 0 8px 24px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.neon-btn:active {
+  transform: translateY(0);
+}
+
+.dark-card {
+  background: #111111;
+  border: 1px solid #1e1e1e;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark-card:hover {
+  border-color: rgba(0, 230, 118, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.glass-dark {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.grid-bg-dark {
+  background-image:
+    linear-gradient(rgba(0, 230, 118, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 230, 118, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neon-btn {
+    transition: none;
+  }
+  .dark-card {
+    transition: none;
+  }
+}
