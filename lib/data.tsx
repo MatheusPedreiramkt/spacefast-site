@@ -426,7 +426,7 @@ export const faqItems: FAQItem[] = [
   {
     question: "Posso pagar mensalmente?",
     answer:
-      "Sim! Temos o pacote mensal completo de marketing por R$597/mês que inclui site, domínio, hospedagem, anúncios, suporte e relatórios. É a melhor opção para quem quer resultado contínuo.",
+      "Sim! Temos o pacote mensal completo de marketing por R$897/mês que inclui site, domínio, hospedagem, anúncios, suporte e relatórios. É a melhor opção para quem quer resultado contínuo.",
   },
 ]
 

@@ -69,7 +69,7 @@ export default function MonthlyPlan() {
                   <div className="mb-2">
                     <div className="flex items-end gap-2">
                       <span className="text-5xl lg:text-6xl font-black text-white tracking-tighter">
-                        R$597
+                        R$897
                       </span>
                       <span className="text-gray-400 text-lg font-medium mb-1.5">/mês</span>
                     </div>
