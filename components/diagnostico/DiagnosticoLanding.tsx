@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import {
   ArrowRight,
@@ -49,19 +49,45 @@ const PARA_QUEM_NAO_E = [
   "Quem quer só \"olhar preço\"",
 ] as const
 
-function VideoPlaceholder() {
+function HeroVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  function handlePlay() {
+    videoRef.current?.play()
+    setIsPlaying(true)
+  }
+
   return (
-    <div className="relative w-full max-w-[560px] mx-auto select-none">
+    <div className="relative w-full max-w-[300px] sm:max-w-[340px] mx-auto select-none">
       <div className="absolute -inset-10 bg-gradient-to-br from-blue-600/22 via-purple-600/10 to-cyan-600/14 blur-3xl rounded-full" />
-      <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/12 shadow-2xl shadow-black/70 bg-gradient-to-br from-[#0d1424] to-[#0a0f1c] flex items-center justify-center">
-        <div className="absolute inset-0 bg-grid opacity-20" />
-        <button
-          type="button"
-          aria-label="Reproduzir vídeo de apresentação"
-          className="relative z-10 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/10 border border-white/25 backdrop-blur-sm flex items-center justify-center hover:bg-white/15 transition-colors focus-visible:ring-2 focus-visible:ring-blue-400"
+      <div className="relative aspect-[9/16] rounded-2xl overflow-hidden border border-white/12 shadow-2xl shadow-black/70 bg-[#0a0f1c]">
+        <video
+          ref={videoRef}
+          src="/video-apresentacao.mp4"
+          poster="/video-apresentacao-poster.jpg"
+          preload="none"
+          playsInline
+          controls={isPlaying}
+          onPause={() => setIsPlaying(false)}
+          onEnded={() => setIsPlaying(false)}
+          className="absolute inset-0 w-full h-full object-cover"
         >
-          <PlayCircle className="w-9 h-9 sm:w-11 sm:h-11 text-white" strokeWidth={1.5} />
-        </button>
+          Seu navegador não suporta vídeo.
+        </video>
+
+        {!isPlaying && (
+          <button
+            type="button"
+            onClick={handlePlay}
+            aria-label="Reproduzir vídeo de apresentação"
+            className="absolute inset-0 z-10 flex items-center justify-center bg-black/15 hover:bg-black/25 transition-colors"
+          >
+            <span className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/10 border border-white/25 backdrop-blur-sm flex items-center justify-center focus-visible:ring-2 focus-visible:ring-blue-400">
+              <PlayCircle className="w-9 h-9 sm:w-11 sm:h-11 text-white" strokeWidth={1.5} />
+            </span>
+          </button>
+        )}
       </div>
     </div>
   )
@@ -152,7 +178,7 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
           >
-            <VideoPlaceholder />
+            <HeroVideo />
           </motion.div>
         </div>
       </div>

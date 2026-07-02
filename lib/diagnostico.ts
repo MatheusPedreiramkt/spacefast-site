@@ -4,7 +4,7 @@
 import { WHATSAPP_NUMBER } from "@/lib/constants"
 
 // Usado no Hero, no bloco de Preço e na pergunta P7 do quiz.
-export const DIAGNOSTICO_PRICE = "500"
+export const DIAGNOSTICO_PRICE = "800"
 
 // ─── Score ───────────────────────────────────────────────────────────────────
 // Mapeia cada opção de cada pergunta ao seu valor de pontuação.
