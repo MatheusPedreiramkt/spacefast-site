@@ -12,7 +12,6 @@ import { trackWhatsAppClick } from "@/lib/analytics"
 const NAV_LINKS = [
   { label: "Início", href: "#inicio" },
   { label: "Portfólio", href: "#portfolio" },
-  { label: "Plano", href: "#plano" },
   { label: "Depoimentos", href: "#depoimentos" },
   { label: "Contato", href: "#contato" },
 ]

@@ -15,6 +15,9 @@ const ACCENT: Record<string, { rgb: string; bg: string }> = {
   emerald: { rgb: "16, 185, 129",  bg: "linear-gradient(150deg,#071a10 0%,#070d1c 55%)" },
   purple:  { rgb: "139, 92, 246",  bg: "linear-gradient(150deg,#0f0a20 0%,#070d1c 55%)" },
   orange:  { rgb: "249, 115, 22",  bg: "linear-gradient(150deg,#180a04 0%,#070d1c 55%)" },
+  amber:   { rgb: "245, 158, 11",  bg: "linear-gradient(150deg,#1a1206 0%,#070d1c 55%)" },
+  sky:     { rgb: "14, 165, 233",  bg: "linear-gradient(150deg,#071726 0%,#070d1c 55%)" },
+  pink:    { rgb: "236, 72, 153",  bg: "linear-gradient(150deg,#1a0a14 0%,#070d1c 55%)" },
 }
 
 // ─── Framer Motion variants ───────────────────────────────────────────────────
@@ -235,10 +238,10 @@ export default function Portfolio({ onCtaClick }: { onCtaClick?: () => void } = 
             <button
               type="button"
               onClick={onCtaClick}
-              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 text-gray-300 text-sm font-medium hover:border-white/20 hover:text-white hover:bg-white/4 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-white/40"
+              className="group inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] hover:from-blue-500 hover:to-cyan-400 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
             >
               Quero um projeto assim
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" aria-hidden />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" aria-hidden />
             </button>
           ) : (
             <a

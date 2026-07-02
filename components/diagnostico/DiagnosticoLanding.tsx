@@ -120,14 +120,6 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
           <div className="space-y-6 lg:space-y-7 text-center lg:text-left">
-            <motion.div {...anim(0)} className="flex justify-center lg:justify-start">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/8 text-blue-300 text-sm font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse shrink-0" />
-                Diagnóstico gratuito
-                <ChevronRight className="w-3.5 h-3.5 opacity-60" />
-              </span>
-            </motion.div>
-
             <motion.h1
               {...anim(0.1)}
               className="text-[2.1rem] sm:text-[2.8rem] lg:text-[3.2rem] font-black leading-[1.1] tracking-tighter text-white"
@@ -380,12 +372,10 @@ function CTAFinalSection({ onStart }: { onStart: () => void }) {
 
 export default function DiagnosticoLanding({
   onStart,
-  onStartForm,
   scrollToPortfolio,
   onScrolled,
 }: {
   onStart: () => void
-  onStartForm: () => void
   scrollToPortfolio: boolean
   onScrolled: () => void
 }) {
@@ -405,7 +395,7 @@ export default function DiagnosticoLanding({
       <HeroSection onStart={onStart} onViewPortfolio={handleViewPortfolio} />
       <ProblemaSection />
       <SolucaoSection />
-      <Portfolio onCtaClick={onStartForm} />
+      <Portfolio onCtaClick={onStart} />
       <ParaQuemSection />
       <PrecoSection />
       <CTAFinalSection onStart={onStart} />

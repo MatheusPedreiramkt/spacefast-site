@@ -14,7 +14,6 @@ import {
   classify,
   buildWhatsAppUrl,
   onLeadComplete,
-  QUESTIONS,
   type Answers,
   type QuestionId,
   type DiagnosticoLead,
@@ -34,7 +33,6 @@ interface DiagnosticoState {
 
 type Action =
   | { type: "START_QUIZ" }
-  | { type: "START_FORM" }
   | { type: "ANSWER"; id: QuestionId; value: string }
   | { type: "BACK" }
   | { type: "SUBMIT_LEAD"; lead: DiagnosticoLead; score: number; classification: Classification }
@@ -54,8 +52,6 @@ function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
   switch (action.type) {
     case "START_QUIZ":
       return { ...state, step: "quiz", questionIndex: 0 }
-    case "START_FORM":
-      return { ...state, step: "quiz", questionIndex: QUESTIONS.length }
     case "ANSWER":
       return {
         ...state,
@@ -88,7 +84,6 @@ export default function DiagnosticoPage() {
   const [scrollToPortfolio, setScrollToPortfolio] = useState(false)
 
   const handleStart = useCallback(() => dispatch({ type: "START_QUIZ" }), [])
-  const handleStartForm = useCallback(() => dispatch({ type: "START_FORM" }), [])
   const handleAnswer = useCallback(
     (id: QuestionId, value: string) => dispatch({ type: "ANSWER", id, value }),
     [],
@@ -148,7 +143,6 @@ export default function DiagnosticoPage() {
       <Header />
       <DiagnosticoLanding
         onStart={handleStart}
-        onStartForm={handleStartForm}
         scrollToPortfolio={scrollToPortfolio}
         onScrolled={handleScrolled}
       />

@@ -249,6 +249,39 @@ export const portfolioProjects: PortfolioProject[] = [
     image: "/projects/bahia-guincho.webp",
     url: "https://www.bahiaguincho.com",
   },
+  {
+    name: "Helite Estofados",
+    description:
+      "Site catálogo para fábrica de estofados sob medida, com visual premium e foco em orçamentos.",
+    category: "Site Catálogo",
+    tags: ["Responsivo", "Design Premium", "WhatsApp", "Catálogo de Produtos"],
+    gradient: "from-amber-500 to-yellow-600",
+    accentColor: "amber",
+    image: "/projects/helite-estofados.jpg",
+    url: "https://www.heliteestofados.com.br",
+  },
+  {
+    name: "Triplice Supply",
+    description:
+      "Site institucional para empresa de suprimentos industriais e offshore, com foco em geração de cotações.",
+    category: "Site Institucional",
+    tags: ["Responsivo", "Design Corporativo", "WhatsApp", "Geração de Cotações"],
+    gradient: "from-sky-600 to-blue-500",
+    accentColor: "sky",
+    image: "/projects/Triplice-supply.webp",
+    url: "https://www.tripliceoffshore.com",
+  },
+  {
+    name: "Tropical Letreiro",
+    description:
+      "Site catálogo para gráfica de comunicação visual, com loja de produtos personalizados e orçamento via WhatsApp.",
+    category: "Site Catálogo",
+    tags: ["Responsivo", "Catálogo de Produtos", "WhatsApp", "Design Vibrante"],
+    gradient: "from-pink-600 to-fuchsia-500",
+    accentColor: "pink",
+    image: "/projects/tropical-letreiro.webp",
+    url: "https://www.tropicalletreiro.com",
+  },
 ]
 
 // ─── Planos avulsos ───────────────────────────────────────────────────────────
