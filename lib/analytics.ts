@@ -11,6 +11,7 @@ declare global {
 }
 
 type Params = Record<string, unknown>
+type PixelOptions = Record<string, unknown>
 
 // ─── Wrappers internos ────────────────────────────────────────────────────────
 
@@ -19,9 +20,34 @@ function ga(event: string, params?: Params) {
   window.gtag("event", event, params ?? {})
 }
 
-function pixel(event: string, params?: Params) {
-  if (typeof window === "undefined" || typeof window.fbq !== "function") return
-  window.fbq("track", event, params ?? {})
+function callPixel(command: "track" | "trackCustom", event: string, params?: Params, options?: PixelOptions) {
+  if (typeof window === "undefined") return
+
+  if (typeof window.fbq === "function") {
+    if (options) {
+      window.fbq(command, event, params ?? {}, options)
+    } else {
+      window.fbq(command, event, params ?? {})
+    }
+    return
+  }
+
+  window.setTimeout(() => {
+    if (typeof window.fbq !== "function") return
+    if (options) {
+      window.fbq(command, event, params ?? {}, options)
+    } else {
+      window.fbq(command, event, params ?? {})
+    }
+  }, 750)
+}
+
+function pixel(event: string, params?: Params, options?: PixelOptions) {
+  callPixel("track", event, params, options)
+}
+
+function pixelCustom(event: string, params?: Params, options?: PixelOptions) {
+  callPixel("trackCustom", event, params, options)
 }
 
 /** Retorna true e marca na sessão — garante disparo único por session. */
@@ -39,12 +65,13 @@ function once(key: string): boolean {
 
 /**
  * Clique em qualquer botão de WhatsApp.
- * GA4: whatsapp_click  |  Meta: Lead
+ * GA4: whatsapp_click  |  Meta: Contact
  * @param source identifica qual botão disparou (ex: "hero_cta", "botao_flutuante")
  */
-export function trackWhatsAppClick(source = "generic") {
+export function trackWhatsAppClick(source = "generic", params?: Params) {
+  const eventParams = { content_name: "WhatsApp Click", source, ...params }
   ga("whatsapp_click", { source })
-  pixel("Lead", { content_name: "WhatsApp Click", source })
+  pixel("Contact", eventParams)
 }
 
 /**
@@ -110,4 +137,47 @@ export function trackPageView() {
 
 export function trackCustomEvent(eventName: string, params?: Params) {
   ga(eventName, params)
+  pixelCustom(eventName, params)
+}
+
+export function trackDiagnosticoViewContent() {
+  pixel("ViewContent", {
+    content_name: "Diagnóstico",
+    content_category: "quiz",
+  })
+}
+
+export function trackQuizStart(params?: Params) {
+  ga("quiz_start", params)
+  pixelCustom("QuizStart", {
+    content_name: "Diagnóstico",
+    content_category: "quiz",
+    ...params,
+  })
+}
+
+export function trackDiagnosticoLead(params?: Params, options?: PixelOptions) {
+  ga("generate_lead", params)
+  pixel(
+    "Lead",
+    {
+      content_name: "Diagnóstico",
+      content_category: "quiz",
+      ...params,
+    },
+    options,
+  )
+}
+
+export function trackQualifiedLead(params?: Params, options?: PixelOptions) {
+  ga("qualified_lead", params)
+  pixelCustom(
+    "QualifiedLead",
+    {
+      content_name: "Diagnóstico",
+      content_category: "quiz",
+      ...params,
+    },
+    options,
+  )
 }

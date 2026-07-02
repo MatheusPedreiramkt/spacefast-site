@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useReducer, useState } from "react"
+import { useCallback, useEffect, useReducer, useRef, useState } from "react"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import WhatsAppButton from "@/components/WhatsAppButton"
@@ -8,11 +8,17 @@ import DiagnosticoLanding from "@/components/diagnostico/DiagnosticoLanding"
 import DiagnosticoQuiz from "@/components/diagnostico/DiagnosticoQuiz"
 import DiagnosticoAnalisando from "@/components/diagnostico/DiagnosticoAnalisando"
 import DiagnosticoResultado from "@/components/diagnostico/DiagnosticoResultado"
-import { trackFormSubmit } from "@/lib/analytics"
+import {
+  trackDiagnosticoLead,
+  trackDiagnosticoViewContent,
+  trackQualifiedLead,
+  trackQuizStart,
+} from "@/lib/analytics"
 import {
   computeScore,
   classify,
   buildWhatsAppUrl,
+  labelFor,
   onLeadComplete,
   type Answers,
   type QuestionId,
@@ -46,6 +52,35 @@ const initialState: DiagnosticoState = {
   score: 0,
   classification: null,
   lead: null,
+}
+
+function buildDiagnosticoEventParams(
+  answers: Answers,
+  score: number,
+  classification: Classification,
+) {
+  const params: Record<string, unknown> = {
+    score,
+    temperatura: classification,
+  }
+
+  const addAnswer = (key: string, id: QuestionId) => {
+    const value = answers[id]
+    if (!value) return
+    params[key] = labelFor(id, value)
+    params[`${key}_value`] = value
+  }
+
+  addAnswer("segmento", "p2")
+  addAnswer("objetivo", "p4")
+  addAnswer("prazo", "p5")
+  addAnswer("orcamento", "p7")
+
+  return params
+}
+
+function buildEventId(eventName: string) {
+  return `diagnostico_${eventName}_${Date.now()}_${Math.random().toString(36).slice(2)}`
 }
 
 function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
@@ -82,8 +117,23 @@ function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
 export default function DiagnosticoPage() {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [scrollToPortfolio, setScrollToPortfolio] = useState(false)
+  const viewContentTrackedRef = useRef(false)
+  const quizStartTrackedRef = useRef(false)
+  const leadSubmittedRef = useRef(false)
 
-  const handleStart = useCallback(() => dispatch({ type: "START_QUIZ" }), [])
+  useEffect(() => {
+    if (viewContentTrackedRef.current) return
+    viewContentTrackedRef.current = true
+    trackDiagnosticoViewContent()
+  }, [])
+
+  const handleStart = useCallback(() => {
+    if (!quizStartTrackedRef.current) {
+      quizStartTrackedRef.current = true
+      trackQuizStart()
+    }
+    dispatch({ type: "START_QUIZ" })
+  }, [])
   const handleAnswer = useCallback(
     (id: QuestionId, value: string) => dispatch({ type: "ANSWER", id, value }),
     [],
@@ -92,10 +142,21 @@ export default function DiagnosticoPage() {
 
   const handleSubmitForm = useCallback(
     (lead: DiagnosticoLead) => {
+      if (leadSubmittedRef.current) return
+      leadSubmittedRef.current = true
+
       const score = computeScore(state.answers)
       const classification = classify(score)
+      const eventParams = buildDiagnosticoEventParams(state.answers, score, classification)
+      const leadEventId = buildEventId("lead")
+
       dispatch({ type: "SUBMIT_LEAD", lead, score, classification })
-      trackFormSubmit("diagnostico")
+      trackDiagnosticoLead(eventParams, { eventID: leadEventId })
+
+      if (classification === "morno" || classification === "quente") {
+        trackQualifiedLead(eventParams, { eventID: buildEventId("qualified_lead") })
+      }
+
       // Fire-and-forget — não bloqueia a transição para a tela "Analisando".
       void onLeadComplete(lead, score, classification)
     },

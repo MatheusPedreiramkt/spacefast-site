@@ -30,14 +30,10 @@ export default function DiagnosticoResultado({
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => {
-            trackWhatsAppClick(`diagnostico_${classification}`)
-            if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-              window.fbq('track', 'Lead', {
-                content_name: 'Diagnóstico Concluído',
-                value: 500,
-                currency: 'BRL'
-              })
-            }
+            trackWhatsAppClick(`diagnostico_${classification}`, {
+              content_name: "WhatsApp Diagnóstico",
+              temperatura: classification,
+            })
           }}
           className={
             primary

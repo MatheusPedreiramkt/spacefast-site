@@ -271,5 +271,8 @@ export async function onLeadComplete(
   score: number,
   classificacao: Classification,
 ) {
+  void lead
+  void score
+  void classificacao
   // TODO: disparar evento Meta CAPI + persistir lead (Apps Script/CAPI)
 }

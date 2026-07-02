@@ -19,13 +19,6 @@ export default function Header({ pixelContentName }: { pixelContentName?: string
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
-  function trackPixelContact() {
-    if (!pixelContentName) return
-    if (typeof window !== "undefined" && typeof window.fbq === "function") {
-      window.fbq("track", "Contact", { content_name: pixelContentName })
-    }
-  }
-
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 24)
     window.addEventListener("scroll", onScroll, { passive: true })
@@ -100,7 +93,12 @@ export default function Header({ pixelContentName }: { pixelContentName?: string
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => { trackWhatsAppClick("header_desktop"); trackPixelContact() }}
+              onClick={() => {
+                trackWhatsAppClick(
+                  "header_desktop",
+                  pixelContentName ? { content_name: pixelContentName } : undefined,
+                )
+              }}
               className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-sm font-semibold hover:from-blue-500 hover:to-cyan-400 transition-all shadow-md shadow-blue-500/20 hover:shadow-blue-500/35 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
             >
               <WhatsAppSVG className="w-3.5 h-3.5" />
@@ -160,7 +158,12 @@ export default function Header({ pixelContentName }: { pixelContentName?: string
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.25 }}
-                onClick={() => { trackWhatsAppClick("header_mobile"); trackPixelContact() }}
+                onClick={() => {
+                  trackWhatsAppClick(
+                    "header_mobile",
+                    pixelContentName ? { content_name: pixelContentName } : undefined,
+                  )
+                }}
                 className="mt-2 flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-sm font-semibold shadow-lg shadow-blue-500/20"
               >
                 <WhatsAppSVG className="w-4 h-4" />
