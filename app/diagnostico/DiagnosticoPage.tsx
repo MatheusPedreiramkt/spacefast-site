@@ -146,6 +146,7 @@ export default function DiagnosticoPage() {
       const eventParams = buildDiagnosticoEventParams(state.answers, score, classification)
 
       dispatch({ type: "SUBMIT_LEAD", lead, score, classification })
+      console.log("[Meta Pixel] Lead fired from diagnostico submit")
       trackDiagnosticoLead(eventParams)
 
       if (classification === "morno" || classification === "quente") {
