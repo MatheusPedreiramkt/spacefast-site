@@ -6,8 +6,15 @@ import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 import { EASE } from "@/lib/motion"
 import { trackWhatsAppClick } from "@/lib/analytics"
 
-export default function WhatsAppButton() {
+export default function WhatsAppButton({ pixelContentName }: { pixelContentName?: string } = {}) {
   const prefersReduced = useReducedMotion()
+
+  function trackPixelContact() {
+    if (!pixelContentName) return
+    if (typeof window !== "undefined" && typeof window.fbq === "function") {
+      window.fbq("track", "Contact", { content_name: pixelContentName })
+    }
+  }
 
   return (
     <motion.div
@@ -37,7 +44,7 @@ export default function WhatsAppButton() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Falar no WhatsApp"
-        onClick={() => trackWhatsAppClick("botao_flutuante")}
+        onClick={() => { trackWhatsAppClick("botao_flutuante"); trackPixelContact() }}
         className="relative flex items-center gap-2.5 rounded-full bg-emerald-500 px-5 py-3.5 text-white shadow-2xl shadow-emerald-500/35 hover:bg-emerald-400 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
         whileHover={prefersReduced ? undefined : { scale: 1.05 }}
         whileTap={prefersReduced ? undefined : { scale: 0.96 }}

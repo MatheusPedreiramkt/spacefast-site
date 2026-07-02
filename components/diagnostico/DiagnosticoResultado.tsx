@@ -29,7 +29,16 @@ export default function DiagnosticoResultado({
           href={whatsAppUrl}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={() => trackWhatsAppClick(`diagnostico_${classification}`)}
+          onClick={() => {
+            trackWhatsAppClick(`diagnostico_${classification}`)
+            if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+              window.fbq('track', 'Lead', {
+                content_name: 'Diagnóstico Concluído',
+                value: 500,
+                currency: 'BRL'
+              })
+            }
+          }}
           className={
             primary
               ? "group relative inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 text-white font-bold text-base hover:from-emerald-400 hover:to-emerald-300 transition-all shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712] w-full sm:w-auto"

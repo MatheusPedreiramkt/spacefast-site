@@ -5,6 +5,7 @@ import "./globals.css"
 import { SITE_URL, EMAIL, INSTAGRAM_URL } from "@/lib/constants"
 import MetaPixel from "@/components/MetaPixel"
 import ScrollTracker from "@/components/ScrollTracker"
+import FacebookPixel from './FacebookPixel'
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" })
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" })
@@ -155,6 +156,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </head>
 
       <body className="min-h-full flex flex-col bg-[#030712] text-white overflow-x-hidden">
+        <FacebookPixel />
         {/* GTM noscript — necessário para rastreamento sem JavaScript */}
         {GTM_ID && (
           <noscript>

@@ -140,14 +140,14 @@ export default function DiagnosticoPage() {
 
   return (
     <>
-      <Header />
+      <Header pixelContentName="WhatsApp Header - Diagnóstico" />
       <DiagnosticoLanding
         onStart={handleStart}
         scrollToPortfolio={scrollToPortfolio}
         onScrolled={handleScrolled}
       />
       <Footer />
-      <WhatsAppButton />
+      <WhatsAppButton pixelContentName="WhatsApp Flutuante - Diagnóstico" />
     </>
   )
 }
