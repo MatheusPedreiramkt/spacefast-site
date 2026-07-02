@@ -175,7 +175,7 @@ function ProjectCard({
 }
 
 // ─── Section ──────────────────────────────────────────────────────────────────
-export default function Portfolio() {
+export default function Portfolio({ onCtaClick }: { onCtaClick?: () => void } = {}) {
   const prefersReduced = useReducedMotion() ?? false
 
   return (
@@ -231,15 +231,26 @@ export default function Portfolio() {
           transition={{ duration: 0.65, delay: 0.3 }}
           className="mt-12 text-center"
         >
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 text-gray-300 text-sm font-medium hover:border-white/20 hover:text-white hover:bg-white/4 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-white/40"
-          >
-            Quero um projeto assim
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" aria-hidden />
-          </a>
+          {onCtaClick ? (
+            <button
+              type="button"
+              onClick={onCtaClick}
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 text-gray-300 text-sm font-medium hover:border-white/20 hover:text-white hover:bg-white/4 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-white/40"
+            >
+              Quero um projeto assim
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" aria-hidden />
+            </button>
+          ) : (
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 text-gray-300 text-sm font-medium hover:border-white/20 hover:text-white hover:bg-white/4 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-white/40"
+            >
+              Quero um projeto assim
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" aria-hidden />
+            </a>
+          )}
         </motion.div>
 
       </div>

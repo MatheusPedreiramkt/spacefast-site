@@ -225,7 +225,7 @@ export const portfolioProjects: PortfolioProject[] = [
     gradient: "from-emerald-600 to-teal-500",
     accentColor: "emerald",
     image: "/projects/green-irrigation.webp",
-    url: "https://www.greenirrigation.com.br/prototipo",
+    url: "https://www.greenirrigation.com.br",
   },
   {
     name: "Clínica Dr. Toufik Rahd",

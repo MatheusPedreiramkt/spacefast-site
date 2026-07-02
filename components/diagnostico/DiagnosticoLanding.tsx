@@ -380,10 +380,12 @@ function CTAFinalSection({ onStart }: { onStart: () => void }) {
 
 export default function DiagnosticoLanding({
   onStart,
+  onStartForm,
   scrollToPortfolio,
   onScrolled,
 }: {
   onStart: () => void
+  onStartForm: () => void
   scrollToPortfolio: boolean
   onScrolled: () => void
 }) {
@@ -403,7 +405,7 @@ export default function DiagnosticoLanding({
       <HeroSection onStart={onStart} onViewPortfolio={handleViewPortfolio} />
       <ProblemaSection />
       <SolucaoSection />
-      <Portfolio />
+      <Portfolio onCtaClick={onStartForm} />
       <ParaQuemSection />
       <PrecoSection />
       <CTAFinalSection onStart={onStart} />
