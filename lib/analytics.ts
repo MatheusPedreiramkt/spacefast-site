@@ -156,7 +156,7 @@ export function trackQuizStart(params?: Params) {
   })
 }
 
-export function trackDiagnosticoLead(params?: Params, options?: PixelOptions) {
+export function trackDiagnosticoLead(params?: Params) {
   ga("generate_lead", params)
   pixel(
     "Lead",
@@ -165,11 +165,10 @@ export function trackDiagnosticoLead(params?: Params, options?: PixelOptions) {
       content_category: "quiz",
       ...params,
     },
-    options,
   )
 }
 
-export function trackQualifiedLead(params?: Params, options?: PixelOptions) {
+export function trackQualifiedLead(params?: Params) {
   ga("qualified_lead", params)
   pixelCustom(
     "QualifiedLead",
@@ -178,6 +177,5 @@ export function trackQualifiedLead(params?: Params, options?: PixelOptions) {
       content_category: "quiz",
       ...params,
     },
-    options,
   )
 }

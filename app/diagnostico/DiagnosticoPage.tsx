@@ -79,10 +79,6 @@ function buildDiagnosticoEventParams(
   return params
 }
 
-function buildEventId(eventName: string) {
-  return `diagnostico_${eventName}_${Date.now()}_${Math.random().toString(36).slice(2)}`
-}
-
 function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
   switch (action.type) {
     case "START_QUIZ":
@@ -148,13 +144,12 @@ export default function DiagnosticoPage() {
       const score = computeScore(state.answers)
       const classification = classify(score)
       const eventParams = buildDiagnosticoEventParams(state.answers, score, classification)
-      const leadEventId = buildEventId("lead")
 
       dispatch({ type: "SUBMIT_LEAD", lead, score, classification })
-      trackDiagnosticoLead(eventParams, { eventID: leadEventId })
+      trackDiagnosticoLead(eventParams)
 
       if (classification === "morno" || classification === "quente") {
-        trackQualifiedLead(eventParams, { eventID: buildEventId("qualified_lead") })
+        trackQualifiedLead(eventParams)
       }
 
       // Fire-and-forget — não bloqueia a transição para a tela "Analisando".

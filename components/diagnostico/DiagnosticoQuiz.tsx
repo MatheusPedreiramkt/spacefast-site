@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { CheckCircle2 } from "lucide-react"
 import { EASE } from "@/lib/motion"
@@ -102,6 +102,8 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
     instagram: "",
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const hasSubmittedRef = useRef(false)
   const prefersReduced = useReducedMotion()
 
   function update(key: keyof typeof fields, value: string) {
@@ -110,6 +112,8 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (hasSubmittedRef.current || isSubmitting) return
+
     const nextErrors: Record<string, string> = {}
 
     if (!fields.nome.trim()) nextErrors.nome = "Informe seu nome."
@@ -124,6 +128,9 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
 
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) return
+
+    hasSubmittedRef.current = true
+    setIsSubmitting(true)
 
     onSubmitForm({
       nome: fields.nome.trim(),
@@ -264,9 +271,10 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
 
       <button
         type="submit"
+        disabled={isSubmitting}
         className="mt-2 inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] hover:from-blue-500 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/25 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
       >
-        Ver meu resultado
+        {isSubmitting ? "Enviando..." : "Ver meu resultado"}
       </button>
     </motion.form>
   )
