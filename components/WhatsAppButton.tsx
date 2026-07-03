@@ -1,10 +1,11 @@
 "use client"
 
 import { motion, useReducedMotion } from "framer-motion"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 import { EASE } from "@/lib/motion"
 import { trackWhatsAppClick } from "@/lib/analytics"
+import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 export default function WhatsAppButton({ pixelContentName }: { pixelContentName?: string } = {}) {
   const prefersReduced = useReducedMotion()
@@ -21,11 +22,13 @@ export default function WhatsAppButton({ pixelContentName }: { pixelContentName?
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Falar no WhatsApp"
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault()
           trackWhatsAppClick(
             "botao_flutuante",
             pixelContentName ? { content_name: pixelContentName } : undefined,
           )
+          openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
         }}
         className="relative flex items-center gap-2.5 rounded-full bg-emerald-500 px-5 py-3.5 text-white shadow-2xl shadow-emerald-500/35 hover:bg-emerald-400 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
         whileHover={prefersReduced ? undefined : { scale: 1.05 }}

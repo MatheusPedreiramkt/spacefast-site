@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion"
 import { services } from "@/lib/data"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { ArrowRight } from "lucide-react"
 import { stagger, fadeUp, VIEWPORT } from "@/lib/motion"
+import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 export default function Services() {
   return (
@@ -78,6 +79,10 @@ export default function Services() {
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => {
+              e.preventDefault()
+              openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+            }}
             className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/12 text-gray-300 text-sm font-medium hover:border-white/22 hover:text-white hover:bg-white/4 transition-all focus-visible:ring-2 focus-visible:ring-white/40"
           >
             Falar sobre meu projeto

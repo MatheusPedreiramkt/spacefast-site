@@ -1,11 +1,12 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { ArrowRight } from "lucide-react"
 import { VIEWPORT, EASE } from "@/lib/motion"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 import { trackWhatsAppClick } from "@/lib/analytics"
+import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 const TRUST_BADGES = [
   { color: "bg-emerald-500", label: "Resposta em até 2h" },
@@ -68,7 +69,11 @@ export default function CTAFinal() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => trackWhatsAppClick("cta_final")}
+              onClick={(e) => {
+                e.preventDefault()
+                trackWhatsAppClick("cta_final")
+                openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+              }}
               className="group inline-flex items-center gap-3 px-9 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-base hover:from-blue-500 hover:to-cyan-400 transition-all shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
             >
               <WhatsAppSVG className="w-5 h-5 shrink-0" />

@@ -25,9 +25,10 @@ import Process from "@/components/Process"
 import Footer from "@/components/Footer"
 import WhatsAppButton from "@/components/WhatsAppButton"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { stagger, fadeUp, VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
 import { trackWhatsAppClick } from "@/lib/analytics"
+import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 // ─── Hero: Laptop mockup ──────────────────────────────────────────────────────
 function LaptopMockup() {
@@ -203,7 +204,11 @@ function HeroSEO() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => trackWhatsAppClick("hero_criacao_sites")}
+                onClick={(e) => {
+                  e.preventDefault()
+                  trackWhatsAppClick("hero_criacao_sites")
+                  openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+                }}
                 className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] hover:from-blue-500 hover:to-cyan-400 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
               >
                 <WhatsAppSVG className="w-4 h-4" />
@@ -663,6 +668,10 @@ function FaqSection() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => {
+                e.preventDefault()
+                openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+              }}
               className="text-blue-400 hover:text-blue-300 transition-colors underline underline-offset-2"
             >
               Fale diretamente conosco
@@ -795,7 +804,11 @@ function CTASEOFinal() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => trackWhatsAppClick("cta_final_criacao_sites")}
+              onClick={(e) => {
+                e.preventDefault()
+                trackWhatsAppClick("cta_final_criacao_sites")
+                openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+              }}
               className="group inline-flex items-center gap-3 px-9 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-base hover:from-blue-500 hover:to-cyan-400 transition-all shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
             >
               <WhatsAppSVG className="w-5 h-5 shrink-0" />

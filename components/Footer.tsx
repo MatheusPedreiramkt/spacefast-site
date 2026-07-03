@@ -1,9 +1,10 @@
 "use client"
 
 import { Zap, Mail } from "lucide-react"
-import { WHATSAPP_URL, INSTAGRAM_URL, EMAIL } from "@/lib/constants"
+import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER, INSTAGRAM_URL, EMAIL } from "@/lib/constants"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 import { trackWhatsAppClick, trackInstagramClick } from "@/lib/analytics"
+import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 const QUICK_LINKS = [
   { label: "Início", href: "#inicio" },
@@ -75,7 +76,11 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
-                onClick={() => trackWhatsAppClick("rodape_icone")}
+                onClick={(e) => {
+                  e.preventDefault()
+                  trackWhatsAppClick("rodape_icone")
+                  openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+                }}
                 className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-gray-500 hover:text-emerald-400 hover:border-emerald-500/28 transition-all focus-visible:ring-2 focus-visible:ring-emerald-400"
               >
                 <WhatsAppSVG className="w-4 h-4" />
@@ -146,7 +151,11 @@ export default function Footer() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => trackWhatsAppClick("rodape_contato")}
+                onClick={(e) => {
+                  e.preventDefault()
+                  trackWhatsAppClick("rodape_contato")
+                  openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+                }}
                 className="flex items-start gap-2.5 text-gray-500 hover:text-emerald-400 transition-colors group focus-visible:text-emerald-400"
               >
                 <WhatsAppSVG className="w-4 h-4 mt-0.5 shrink-0" />

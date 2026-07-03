@@ -3,9 +3,10 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { faqItems } from "@/lib/data"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { ChevronDown } from "lucide-react"
 import { VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
+import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
@@ -35,6 +36,10 @@ export default function FAQ() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => {
+                e.preventDefault()
+                openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+              }}
               className="text-blue-400 hover:text-blue-300 transition-colors underline underline-offset-2"
             >
               Fale diretamente conosco

@@ -3,9 +3,10 @@
 // Exemplo: 5511999999999
 export const WHATSAPP_NUMBER = "5597984575497"
 
-export const WHATSAPP_MESSAGE = encodeURIComponent(
+export const WHATSAPP_MESSAGE_TEXT =
   "Olá! Vim pelo site da SpaceFast e tenho interesse em criar minha presença digital. Podem me ajudar?"
-)
+
+export const WHATSAPP_MESSAGE = encodeURIComponent(WHATSAPP_MESSAGE_TEXT)
 
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`
 

@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion"
 import { plans } from "@/lib/data"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { CheckCircle2, ArrowRight } from "lucide-react"
 import { stagger, scaleUp, VIEWPORT } from "@/lib/motion"
 import { trackPlanClick, trackWhatsAppClick } from "@/lib/analytics"
+import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 export default function Plans() {
   return (
@@ -57,7 +58,11 @@ export default function Plans() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => trackWhatsAppClick("planos_indeciso")}
+              onClick={(e) => {
+                e.preventDefault()
+                trackWhatsAppClick("planos_indeciso")
+                openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+              }}
               className="group shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/15 bg-white/[0.05] text-white/80 hover:text-white hover:bg-white/[0.09] hover:border-white/25 text-sm font-medium transition-all duration-200 whitespace-nowrap"
             >
               Falar com especialista
@@ -132,7 +137,11 @@ export default function Plans() {
                     href={WHATSAPP_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => trackPlanClick(plan.name)}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      trackPlanClick(plan.name)
+                      openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+                    }}
                     className={`group flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712] ${
                       plan.highlighted
                         ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:from-blue-500 hover:to-cyan-400 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 focus-visible:ring-blue-400"
@@ -167,7 +176,11 @@ export default function Plans() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => trackWhatsAppClick("planos_personalizado")}
+              onClick={(e) => {
+                e.preventDefault()
+                trackWhatsAppClick("planos_personalizado")
+                openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+              }}
               className="group shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm hover:from-blue-500 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 whitespace-nowrap"
             >
               Solicitar projeto personalizado

@@ -3,11 +3,12 @@
 import { motion, useReducedMotion } from "framer-motion"
 import Image from "next/image"
 import { portfolioProjects } from "@/lib/data"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { ArrowRight, CheckCircle2, ExternalLink } from "lucide-react"
 import { stagger, fadeUp, VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
 import type { PortfolioProject } from "@/lib/data"
 import { trackPortfolioClick } from "@/lib/analytics"
+import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 // ─── Per-accent glow color (RGB) and image-area tint ─────────────────────────
 const ACCENT: Record<string, { rgb: string; bg: string }> = {
@@ -248,6 +249,10 @@ export default function Portfolio({ onCtaClick }: { onCtaClick?: () => void } = 
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => {
+                e.preventDefault()
+                openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+              }}
               className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 text-gray-300 text-sm font-medium hover:border-white/20 hover:text-white hover:bg-white/4 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-white/40"
             >
               Quero um projeto assim

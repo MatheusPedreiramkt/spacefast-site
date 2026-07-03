@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion"
 import { solutions } from "@/lib/data"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { ArrowRight } from "lucide-react"
 import { stagger, fadeUp, VIEWPORT, SECTION_ANIM } from "@/lib/motion"
+import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 export default function Solution() {
   return (
@@ -71,6 +72,10 @@ export default function Solution() {
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => {
+              e.preventDefault()
+              openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+            }}
             className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm hover:from-blue-500 hover:to-cyan-400 transition-all shadow-xl shadow-blue-500/22 hover:shadow-blue-500/36 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400"
           >
             Falar com especialista

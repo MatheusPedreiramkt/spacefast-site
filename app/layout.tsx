@@ -6,6 +6,7 @@ import { GoogleAnalytics } from "@/components/GoogleAnalytics"
 import { GoogleTagManager } from "@/components/GoogleTagManager"
 import MetaPixel from "@/components/MetaPixel"
 import ScrollTracker from "@/components/ScrollTracker"
+import CQCTracker from "@/components/CQCTracker"
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" })
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" })
@@ -144,6 +145,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
         {/* Rastreia scroll 75% — componente invisível */}
         <ScrollTracker />
+
+        {/* Captura fbclid/UTMs/fbp/fbc para o CQC manual — componente invisível */}
+        <CQCTracker />
       </body>
     </html>
   )
