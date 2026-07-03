@@ -9,6 +9,7 @@ import DiagnosticoQuiz from "@/components/diagnostico/DiagnosticoQuiz"
 import DiagnosticoAnalisando from "@/components/diagnostico/DiagnosticoAnalisando"
 import DiagnosticoResultado from "@/components/diagnostico/DiagnosticoResultado"
 import {
+  pushDataLayerEvent,
   trackDiagnosticoLead,
   trackDiagnosticoViewContent,
   trackQualifiedLead,
@@ -76,6 +77,24 @@ function buildDiagnosticoEventParams(
     possui_site: answers.p3 ?? "",
     decisor: answers.p6 ?? "",
     momento_negocio: answers.p8 ?? "",
+  }
+}
+
+function buildDiagnosticoDataLayerParams(
+  answers: Answers,
+  score: number,
+  classification: Classification,
+) {
+  const attributionParams = getAttributionParams()
+
+  return {
+    ...buildDiagnosticoEventParams(answers, score, classification),
+    utm_source: attributionParams.utm_source,
+    utm_medium: attributionParams.utm_medium,
+    utm_campaign: attributionParams.utm_campaign,
+    utm_content: attributionParams.utm_content,
+    utm_term: attributionParams.utm_term,
+    placement: attributionParams.placement,
   }
 }
 
@@ -212,6 +231,7 @@ export default function DiagnosticoPage() {
       const score = computeScore(state.answers)
       const classification = classify(score)
       const eventParams = buildDiagnosticoEventParams(state.answers, score, classification)
+      const dataLayerParams = buildDiagnosticoDataLayerParams(state.answers, score, classification)
       const sheetPayload = buildSheetPayload(lead, state.answers, score, classification)
       const qualifiedLead: QualifiedDiagnosticoLead = {
         ...lead,
@@ -221,9 +241,11 @@ export default function DiagnosticoPage() {
 
       dispatch({ type: "SUBMIT_LEAD", lead: qualifiedLead, score, classification })
       console.log("[Meta Pixel] Lead fired from diagnostico submit")
+      pushDataLayerEvent("lead_submit", dataLayerParams)
       trackDiagnosticoLead(eventParams)
 
       if (classification === "morno" || classification === "quente") {
+        pushDataLayerEvent("qualified_lead", dataLayerParams)
         trackQualifiedLead(eventParams)
       }
 

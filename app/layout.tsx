@@ -1,17 +1,14 @@
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import Script from "next/script"
 import "./globals.css"
 import { SITE_URL, EMAIL, INSTAGRAM_URL } from "@/lib/constants"
 import { GoogleAnalytics } from "@/components/GoogleAnalytics"
+import { GoogleTagManager } from "@/components/GoogleTagManager"
 import MetaPixel from "@/components/MetaPixel"
 import ScrollTracker from "@/components/ScrollTracker"
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" })
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" })
-
-// ─── IDs de rastreamento ─────────────────────────────────────────────────────
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
@@ -126,33 +123,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {/* JSON-LD */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-        {/* Google Tag Manager — carrega após hidratação */}
-        {GTM_ID && (
-          <Script id="gtm-head" strategy="afterInteractive">
-            {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${GTM_ID}');`}
-          </Script>
-        )}
-
         {/* Meta Pixel */}
         <MetaPixel />
       </head>
 
       <body className="min-h-full flex flex-col bg-[#030712] text-white overflow-x-hidden">
-        {/* GTM noscript — necessário para rastreamento sem JavaScript */}
-        {GTM_ID && (
-          <noscript>
-            <iframe
-              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-              height="0"
-              width="0"
-              style={{ display: "none", visibility: "hidden" }}
-            />
-          </noscript>
-        )}
+        <GoogleTagManager />
 
         {/* Skip link — acessibilidade */}
         <a

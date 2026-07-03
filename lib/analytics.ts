@@ -15,6 +15,16 @@ type PixelOptions = Record<string, unknown>
 
 // ─── Wrappers internos ────────────────────────────────────────────────────────
 
+export function pushDataLayerEvent(event: string, params?: Params) {
+  if (typeof window === "undefined") return
+
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push({
+    event,
+    ...(params ?? {}),
+  })
+}
+
 function ga(event: string, params?: Params) {
   if (typeof window === "undefined" || typeof window.gtag !== "function") return
   window.gtag("event", event, params ?? {})
@@ -71,6 +81,9 @@ function once(key: string): boolean {
 export function trackWhatsAppClick(source = "generic", params?: Params) {
   const eventParams = { content_name: "WhatsApp Click", source, ...params }
   ga("whatsapp_click", { source })
+  if (typeof window !== "undefined" && window.location.pathname.startsWith("/diagnostico")) {
+    pushDataLayerEvent("whatsapp_click", eventParams)
+  }
   pixel("Contact", eventParams)
 }
 
@@ -141,6 +154,7 @@ export function trackCustomEvent(eventName: string, params?: Params) {
 }
 
 export function trackDiagnosticoViewContent() {
+  pushDataLayerEvent("diagnostico_view")
   pixel("ViewContent", {
     content_name: "Diagnóstico",
     content_category: "quiz",
@@ -149,6 +163,7 @@ export function trackDiagnosticoViewContent() {
 
 export function trackQuizStart(params?: Params) {
   ga("quiz_start", params)
+  pushDataLayerEvent("quiz_start", params)
   pixelCustom("QuizStart", {
     content_name: "Diagnóstico",
     content_category: "quiz",
