@@ -254,6 +254,32 @@ export interface QualifiedDiagnosticoLead extends DiagnosticoLead {
   temperatura: Classification
 }
 
+export interface DiagnosticoLeadSheetPayload {
+  nome: string
+  whatsapp: string
+  email: string
+  empresa: string
+  cidade: string
+  estado: string
+  tipo_negocio: string
+  possui_site: string
+  objetivo: string
+  prazo: string
+  decisor: string
+  investimento: string
+  momento_negocio: string
+  score: number
+  temperatura: Classification
+  mensagem_whatsapp: string
+  utm_source: string
+  utm_medium: string
+  utm_campaign: string
+  utm_content: string
+  utm_term: string
+  placement: string
+  pagina: string
+}
+
 const WHATSAPP_MESSAGES: Record<Classification, string> = {
   quente:
     "Olá, preenchi o diagnóstico da Space Fast. Pelo resultado, minha empresa parece pronta para ter um site profissional. Gostaria de entender a melhor estrutura para o meu negócio.",
@@ -265,15 +291,26 @@ const WHATSAPP_MESSAGES: Record<Classification, string> = {
     "Olá, preenchi o diagnóstico da Space Fast. Gostaria de receber uma orientação sobre o melhor momento para criar um site profissional.",
 }
 
-export function buildWhatsAppUrl(classification: Classification): string {
-  const text = WHATSAPP_MESSAGES[classification]
+export function buildWhatsAppMessage(classification: Classification): string {
+  return WHATSAPP_MESSAGES[classification]
+}
 
+export function buildWhatsAppUrl(classification: Classification): string {
+  const text = buildWhatsAppMessage(classification)
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`
 }
 
 // ─── Gancho de integração — fim do quiz ───────────────────────────────────────
 // Chamado assim que o lead conclui o formulário (P9), antes da tela "Analisando".
-export async function onLeadComplete(lead: QualifiedDiagnosticoLead) {
-  void lead
-  // TODO: disparar evento Meta CAPI + persistir lead (Apps Script/CAPI)
+export async function onLeadComplete(payload: DiagnosticoLeadSheetPayload) {
+  try {
+    await fetch("/api/diagnostico-leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    })
+  } catch {
+    // A rota server-side registra falhas do webhook. Não bloqueia a tela de resultado.
+  }
 }

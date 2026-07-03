@@ -17,11 +17,13 @@ import {
 import {
   computeScore,
   classify,
+  buildWhatsAppMessage,
   buildWhatsAppUrl,
   onLeadComplete,
   type Answers,
   type QuestionId,
   type DiagnosticoLead,
+  type DiagnosticoLeadSheetPayload,
   type QualifiedDiagnosticoLead,
   type Classification,
 } from "@/lib/diagnostico"
@@ -74,6 +76,74 @@ function buildDiagnosticoEventParams(
     possui_site: answers.p3 ?? "",
     decisor: answers.p6 ?? "",
     momento_negocio: answers.p8 ?? "",
+  }
+}
+
+function getAttributionParams() {
+  if (typeof window === "undefined") {
+    return {
+      utm_source: "",
+      utm_medium: "",
+      utm_campaign: "",
+      utm_content: "",
+      utm_term: "",
+      placement: "",
+      pagina: "/diagnostico",
+    }
+  }
+
+  const params = new URLSearchParams(window.location.search)
+
+  return {
+    utm_source: params.get("utm_source") ?? "",
+    utm_medium: params.get("utm_medium") ?? "",
+    utm_campaign: params.get("utm_campaign") ?? "",
+    utm_content: params.get("utm_content") ?? "",
+    utm_term: params.get("utm_term") ?? "",
+    placement: params.get("placement") ?? "",
+    pagina: window.location.href,
+  }
+}
+
+function splitCidadeEstado(value?: string) {
+  const normalized = value?.trim() ?? ""
+  if (!normalized) return { cidade: "", estado: "" }
+
+  const match = normalized.match(/^(.*?)(?:\s*[-/,]\s*)([A-Za-z]{2})$/)
+  if (!match) return { cidade: normalized, estado: "" }
+
+  return {
+    cidade: match[1].trim(),
+    estado: match[2].toUpperCase(),
+  }
+}
+
+function buildSheetPayload(
+  lead: DiagnosticoLead,
+  answers: Answers,
+  score: number,
+  classification: Classification,
+): DiagnosticoLeadSheetPayload {
+  const { cidade, estado } = splitCidadeEstado(lead.cidade)
+
+  return {
+    nome: lead.nome,
+    whatsapp: lead.whatsapp,
+    email: lead.email ?? "",
+    empresa: lead.empresa ?? "",
+    cidade,
+    estado,
+    tipo_negocio: answers.p2 ?? "",
+    possui_site: answers.p3 ?? "",
+    objetivo: answers.p4 ?? "",
+    prazo: answers.p5 ?? "",
+    decisor: answers.p6 ?? "",
+    investimento: answers.p7 ?? "",
+    momento_negocio: answers.p8 ?? "",
+    score,
+    temperatura: classification,
+    mensagem_whatsapp: buildWhatsAppMessage(classification),
+    ...getAttributionParams(),
   }
 }
 
@@ -142,6 +212,7 @@ export default function DiagnosticoPage() {
       const score = computeScore(state.answers)
       const classification = classify(score)
       const eventParams = buildDiagnosticoEventParams(state.answers, score, classification)
+      const sheetPayload = buildSheetPayload(lead, state.answers, score, classification)
       const qualifiedLead: QualifiedDiagnosticoLead = {
         ...lead,
         score,
@@ -157,7 +228,7 @@ export default function DiagnosticoPage() {
       }
 
       // Fire-and-forget — não bloqueia a transição para a tela "Analisando".
-      void onLeadComplete(qualifiedLead)
+      void onLeadComplete(sheetPayload)
     },
     [state.answers],
   )
