@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { preload } from "react-dom"
 import { SITE_URL } from "@/lib/constants"
 import DiagnosticoPage from "./DiagnosticoPage"
 
@@ -18,5 +19,9 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
+  // Poster do vídeo do hero é o elemento de LCP nesta página — adianta o
+  // download com prioridade alta, antes do JS de hidratação competir por banda.
+  preload("/video-apresentacao-poster.jpg", { as: "image", fetchPriority: "high" })
+
   return <DiagnosticoPage />
 }

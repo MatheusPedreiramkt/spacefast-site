@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import dynamic from "next/dynamic"
 import { motion } from "framer-motion"
 import {
   ArrowRight,
@@ -16,9 +17,11 @@ import {
   Search,
   Zap,
 } from "lucide-react"
-import Portfolio from "@/components/Portfolio"
 import { stagger, fadeUp, VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
 import { DIAGNOSTICO_PRICE } from "@/lib/diagnostico"
+
+// Abaixo da dobra — code-split para reduzir o JS crítico da carga inicial.
+const Portfolio = dynamic(() => import("@/components/Portfolio"))
 
 // ─── Solução — 6 itens ─────────────────────────────────────────────────────
 const SOLUCAO_ITEMS = [
@@ -66,7 +69,7 @@ function HeroVideo() {
           ref={videoRef}
           src="/video-apresentacao.mp4"
           poster="/video-apresentacao-poster.jpg"
-          preload="auto"
+          preload="metadata"
           playsInline
           controls={isPlaying}
           onPause={() => setIsPlaying(false)}
@@ -94,12 +97,6 @@ function HeroVideo() {
 }
 
 function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onViewPortfolio: () => void }) {
-  const anim = (delay = 0) => ({
-    initial: { opacity: 0, y: 18 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.55, delay, ease: EASE },
-  })
-
   return (
     <section
       id="inicio"
@@ -120,31 +117,22 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
           <div className="space-y-6 lg:space-y-7 text-center lg:text-left">
-            <motion.h1
-              {...anim(0.1)}
-              className="text-[1.85rem] sm:text-[2.8rem] lg:text-[3.2rem] font-black leading-[1.1] tracking-normal text-white"
-            >
+            <h1 className="text-[1.85rem] sm:text-[2.8rem] lg:text-[3.2rem] font-black leading-[1.1] tracking-normal text-white">
               Descubra se sua empresa está pronta para ter um{" "}
               <span className="gradient-text">site profissional</span>
-            </motion.h1>
+            </h1>
 
-            <motion.div {...anim(0.18)} className="lg:hidden">
+            <div className="lg:hidden">
               <HeroVideo />
-            </motion.div>
+            </div>
 
-            <motion.p
-              {...anim(0.2)}
-              className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px] mx-auto lg:mx-0"
-            >
+            <p className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px] mx-auto lg:mx-0">
               Responda um diagnóstico rápido e veja qual estrutura de site faz mais sentido para o
               seu negócio. Projetos a partir de{" "}
               <span className="text-gray-200 font-medium">R${DIAGNOSTICO_PRICE}</span>.
-            </motion.p>
+            </p>
 
-            <motion.div
-              {...anim(0.3)}
-              className="flex flex-col sm:flex-row gap-3 items-center lg:items-start"
-            >
+            <div className="flex flex-col sm:flex-row gap-3 items-center lg:items-start">
               <button
                 type="button"
                 onClick={onStart}
@@ -162,21 +150,16 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
                 Ver exemplos de sites
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
               </button>
-            </motion.div>
+            </div>
 
-            <motion.p {...anim(0.38)} className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500">
               Leva menos de 2 minutos. Sem compromisso.
-            </motion.p>
+            </p>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 32 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
-            className="hidden lg:block"
-          >
+          <div className="hidden lg:block">
             <HeroVideo />
-          </motion.div>
+          </div>
         </div>
       </div>
 
