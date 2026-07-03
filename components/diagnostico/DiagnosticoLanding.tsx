@@ -66,7 +66,7 @@ function HeroVideo() {
           ref={videoRef}
           src="/video-apresentacao.mp4"
           poster="/video-apresentacao-poster.jpg"
-          preload="none"
+          preload="auto"
           playsInline
           controls={isPlaying}
           onPause={() => setIsPlaying(false)}
