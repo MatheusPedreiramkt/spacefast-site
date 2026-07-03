@@ -59,7 +59,7 @@ function HeroVideo() {
   }
 
   return (
-    <div className="relative w-full max-w-[300px] sm:max-w-[340px] mx-auto select-none">
+    <div className="relative w-full max-w-[210px] sm:max-w-[340px] mx-auto select-none">
       <div className="absolute -inset-10 bg-gradient-to-br from-blue-600/22 via-purple-600/10 to-cyan-600/14 blur-3xl rounded-full" />
       <div className="relative aspect-[9/16] rounded-2xl overflow-hidden border border-white/12 shadow-2xl shadow-black/70 bg-[#0a0f1c]">
         <video
@@ -122,11 +122,15 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
           <div className="space-y-6 lg:space-y-7 text-center lg:text-left">
             <motion.h1
               {...anim(0.1)}
-              className="text-[2.1rem] sm:text-[2.8rem] lg:text-[3.2rem] font-black leading-[1.1] tracking-tighter text-white"
+              className="text-[1.85rem] sm:text-[2.8rem] lg:text-[3.2rem] font-black leading-[1.1] tracking-normal text-white"
             >
               Descubra se sua empresa está pronta para ter um{" "}
               <span className="gradient-text">site profissional</span>
             </motion.h1>
+
+            <motion.div {...anim(0.18)} className="lg:hidden">
+              <HeroVideo />
+            </motion.div>
 
             <motion.p
               {...anim(0.2)}
@@ -169,6 +173,7 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
             initial={{ opacity: 0, x: 32 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
+            className="hidden lg:block"
           >
             <HeroVideo />
           </motion.div>
