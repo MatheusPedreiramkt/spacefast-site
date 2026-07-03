@@ -18,11 +18,11 @@ import {
   computeScore,
   classify,
   buildWhatsAppUrl,
-  labelFor,
   onLeadComplete,
   type Answers,
   type QuestionId,
   type DiagnosticoLead,
+  type QualifiedDiagnosticoLead,
   type Classification,
 } from "@/lib/diagnostico"
 
@@ -34,14 +34,19 @@ interface DiagnosticoState {
   answers: Answers
   score: number
   classification: Classification | null
-  lead: DiagnosticoLead | null
+  lead: QualifiedDiagnosticoLead | null
 }
 
 type Action =
   | { type: "START_QUIZ" }
   | { type: "ANSWER"; id: QuestionId; value: string }
   | { type: "BACK" }
-  | { type: "SUBMIT_LEAD"; lead: DiagnosticoLead; score: number; classification: Classification }
+  | {
+      type: "SUBMIT_LEAD"
+      lead: QualifiedDiagnosticoLead
+      score: number
+      classification: Classification
+    }
   | { type: "FINISH_ANALYSIS" }
   | { type: "BACK_TO_LANDING" }
 
@@ -59,24 +64,17 @@ function buildDiagnosticoEventParams(
   score: number,
   classification: Classification,
 ) {
-  const params: Record<string, unknown> = {
+  return {
     score,
     temperatura: classification,
+    tipo_negocio: answers.p2 ?? "",
+    objetivo: answers.p4 ?? "",
+    prazo: answers.p5 ?? "",
+    investimento: answers.p7 ?? "",
+    possui_site: answers.p3 ?? "",
+    decisor: answers.p6 ?? "",
+    momento_negocio: answers.p8 ?? "",
   }
-
-  const addAnswer = (key: string, id: QuestionId) => {
-    const value = answers[id]
-    if (!value) return
-    params[key] = labelFor(id, value)
-    params[`${key}_value`] = value
-  }
-
-  addAnswer("segmento", "p2")
-  addAnswer("objetivo", "p4")
-  addAnswer("prazo", "p5")
-  addAnswer("orcamento", "p7")
-
-  return params
 }
 
 function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
@@ -144,8 +142,13 @@ export default function DiagnosticoPage() {
       const score = computeScore(state.answers)
       const classification = classify(score)
       const eventParams = buildDiagnosticoEventParams(state.answers, score, classification)
+      const qualifiedLead: QualifiedDiagnosticoLead = {
+        ...lead,
+        score,
+        temperatura: classification,
+      }
 
-      dispatch({ type: "SUBMIT_LEAD", lead, score, classification })
+      dispatch({ type: "SUBMIT_LEAD", lead: qualifiedLead, score, classification })
       console.log("[Meta Pixel] Lead fired from diagnostico submit")
       trackDiagnosticoLead(eventParams)
 
@@ -154,7 +157,7 @@ export default function DiagnosticoPage() {
       }
 
       // Fire-and-forget — não bloqueia a transição para a tela "Analisando".
-      void onLeadComplete(lead, score, classification)
+      void onLeadComplete(qualifiedLead)
     },
     [state.answers],
   )
@@ -188,8 +191,7 @@ export default function DiagnosticoPage() {
     return (
       <DiagnosticoResultado
         classification={state.classification}
-        lead={state.lead}
-        whatsAppUrl={buildWhatsAppUrl(state.lead, state.answers)}
+        whatsAppUrl={buildWhatsAppUrl(state.classification)}
         onViewPortfolio={handleViewPortfolio}
       />
     )

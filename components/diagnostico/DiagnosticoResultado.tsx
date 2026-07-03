@@ -5,16 +5,14 @@ import { ArrowRight, CheckCircle2 } from "lucide-react"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 import { EASE } from "@/lib/motion"
 import { trackWhatsAppClick } from "@/lib/analytics"
-import { RESULT_COPY, type Classification, type DiagnosticoLead } from "@/lib/diagnostico"
+import { RESULT_COPY, type Classification } from "@/lib/diagnostico"
 
 export default function DiagnosticoResultado({
   classification,
-  lead,
   whatsAppUrl,
   onViewPortfolio,
 }: {
   classification: Classification
-  lead: DiagnosticoLead
   whatsAppUrl: string
   onViewPortfolio: () => void
 }) {
@@ -94,8 +92,7 @@ export default function DiagnosticoResultado({
         </div>
 
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white leading-tight tracking-tight mb-4">
-          {lead.nome ? `${lead.nome.split(" ")[0]}, ` : ""}
-          {copy.title.charAt(0).toLowerCase() + copy.title.slice(1)}
+          {copy.title}
         </h1>
 
         <p className="text-gray-400 text-[1.05rem] leading-relaxed mb-8">{copy.subtitle}</p>
