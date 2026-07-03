@@ -16,22 +16,6 @@ export default function WhatsAppButton({ pixelContentName }: { pixelContentName?
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 1.5, type: "spring", stiffness: 280, damping: 22 }}
     >
-      {/* Pulse rings */}
-      {!prefersReduced && (
-        <>
-          <motion.div
-            className="absolute inset-0 rounded-full bg-emerald-500/30"
-            animate={{ scale: [1, 1.55], opacity: [0.4, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-          />
-          <motion.div
-            className="absolute inset-0 rounded-full bg-emerald-500/20"
-            animate={{ scale: [1, 1.9], opacity: [0.3, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.5 }}
-          />
-        </>
-      )}
-
       <motion.a
         href={WHATSAPP_URL}
         target="_blank"

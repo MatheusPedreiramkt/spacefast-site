@@ -59,7 +59,7 @@ function HeroVideo() {
   }
 
   return (
-    <div className="relative w-full max-w-[210px] sm:max-w-[340px] mx-auto select-none">
+    <div className="relative w-full max-w-[240px] sm:max-w-[340px] mx-auto select-none">
       <div className="absolute -inset-10 bg-gradient-to-br from-blue-600/22 via-purple-600/10 to-cyan-600/14 blur-3xl rounded-full" />
       <div className="relative aspect-[9/16] rounded-2xl overflow-hidden border border-white/12 shadow-2xl shadow-black/70 bg-[#0a0f1c]">
         <video
