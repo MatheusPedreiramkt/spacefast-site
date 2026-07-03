@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/constants'
 import CourseHeader from '@/components/course-landing/CourseHeader'
 import CourseHero from '@/components/course-landing/CourseHero'
 import CourseProblem from '@/components/course-landing/CourseProblem'
@@ -32,7 +33,7 @@ export default function ProspeccaoAutomaticaPage() {
             provider: {
               '@type': 'Organization',
               name: 'SpaceFast Digital',
-              url: 'https://spacefast.com.br',
+              url: SITE_URL,
             },
             author: {
               '@type': 'Person',

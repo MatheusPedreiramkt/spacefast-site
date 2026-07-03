@@ -36,7 +36,7 @@ export default function CourseHeader() {
       >
         {/* Logo */}
         <a
-          href="https://spacefast.com.br"
+          href="https://www.spacefast.com.br"
           className="flex items-center gap-2.5"
           aria-label="SpaceFast"
         >

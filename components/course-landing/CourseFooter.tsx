@@ -13,7 +13,7 @@ export default function CourseFooter() {
           {/* Brand */}
           <div className="flex flex-col items-center sm:items-start gap-1">
             <a
-              href="https://spacefast.com.br"
+              href="https://www.spacefast.com.br"
               className="flex items-center gap-2"
               aria-label="SpaceFast"
             >

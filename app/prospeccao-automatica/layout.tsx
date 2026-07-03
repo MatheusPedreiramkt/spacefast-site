@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'Google Maps + WhatsApp | Sistema de Captação de Clientes',
@@ -19,9 +20,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'Matheus Pedreira' }],
   creator: 'SpaceFast Digital',
   publisher: 'SpaceFast Digital',
-  metadataBase: new URL('https://spacefast.com.br'),
+  metadataBase: new URL(SITE_URL),
   alternates: {
-    canonical: 'https://spacefast.com.br/prospeccao-automatica',
+    canonical: `${SITE_URL}/prospeccao-automatica`,
   },
   robots: {
     index: true,
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    url: 'https://spacefast.com.br/prospeccao-automatica',
+    url: `${SITE_URL}/prospeccao-automatica`,
     title: 'Google Maps + WhatsApp | Sistema de Captação de Clientes',
     description:
       'Aprenda a encontrar empresas no Google Maps, organizar contatos em planilhas e configurar um sistema de prospecção pelo WhatsApp.',

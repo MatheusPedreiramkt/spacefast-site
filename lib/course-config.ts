@@ -15,8 +15,8 @@ export const INSTRUCTOR = {
   bio: 'Sou desenvolvedor web e trabalho com criação de sites, sistemas, marketing digital e soluções de automação. Desenvolvi esse processo para organizar minha própria prospecção e transformei tudo em um treinamento prático para que outras pessoas também possam instalar e utilizar o sistema.',
   instagram: '@matheus.websites',
   instagramUrl: 'https://instagram.com/matheus.websites',
-  site: 'spacefast.com.br',
-  siteUrl: 'https://spacefast.com.br',
+  site: 'www.spacefast.com.br',
+  siteUrl: 'https://www.spacefast.com.br',
   brand: 'SpaceFast Digital',
   photoPath: '/images/course/instructor.jpg',
 }
