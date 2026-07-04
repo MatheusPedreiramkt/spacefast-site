@@ -161,7 +161,7 @@ function buildSheetPayload(
     momento_negocio: answers.p8 ?? "",
     score,
     temperatura: classification,
-    mensagem_whatsapp: buildWhatsAppMessage(classification),
+    mensagem_whatsapp: buildWhatsAppMessage(answers),
     ...getAttributionParams(),
   }
 }
@@ -284,7 +284,7 @@ export default function DiagnosticoPage() {
     return (
       <DiagnosticoResultado
         classification={state.classification}
-        whatsAppUrl={buildWhatsAppUrl(state.classification)}
+        whatsAppUrl={buildWhatsAppUrl(state.answers)}
         onViewPortfolio={handleViewPortfolio}
       />
     )

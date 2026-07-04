@@ -280,23 +280,18 @@ export interface DiagnosticoLeadSheetPayload {
   pagina: string
 }
 
-const WHATSAPP_MESSAGES: Record<Classification, string> = {
-  quente:
-    "Olá, preenchi o diagnóstico da Space Fast. Pelo resultado, minha empresa parece pronta para ter um site profissional. Gostaria de entender a melhor estrutura para o meu negócio.",
-  morno:
-    "Olá, preenchi o diagnóstico da Space Fast. Pelo resultado, minha empresa pode se beneficiar de um site profissional. Gostaria de ver alguns modelos e entender o melhor caminho.",
-  frio:
-    "Olá, preenchi o diagnóstico da Space Fast. Gostaria de receber uma orientação sobre o melhor momento para criar um site profissional.",
-  desqualificado:
-    "Olá, preenchi o diagnóstico da Space Fast. Gostaria de receber uma orientação sobre o melhor momento para criar um site profissional.",
+export function buildWhatsAppMessage(answers: Answers): string {
+  const lines = ["Oi! Fiz o diagnóstico e quero um site pro meu negócio. Como funciona? 🚀", ""]
+
+  if (answers.p2) lines.push(`Segmento: ${labelFor("p2", answers.p2)}`)
+  if (answers.p3) lines.push(`Já tenho site: ${labelFor("p3", answers.p3)}`)
+  if (answers.p5) lines.push(`Quero começar: ${labelFor("p5", answers.p5)}`)
+
+  return lines.join("\n")
 }
 
-export function buildWhatsAppMessage(classification: Classification): string {
-  return WHATSAPP_MESSAGES[classification]
-}
-
-export function buildWhatsAppUrl(classification: Classification): string {
-  const text = buildWhatsAppMessage(classification)
+export function buildWhatsAppUrl(answers: Answers): string {
+  const text = buildWhatsAppMessage(answers)
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`
 }
 
