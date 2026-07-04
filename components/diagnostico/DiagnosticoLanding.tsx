@@ -118,8 +118,7 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
           <div className="space-y-6 lg:space-y-7 text-center lg:text-left">
             <h1 className="text-[1.85rem] sm:text-[2.8rem] lg:text-[3.2rem] font-black leading-[1.1] tracking-normal text-white">
-              Descubra se sua empresa está pronta para ter um{" "}
-              <span className="gradient-text">site profissional</span>
+              Atraia clientes todos os dias sem depender de indicação
             </h1>
 
             <div className="lg:hidden">
@@ -127,9 +126,9 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
             </div>
 
             <p className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px] mx-auto lg:mx-0">
-              Responda um diagnóstico rápido e veja qual estrutura de site faz mais sentido para o
-              seu negócio. Projetos a partir de{" "}
-              <span className="text-gray-200 font-medium">R${DIAGNOSTICO_PRICE}</span>.
+              Um site profissional faz seu negócio ser encontrado no Google e passa a credibilidade
+              que traz cliente sozinho. Responda o diagnóstico e veja qual site faz sentido pro seu
+              negócio.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 items-center lg:items-start">
