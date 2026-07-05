@@ -54,11 +54,23 @@ const PARA_QUEM_NAO_E = [
 
 function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
 
   function handlePlay() {
-    videoRef.current?.play()
-    setIsPlaying(true)
+    const video = videoRef.current
+    if (!video) return
+
+    if (!shouldLoadVideo) {
+      setShouldLoadVideo(true)
+      video.src = "/video-apresentacao.mp4"
+      video.load()
+    }
+
+    void video
+      .play()
+      .then(() => setIsPlaying(true))
+      .catch(() => setIsPlaying(false))
   }
 
   return (
@@ -67,11 +79,12 @@ function HeroVideo() {
       <div className="relative aspect-[9/16] rounded-2xl overflow-hidden border border-white/12 shadow-2xl shadow-black/70 bg-[#0a0f1c]">
         <video
           ref={videoRef}
-          src="/video-apresentacao.mp4"
+          src={shouldLoadVideo ? "/video-apresentacao.mp4" : undefined}
           poster="/video-apresentacao-poster.jpg"
-          preload="metadata"
+          preload="none"
           playsInline
-          controls={isPlaying}
+          controls={shouldLoadVideo}
+          onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}
           onEnded={() => setIsPlaying(false)}
           className="absolute inset-0 w-full h-full object-cover"
@@ -79,7 +92,7 @@ function HeroVideo() {
           Seu navegador não suporta vídeo.
         </video>
 
-        {!isPlaying && (
+        {!shouldLoadVideo && !isPlaying && (
           <button
             type="button"
             onClick={handlePlay}
@@ -115,9 +128,9 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
       <div className="absolute bottom-1/4 -right-64 w-[700px] h-[700px] bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
-          <div className="space-y-6 lg:space-y-7 text-center lg:text-left">
-            <h1 className="max-w-[340px] sm:max-w-none mx-auto lg:mx-0 text-[1.65rem] sm:text-[2.8rem] lg:text-[3.2rem] font-black leading-[1.12] sm:leading-[1.1] tracking-normal text-white">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center min-w-0">
+          <div className="min-w-0 w-full space-y-6 lg:space-y-7 text-center lg:text-left">
+            <h1 className="max-w-[320px] sm:max-w-none mx-auto lg:mx-0 text-[1.52rem] sm:text-[2.8rem] lg:text-[3.2rem] font-black leading-[1.12] sm:leading-[1.1] tracking-normal text-white break-words">
               Atraia clientes <span className="gradient-text">todos os dias</span> sem depender de
               indicação
             </h1>
@@ -126,7 +139,7 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
               <HeroVideo />
             </div>
 
-            <p className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px] mx-auto lg:mx-0">
+            <p className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[340px] sm:max-w-[480px] mx-auto lg:mx-0">
               Um site profissional faz seu negócio ser encontrado no Google e passa a credibilidade
               que traz cliente sozinho. Responda o diagnóstico e veja qual site faz sentido pro seu
               negócio.

@@ -82,9 +82,9 @@ function ProjectCard({
           src={project.image}
           alt={`Preview do site ${project.name}`}
           fill
-          sizes="(max-width: 640px) 94vw, (max-width: 1024px) 47vw, 600px"
+          sizes="(max-width: 640px) 340px, (max-width: 1024px) 47vw, 600px"
           className="object-contain relative z-[2]"
-          quality={90}
+          quality={82}
           draggable={false}
         />
 
