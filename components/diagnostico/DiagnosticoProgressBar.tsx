@@ -6,10 +6,12 @@ import { ChevronLeft } from "lucide-react"
 export default function DiagnosticoProgressBar({
   current,
   total,
+  label,
   onBack,
 }: {
   current: number // 1-based
   total: number
+  label: string
   onBack: () => void
 }) {
   const prefersReduced = useReducedMotion()
@@ -28,9 +30,7 @@ export default function DiagnosticoProgressBar({
 
       <div className="flex-1">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-gray-500 font-medium">
-            Pergunta {current} de {total}
-          </span>
+          <span className="text-xs text-gray-500 font-medium">{label}</span>
           <span className="text-xs text-gray-600">{pct}%</span>
         </div>
         <div

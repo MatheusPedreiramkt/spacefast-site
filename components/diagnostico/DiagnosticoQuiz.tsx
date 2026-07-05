@@ -246,7 +246,12 @@ export default function DiagnosticoQuiz({
 
       <div className="relative max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12 min-h-screen flex flex-col">
         <div className="mb-8">
-          <DiagnosticoProgressBar current={questionIndex + 1} total={TOTAL_STEPS} onBack={onBack} />
+          <DiagnosticoProgressBar
+            current={questionIndex + 1}
+            total={TOTAL_STEPS}
+            label={isForm ? "Últimos dados" : `Pergunta ${questionIndex + 1} de ${QUESTIONS.length}`}
+            onBack={onBack}
+          />
         </div>
 
         <div className="flex-1">

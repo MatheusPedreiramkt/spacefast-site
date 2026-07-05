@@ -36,9 +36,9 @@ export const SCORING = {
     pesquisando: -20,
   },
   p5: {
-    decisor_ciente_500: 40,
-    decide_junto_ciente_800: 30,
-    preciso_avaliar: 10,
+    consigo_investir_500: 40,
+    preciso_alinhar_com_outra_pessoa: 25,
+    preciso_entender_melhor: 10,
     procuro_mais_barato: -40,
   },
 } as const
@@ -101,17 +101,17 @@ export const QUESTIONS: QuizQuestion[] = [
   },
   {
     id: "p5",
-    question: "Sobre o investimento, qual opção combina melhor com você?",
+    question: "Pensando no investimento, qual dessas opções mais combina com seu momento?",
     options: [
       {
-        value: "decisor_ciente_500",
-        label: `Sou decisor e sei que um site profissional começa a partir de R$${DIAGNOSTICO_PRICE}`,
+        value: "consigo_investir_500",
+        label: `Se fizer sentido para o meu negócio, consigo investir a partir de R$${DIAGNOSTICO_PRICE}`,
       },
       {
-        value: "decide_junto_ciente_800",
-        label: "Decido junto com alguém e sei que começa a partir de R$800",
+        value: "preciso_alinhar_com_outra_pessoa",
+        label: "Tenho interesse, mas preciso alinhar esse investimento com outra pessoa",
       },
-      { value: "preciso_avaliar", label: "Ainda preciso avaliar o investimento" },
+      { value: "preciso_entender_melhor", label: "Ainda preciso entender melhor antes de definir o investimento" },
       { value: "procuro_mais_barato", label: "No momento estou procurando algo mais barato" },
     ],
   },
