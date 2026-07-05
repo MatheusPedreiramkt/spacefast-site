@@ -84,10 +84,6 @@ function McQuestion({
   )
 }
 
-function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-}
-
 function isValidWhatsApp(value: string) {
   return value.replace(/\D/g, "").length >= 10
 }
@@ -96,10 +92,7 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
   const [fields, setFields] = useState({
     nome: "",
     whatsapp: "",
-    email: "",
-    cidade: "",
     empresa: "",
-    instagram: "",
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -122,9 +115,6 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
     } else if (!isValidWhatsApp(fields.whatsapp)) {
       nextErrors.whatsapp = "Informe um WhatsApp válido, com DDD."
     }
-    if (fields.email.trim() && !isValidEmail(fields.email.trim())) {
-      nextErrors.email = "Informe um e-mail válido."
-    }
 
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) return
@@ -135,10 +125,7 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
     onSubmitForm({
       nome: fields.nome.trim(),
       whatsapp: fields.whatsapp.trim(),
-      email: fields.email.trim() || undefined,
-      cidade: fields.cidade.trim() || undefined,
       empresa: fields.empresa.trim() || undefined,
-      instagram: fields.instagram.trim() || undefined,
     })
   }
 
@@ -207,64 +194,15 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
       </div>
 
       <div>
-        <label htmlFor="df-email" className="block text-sm text-gray-400 mb-1.5">
-          E-mail
+        <label htmlFor="df-empresa" className="block text-sm text-gray-400 mb-1.5">
+          Nome da empresa
         </label>
         <input
-          id="df-email"
-          type="email"
-          autoComplete="email"
-          value={fields.email}
-          onChange={(e) => update("email", e.target.value)}
-          className={`${inputClass} ${errors.email ? "border-red-500/60" : "border-white/10"}`}
-          aria-invalid={!!errors.email}
-          aria-describedby={errors.email ? "df-email-error" : undefined}
-        />
-        {errors.email && (
-          <p id="df-email-error" className="text-red-400 text-xs mt-1.5">
-            {errors.email}
-          </p>
-        )}
-      </div>
-
-      <div className="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="df-cidade" className="block text-sm text-gray-400 mb-1.5">
-            Cidade-Estado
-          </label>
-          <input
-            id="df-cidade"
-            type="text"
-            autoComplete="address-level2"
-            value={fields.cidade}
-            onChange={(e) => update("cidade", e.target.value)}
-            className={`${inputClass} border-white/10`}
-          />
-        </div>
-        <div>
-          <label htmlFor="df-empresa" className="block text-sm text-gray-400 mb-1.5">
-            Nome da empresa
-          </label>
-          <input
-            id="df-empresa"
-            type="text"
-            autoComplete="organization"
-            value={fields.empresa}
-            onChange={(e) => update("empresa", e.target.value)}
-            className={`${inputClass} border-white/10`}
-          />
-        </div>
-      </div>
-
-      <div>
-        <label htmlFor="df-instagram" className="block text-sm text-gray-400 mb-1.5">
-          Instagram ou site atual (se tiver)
-        </label>
-        <input
-          id="df-instagram"
+          id="df-empresa"
           type="text"
-          value={fields.instagram}
-          onChange={(e) => update("instagram", e.target.value)}
+          autoComplete="organization"
+          value={fields.empresa}
+          onChange={(e) => update("empresa", e.target.value)}
           className={`${inputClass} border-white/10`}
         />
       </div>

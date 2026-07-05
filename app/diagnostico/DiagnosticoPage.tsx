@@ -70,13 +70,13 @@ function buildDiagnosticoEventParams(
   return {
     score,
     temperatura: classification,
-    tipo_negocio: answers.p2 ?? "",
-    objetivo: answers.p4 ?? "",
-    prazo: answers.p5 ?? "",
-    investimento: answers.p7 ?? "",
-    possui_site: answers.p3 ?? "",
-    decisor: answers.p6 ?? "",
-    momento_negocio: answers.p8 ?? "",
+    tipo_negocio: "",
+    objetivo: answers.p3 ?? "",
+    prazo: answers.p4 ?? "",
+    investimento: answers.p5 ?? "",
+    possui_site: answers.p2 ?? "",
+    decisor: "",
+    momento_negocio: answers.p1 ?? "",
   }
 }
 
@@ -124,41 +124,26 @@ function getAttributionParams() {
   }
 }
 
-function splitCidadeEstado(value?: string) {
-  const normalized = value?.trim() ?? ""
-  if (!normalized) return { cidade: "", estado: "" }
-
-  const match = normalized.match(/^(.*?)(?:\s*[-/,]\s*)([A-Za-z]{2})$/)
-  if (!match) return { cidade: normalized, estado: "" }
-
-  return {
-    cidade: match[1].trim(),
-    estado: match[2].toUpperCase(),
-  }
-}
-
 function buildSheetPayload(
   lead: DiagnosticoLead,
   answers: Answers,
   score: number,
   classification: Classification,
 ): DiagnosticoLeadSheetPayload {
-  const { cidade, estado } = splitCidadeEstado(lead.cidade)
-
   return {
     nome: lead.nome,
     whatsapp: lead.whatsapp,
-    email: lead.email ?? "",
+    email: "",
     empresa: lead.empresa ?? "",
-    cidade,
-    estado,
-    tipo_negocio: answers.p2 ?? "",
-    possui_site: answers.p3 ?? "",
-    objetivo: answers.p4 ?? "",
-    prazo: answers.p5 ?? "",
-    decisor: answers.p6 ?? "",
-    investimento: answers.p7 ?? "",
-    momento_negocio: answers.p8 ?? "",
+    cidade: "",
+    estado: "",
+    tipo_negocio: "",
+    possui_site: answers.p2 ?? "",
+    objetivo: answers.p3 ?? "",
+    prazo: answers.p4 ?? "",
+    decisor: "",
+    investimento: answers.p5 ?? "",
+    momento_negocio: answers.p1 ?? "",
     score,
     temperatura: classification,
     mensagem_whatsapp: buildWhatsAppMessage(answers),

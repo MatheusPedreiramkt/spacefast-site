@@ -11,58 +11,35 @@ export const DIAGNOSTICO_PRICE = "500"
 export const SCORING = {
   p1: {
     empresa_ativa: 30,
-    comecando_agora: 15,
+    comecando_agora: 10,
     pesquisando: -20,
   },
   p2: {
-    prestador_servico: 20,
-    loja_fisica: 20,
-    loja_online: 20,
-    clinica_consultorio: 25,
-    restaurante_delivery: 15,
-    empresa_b2b: 25,
-    autonomo: 15,
-    outro: 10,
-  },
-  p3: {
+    apenas_instagram_whatsapp: 25,
     nao_tenho_site: 25,
     site_antigo: 30,
     site_nao_gera_resultado: 30,
     quero_melhorar: 20,
-    apenas_instagram_whatsapp: 25,
   },
-  p4: {
+  p3: {
     passar_confianca: 20,
     receber_clientes_whatsapp: 25,
     aparecer_google: 20,
     apresentar_produtos_servicos: 15,
     vender_online: 20,
-    presenca_profissional: 20,
   },
-  p5: {
+  p4: {
     quanto_antes: 30,
     esta_semana: 25,
-    este_mes: 20,
+    este_mes: 15,
     proximos_meses: 5,
     pesquisando: -20,
   },
-  p6: {
-    eu_decido: 25,
-    decido_junto: 15,
-    pesquisando_para_outra_pessoa: 0,
-  },
-  p7: {
-    ciente_800: 30,
-    posso_investir_mais: 40,
+  p5: {
+    decisor_ciente_500: 40,
+    decide_junto_ciente_800: 30,
     preciso_avaliar: 10,
     procuro_mais_barato: -40,
-  },
-  p8: {
-    vendo_todos_os_meses: 25,
-    tenho_clientes_quero_crescer: 25,
-    comecando_agora: 10,
-    ainda_nao_vendo: -20,
-    prefiro_nao_informar: 0,
   },
 } as const
 
@@ -82,40 +59,26 @@ export interface QuizQuestion {
 export const QUESTIONS: QuizQuestion[] = [
   {
     id: "p1",
-    question: "Você já tem uma empresa ou negócio ativo?",
+    question: "Hoje você já tem um negócio ativo?",
     options: [
-      { value: "empresa_ativa", label: "Sim, tenho empresa ativa" },
+      { value: "empresa_ativa", label: "Sim, já tenho empresa/negócio ativo" },
       { value: "comecando_agora", label: "Estou começando agora" },
       { value: "pesquisando", label: "Ainda estou apenas pesquisando" },
     ],
   },
   {
     id: "p2",
-    question: "Qual é o tipo do seu negócio?",
+    question: "Como está sua presença online hoje?",
     options: [
-      { value: "prestador_servico", label: "Prestador de serviço" },
-      { value: "loja_fisica", label: "Loja física" },
-      { value: "loja_online", label: "Loja online" },
-      { value: "clinica_consultorio", label: "Clínica ou consultório" },
-      { value: "restaurante_delivery", label: "Restaurante ou delivery" },
-      { value: "empresa_b2b", label: "Empresa B2B" },
-      { value: "autonomo", label: "Profissional autônomo" },
-      { value: "outro", label: "Outro" },
+      { value: "apenas_instagram_whatsapp", label: "Tenho só Instagram/WhatsApp" },
+      { value: "nao_tenho_site", label: "Não tenho site" },
+      { value: "site_antigo", label: "Tenho site, mas está antigo" },
+      { value: "site_nao_gera_resultado", label: "Tenho site, mas não gera resultado" },
+      { value: "quero_melhorar", label: "Já tenho site e quero melhorar" },
     ],
   },
   {
     id: "p3",
-    question: "Hoje sua empresa já tem site?",
-    options: [
-      { value: "nao_tenho_site", label: "Não tenho site" },
-      { value: "site_antigo", label: "Tenho, mas está antigo" },
-      { value: "site_nao_gera_resultado", label: "Tenho, mas não gera resultado" },
-      { value: "quero_melhorar", label: "Tenho e quero melhorar" },
-      { value: "apenas_instagram_whatsapp", label: "Uso apenas Instagram/WhatsApp" },
-    ],
-  },
-  {
-    id: "p4",
     question: "Qual é o principal objetivo do site?",
     options: [
       { value: "passar_confianca", label: "Passar mais confiança" },
@@ -123,48 +86,33 @@ export const QUESTIONS: QuizQuestion[] = [
       { value: "aparecer_google", label: "Aparecer melhor no Google" },
       { value: "apresentar_produtos_servicos", label: "Apresentar produtos ou serviços" },
       { value: "vender_online", label: "Vender online" },
-      { value: "presenca_profissional", label: "Ter uma presença mais profissional" },
+    ],
+  },
+  {
+    id: "p4",
+    question: "Quando você pretende iniciar?",
+    options: [
+      { value: "quanto_antes", label: "O quanto antes" },
+      { value: "esta_semana", label: "Ainda esta semana" },
+      { value: "este_mes", label: "Este mês" },
+      { value: "proximos_meses", label: "Nos próximos meses" },
+      { value: "pesquisando", label: "Estou só pesquisando" },
     ],
   },
   {
     id: "p5",
-    question: "Quando você pretende iniciar?",
+    question: "Sobre o investimento, qual opção combina melhor com você?",
     options: [
-      { value: "quanto_antes", label: "O quanto antes" },
-      { value: "esta_semana", label: "Esta semana" },
-      { value: "este_mes", label: "Este mês" },
-      { value: "proximos_meses", label: "Nos próximos meses" },
-      { value: "pesquisando", label: "Ainda estou pesquisando" },
-    ],
-  },
-  {
-    id: "p6",
-    question: "Você é a pessoa responsável por decidir a contratação?",
-    options: [
-      { value: "eu_decido", label: "Sim, eu decido" },
-      { value: "decido_junto", label: "Decido junto com sócio/família" },
-      { value: "pesquisando_para_outra_pessoa", label: "Estou pesquisando para outra pessoa" },
-    ],
-  },
-  {
-    id: "p7",
-    question: `Você está ciente de que um site profissional começa a partir de R$${DIAGNOSTICO_PRICE}?`,
-    options: [
-      { value: "ciente_800", label: "Sim, estou ciente" },
-      { value: "posso_investir_mais", label: "Sim, e posso investir mais se fizer sentido" },
-      { value: "preciso_avaliar", label: "Ainda preciso avaliar" },
-      { value: "procuro_mais_barato", label: "No momento procuro algo mais barato" },
-    ],
-  },
-  {
-    id: "p8",
-    question: "Qual é o faturamento ou momento atual do negócio?",
-    options: [
-      { value: "vendo_todos_os_meses", label: "Já vendo todos os meses" },
-      { value: "tenho_clientes_quero_crescer", label: "Tenho clientes, mas quero crescer" },
-      { value: "comecando_agora", label: "Estou começando agora" },
-      { value: "ainda_nao_vendo", label: "Ainda não vendo" },
-      { value: "prefiro_nao_informar", label: "Prefiro não informar" },
+      {
+        value: "decisor_ciente_500",
+        label: `Sou decisor e sei que um site profissional começa a partir de R$${DIAGNOSTICO_PRICE}`,
+      },
+      {
+        value: "decide_junto_ciente_800",
+        label: "Decido junto com alguém e sei que começa a partir de R$800",
+      },
+      { value: "preciso_avaliar", label: "Ainda preciso avaliar o investimento" },
+      { value: "procuro_mais_barato", label: "No momento estou procurando algo mais barato" },
     ],
   },
 ]
@@ -192,8 +140,8 @@ export function computeScore(answers: Answers): number {
 export type Classification = "quente" | "morno" | "frio" | "desqualificado"
 
 export function classify(score: number): Classification {
-  if (score >= 100) return "quente"
-  if (score >= 60) return "morno"
+  if (score >= 90) return "quente"
+  if (score >= 55) return "morno"
   if (score >= 0) return "frio"
   return "desqualificado"
 }
@@ -243,10 +191,7 @@ export const RESULT_COPY: Record<Classification, ResultCopy> = {
 export interface DiagnosticoLead {
   nome: string
   whatsapp: string
-  email?: string
-  cidade?: string
   empresa?: string
-  instagram?: string
 }
 
 export interface QualifiedDiagnosticoLead extends DiagnosticoLead {
@@ -283,9 +228,9 @@ export interface DiagnosticoLeadSheetPayload {
 export function buildWhatsAppMessage(answers: Answers): string {
   const lines = ["Oi! Fiz o diagnóstico e quero um site pro meu negócio. Como funciona? 🚀", ""]
 
-  if (answers.p2) lines.push(`Segmento: ${labelFor("p2", answers.p2)}`)
-  if (answers.p3) lines.push(`Já tenho site: ${labelFor("p3", answers.p3)}`)
-  if (answers.p5) lines.push(`Quero começar: ${labelFor("p5", answers.p5)}`)
+  if (answers.p2) lines.push(`Presença online: ${labelFor("p2", answers.p2)}`)
+  if (answers.p3) lines.push(`Objetivo do site: ${labelFor("p3", answers.p3)}`)
+  if (answers.p4) lines.push(`Quero começar: ${labelFor("p4", answers.p4)}`)
 
   return lines.join("\n")
 }
