@@ -65,12 +65,11 @@ export default function Header({ pixelContentName }: { pixelContentName?: string
             aria-label="SpaceFast — voltar ao início"
           >
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               alt="SpaceFast"
               width={220}
               height={102}
-              className="object-contain"
-              priority
+              className="h-10 w-auto object-contain"
             />
           </a>
 

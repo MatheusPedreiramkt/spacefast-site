@@ -1,10 +1,17 @@
 import type { NextConfig } from "next";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const rootDir = dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: rootDir,
+  },
   async headers() {
     return [
       {
-        source: "/:path*.(mp4|webm|jpg|jpeg|png|webp|avif|svg|ico)",
+        source: "/:path*.(avif|webp|png|jpg|jpeg|gif|svg|ico|mp4|webm|woff2|woff|ttf|otf)",
         headers: [
           {
             key: "Cache-Control",
