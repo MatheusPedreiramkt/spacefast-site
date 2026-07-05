@@ -118,7 +118,8 @@ function HeroSection({ onStart, onViewPortfolio }: { onStart: () => void; onView
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
           <div className="space-y-6 lg:space-y-7 text-center lg:text-left">
             <h1 className="text-[1.85rem] sm:text-[2.8rem] lg:text-[3.2rem] font-black leading-[1.1] tracking-normal text-white">
-              Atraia clientes todos os dias sem depender de indicação
+              Atraia clientes <span className="gradient-text">todos os dias</span> sem depender de
+              indicação
             </h1>
 
             <div className="lg:hidden">
