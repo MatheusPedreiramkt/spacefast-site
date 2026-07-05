@@ -53,6 +53,11 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
   },
   alternates: { canonical: SITE_URL, languages: { "pt-BR": SITE_URL } },
+  verification: {
+    other: {
+      "facebook-domain-verification": "m5wycnszqdsb1c03qiauyrdjb334fj",
+    },
+  },
   icons: {
     icon: [{ url: "/favicon.ico", sizes: "any" }, { url: "/icon.svg", type: "image/svg+xml" }],
     apple: "/apple-touch-icon.png",
