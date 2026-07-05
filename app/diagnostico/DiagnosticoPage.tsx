@@ -1,10 +1,7 @@
 "use client"
 
-import { useCallback, useEffect, useReducer, useRef, useState } from "react"
-import Header from "@/components/Header"
-import Footer from "@/components/Footer"
-import WhatsAppButton from "@/components/WhatsAppButton"
-import DiagnosticoLanding from "@/components/diagnostico/DiagnosticoLanding"
+import { useCallback, useEffect, useReducer, useRef } from "react"
+import { useRouter } from "next/navigation"
 import DiagnosticoQuiz from "@/components/diagnostico/DiagnosticoQuiz"
 import DiagnosticoAnalisando from "@/components/diagnostico/DiagnosticoAnalisando"
 import DiagnosticoResultado from "@/components/diagnostico/DiagnosticoResultado"
@@ -29,7 +26,7 @@ import {
   type Classification,
 } from "@/lib/diagnostico"
 
-type Step = "landing" | "quiz" | "analisando" | "resultado"
+type Step = "quiz" | "analisando" | "resultado"
 
 interface DiagnosticoState {
   step: Step
@@ -41,7 +38,6 @@ interface DiagnosticoState {
 }
 
 type Action =
-  | { type: "START_QUIZ" }
   | { type: "ANSWER"; id: QuestionId; value: string }
   | { type: "BACK" }
   | {
@@ -51,10 +47,9 @@ type Action =
       classification: Classification
     }
   | { type: "FINISH_ANALYSIS" }
-  | { type: "BACK_TO_LANDING" }
 
 const initialState: DiagnosticoState = {
-  step: "landing",
+  step: "quiz",
   questionIndex: 0,
   answers: {},
   score: 0,
@@ -153,8 +148,6 @@ function buildSheetPayload(
 
 function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
   switch (action.type) {
-    case "START_QUIZ":
-      return { ...state, step: "quiz", questionIndex: 0 }
     case "ANSWER":
       return {
         ...state,
@@ -162,9 +155,7 @@ function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
         questionIndex: state.questionIndex + 1,
       }
     case "BACK":
-      return state.questionIndex === 0
-        ? { ...state, step: "landing" }
-        : { ...state, questionIndex: state.questionIndex - 1 }
+      return state.questionIndex === 0 ? state : { ...state, questionIndex: state.questionIndex - 1 }
     case "SUBMIT_LEAD":
       return {
         ...state,
@@ -175,8 +166,6 @@ function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
       }
     case "FINISH_ANALYSIS":
       return { ...state, step: "resultado" }
-    case "BACK_TO_LANDING":
-      return { ...state, step: "landing" }
     default:
       return state
   }
@@ -184,7 +173,7 @@ function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
 
 export default function DiagnosticoPage() {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const [scrollToPortfolio, setScrollToPortfolio] = useState(false)
+  const router = useRouter()
   const viewContentTrackedRef = useRef(false)
   const quizStartTrackedRef = useRef(false)
   const leadSubmittedRef = useRef(false)
@@ -195,17 +184,13 @@ export default function DiagnosticoPage() {
     trackDiagnosticoViewContent()
   }, [])
 
-  const handleStart = useCallback(() => {
+  const handleAnswer = useCallback((id: QuestionId, value: string) => {
     if (!quizStartTrackedRef.current) {
       quizStartTrackedRef.current = true
       trackQuizStart()
     }
-    dispatch({ type: "START_QUIZ" })
+    dispatch({ type: "ANSWER", id, value })
   }, [])
-  const handleAnswer = useCallback(
-    (id: QuestionId, value: string) => dispatch({ type: "ANSWER", id, value }),
-    [],
-  )
   const handleBack = useCallback(() => dispatch({ type: "BACK" }), [])
 
   const handleSubmitForm = useCallback(
@@ -242,24 +227,11 @@ export default function DiagnosticoPage() {
 
   const handleFinishAnalysis = useCallback(() => dispatch({ type: "FINISH_ANALYSIS" }), [])
 
+  // A landing longa saiu de /diagnostico — quem quer ver o portfólio é
+  // levado para a apresentação completa, em outra rota.
   const handleViewPortfolio = useCallback(() => {
-    setScrollToPortfolio(true)
-    dispatch({ type: "BACK_TO_LANDING" })
-  }, [])
-
-  const handleScrolled = useCallback(() => setScrollToPortfolio(false), [])
-
-  if (state.step === "quiz") {
-    return (
-      <DiagnosticoQuiz
-        questionIndex={state.questionIndex}
-        answers={state.answers}
-        onAnswer={handleAnswer}
-        onBack={handleBack}
-        onSubmitForm={handleSubmitForm}
-      />
-    )
-  }
+    router.push("/diagnostico/apresentacao#portfolio")
+  }, [router])
 
   if (state.step === "analisando") {
     return <DiagnosticoAnalisando onDone={handleFinishAnalysis} />
@@ -276,15 +248,12 @@ export default function DiagnosticoPage() {
   }
 
   return (
-    <>
-      <Header pixelContentName="WhatsApp Header - Diagnóstico" />
-      <DiagnosticoLanding
-        onStart={handleStart}
-        scrollToPortfolio={scrollToPortfolio}
-        onScrolled={handleScrolled}
-      />
-      <Footer />
-      <WhatsAppButton pixelContentName="WhatsApp Flutuante - Diagnóstico" />
-    </>
+    <DiagnosticoQuiz
+      questionIndex={state.questionIndex}
+      answers={state.answers}
+      onAnswer={handleAnswer}
+      onBack={handleBack}
+      onSubmitForm={handleSubmitForm}
+    />
   )
 }

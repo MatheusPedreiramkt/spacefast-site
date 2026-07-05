@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { preload } from "react-dom"
 import { SITE_URL } from "@/lib/constants"
 import DiagnosticoPage from "./DiagnosticoPage"
 
@@ -7,6 +6,7 @@ const PAGE_URL = `${SITE_URL}/diagnostico`
 
 // Página de destino para tráfego pago (Facebook Ads) — não indexar para não
 // competir com as páginas orgânicas do site nem expor o funil de qualificação.
+// Abre direto no quiz (sem landing) para reduzir fricção do funil pago.
 export const metadata: Metadata = {
   title: "Diagnóstico Gratuito | SpaceFast",
   description:
@@ -19,9 +19,5 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  // Poster do vídeo do hero é o elemento de LCP nesta página — adianta o
-  // download com prioridade alta, antes do JS de hidratação competir por banda.
-  preload("/video-apresentacao-poster.jpg", { as: "image", fetchPriority: "high" })
-
   return <DiagnosticoPage />
 }

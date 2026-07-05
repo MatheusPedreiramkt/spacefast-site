@@ -7,11 +7,13 @@ export default function DiagnosticoProgressBar({
   current,
   total,
   label,
+  showBack = true,
   onBack,
 }: {
   current: number // 1-based
   total: number
   label: string
+  showBack?: boolean
   onBack: () => void
 }) {
   const prefersReduced = useReducedMotion()
@@ -19,14 +21,16 @@ export default function DiagnosticoProgressBar({
 
   return (
     <div className="flex items-center gap-3 sm:gap-4">
-      <button
-        type="button"
-        onClick={onBack}
-        aria-label="Voltar para a pergunta anterior"
-        className="shrink-0 w-9 h-9 rounded-full border border-white/12 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:ring-blue-400"
-      >
-        <ChevronLeft className="w-4.5 h-4.5" aria-hidden />
-      </button>
+      {showBack && (
+        <button
+          type="button"
+          onClick={onBack}
+          aria-label="Voltar para a pergunta anterior"
+          className="shrink-0 w-9 h-9 rounded-full border border-white/12 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:ring-blue-400"
+        >
+          <ChevronLeft className="w-4.5 h-4.5" aria-hidden />
+        </button>
+      )}
 
       <div className="flex-1">
         <div className="flex items-center justify-between mb-1.5">

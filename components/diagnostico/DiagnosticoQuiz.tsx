@@ -6,6 +6,7 @@ import { CheckCircle2 } from "lucide-react"
 import { EASE } from "@/lib/motion"
 import DiagnosticoProgressBar from "./DiagnosticoProgressBar"
 import {
+  DIAGNOSTICO_PRICE,
   QUESTIONS,
   TOTAL_STEPS,
   type Answers,
@@ -47,6 +48,18 @@ function McQuestion({
       exit={prefersReduced ? undefined : { opacity: 0, x: -24 }}
       transition={{ duration: 0.32, ease: EASE }}
     >
+      {questionIndex === 0 && (
+        <div className="mb-6">
+          <h1 className="text-lg sm:text-xl font-bold text-white leading-snug mb-2">
+            Diagnóstico rápido para site profissional
+          </h1>
+          <p className="text-gray-400 text-sm leading-relaxed">
+            Responda 5 perguntas e descubra qual estrutura faz mais sentido para sua empresa.
+            Projetos a partir de R${DIAGNOSTICO_PRICE}.
+          </p>
+        </div>
+      )}
+
       <h2 className="text-xl sm:text-2xl font-bold text-white leading-snug mb-6">
         {question.question}
       </h2>
@@ -249,7 +262,8 @@ export default function DiagnosticoQuiz({
           <DiagnosticoProgressBar
             current={questionIndex + 1}
             total={TOTAL_STEPS}
-            label={isForm ? "Últimos dados" : `Pergunta ${questionIndex + 1} de ${QUESTIONS.length}`}
+            label={isForm ? "Etapa final: seus dados" : `Pergunta ${questionIndex + 1} de ${QUESTIONS.length}`}
+            showBack={questionIndex > 0}
             onBack={onBack}
           />
         </div>
