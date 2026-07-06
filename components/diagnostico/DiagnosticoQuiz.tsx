@@ -101,7 +101,7 @@ function isValidWhatsApp(value: string) {
   return value.replace(/\D/g, "").length >= 10
 }
 
-function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => void }) {
+function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => Promise<void> | void }) {
   const [fields, setFields] = useState({
     nome: "",
     whatsapp: "",
@@ -116,7 +116,7 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
     setFields((f) => ({ ...f, [key]: value }))
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (hasSubmittedRef.current || isSubmitting) return
 
@@ -135,11 +135,17 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
     hasSubmittedRef.current = true
     setIsSubmitting(true)
 
-    onSubmitForm({
-      nome: fields.nome.trim(),
-      whatsapp: fields.whatsapp.trim(),
-      empresa: fields.empresa.trim() || undefined,
-    })
+    try {
+      await onSubmitForm({
+        nome: fields.nome.trim(),
+        whatsapp: fields.whatsapp.trim(),
+        empresa: fields.empresa.trim() || undefined,
+      })
+    } catch {
+      hasSubmittedRef.current = false
+      setIsSubmitting(false)
+      setErrors({ submit: "Não foi possível finalizar agora. Tente novamente." })
+    }
   }
 
   const inputClass =
@@ -225,8 +231,9 @@ function LeadForm({ onSubmitForm }: { onSubmitForm: (lead: DiagnosticoLead) => v
         disabled={isSubmitting}
         className="mt-2 inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] hover:from-blue-500 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/25 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
       >
-        {isSubmitting ? "Enviando..." : "Ver meu resultado"}
+        {isSubmitting ? "Enviando..." : "Finalizar e falar com especialista"}
       </button>
+      {errors.submit && <p className="text-red-400 text-xs text-center">{errors.submit}</p>}
     </motion.form>
   )
 }
@@ -242,7 +249,7 @@ export default function DiagnosticoQuiz({
   answers: Answers
   onAnswer: (id: QuestionId, value: string) => void
   onBack: () => void
-  onSubmitForm: (lead: DiagnosticoLead) => void
+  onSubmitForm: (lead: DiagnosticoLead) => Promise<void> | void
 }) {
   const isForm = questionIndex >= QUESTIONS.length
 

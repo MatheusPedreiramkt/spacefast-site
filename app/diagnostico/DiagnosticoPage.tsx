@@ -1,10 +1,8 @@
 "use client"
 
 import { useCallback, useEffect, useReducer, useRef } from "react"
-import { useRouter } from "next/navigation"
 import DiagnosticoQuiz from "@/components/diagnostico/DiagnosticoQuiz"
-import DiagnosticoAnalisando from "@/components/diagnostico/DiagnosticoAnalisando"
-import DiagnosticoResultado from "@/components/diagnostico/DiagnosticoResultado"
+import DiagnosticoRedirecionando from "@/components/diagnostico/DiagnosticoRedirecionando"
 import {
   pushDataLayerEvent,
   trackDiagnosticoLead,
@@ -26,7 +24,7 @@ import {
   type Classification,
 } from "@/lib/diagnostico"
 
-type Step = "quiz" | "analisando" | "resultado"
+type Step = "quiz" | "redirecionando"
 
 interface DiagnosticoState {
   step: Step
@@ -46,7 +44,6 @@ type Action =
       score: number
       classification: Classification
     }
-  | { type: "FINISH_ANALYSIS" }
 
 const initialState: DiagnosticoState = {
   step: "quiz",
@@ -159,13 +156,11 @@ function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
     case "SUBMIT_LEAD":
       return {
         ...state,
-        step: "analisando",
+        step: "redirecionando",
         lead: action.lead,
         score: action.score,
         classification: action.classification,
       }
-    case "FINISH_ANALYSIS":
-      return { ...state, step: "resultado" }
     default:
       return state
   }
@@ -173,7 +168,6 @@ function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
 
 export default function DiagnosticoPage() {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const router = useRouter()
   const viewContentTrackedRef = useRef(false)
   const quizStartTrackedRef = useRef(false)
   const leadSubmittedRef = useRef(false)
@@ -194,7 +188,7 @@ export default function DiagnosticoPage() {
   const handleBack = useCallback(() => dispatch({ type: "BACK" }), [])
 
   const handleSubmitForm = useCallback(
-    (lead: DiagnosticoLead) => {
+    async (lead: DiagnosticoLead) => {
       if (leadSubmittedRef.current) return
       leadSubmittedRef.current = true
 
@@ -209,7 +203,6 @@ export default function DiagnosticoPage() {
         temperatura: classification,
       }
 
-      dispatch({ type: "SUBMIT_LEAD", lead: qualifiedLead, score, classification })
       console.log("[Meta Pixel] Lead fired from diagnostico submit")
       pushDataLayerEvent("lead_submit", dataLayerParams)
       trackDiagnosticoLead(eventParams)
@@ -219,30 +212,17 @@ export default function DiagnosticoPage() {
         trackQualifiedLead(eventParams)
       }
 
-      // Fire-and-forget — não bloqueia a transição para a tela "Analisando".
-      void onLeadComplete(sheetPayload)
+      await onLeadComplete(sheetPayload)
+      dispatch({ type: "SUBMIT_LEAD", lead: qualifiedLead, score, classification })
     },
     [state.answers],
   )
 
-  const handleFinishAnalysis = useCallback(() => dispatch({ type: "FINISH_ANALYSIS" }), [])
-
-  // A landing longa saiu de /diagnostico — quem quer ver o portfólio é
-  // levado para a apresentação completa, em outra rota.
-  const handleViewPortfolio = useCallback(() => {
-    router.push("/diagnostico/apresentacao#portfolio")
-  }, [router])
-
-  if (state.step === "analisando") {
-    return <DiagnosticoAnalisando onDone={handleFinishAnalysis} />
-  }
-
-  if (state.step === "resultado" && state.lead && state.classification) {
+  if (state.step === "redirecionando" && state.lead && state.classification) {
     return (
-      <DiagnosticoResultado
+      <DiagnosticoRedirecionando
         classification={state.classification}
         whatsAppUrl={buildWhatsAppUrl(state.answers)}
-        onViewPortfolio={handleViewPortfolio}
       />
     )
   }
