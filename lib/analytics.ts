@@ -171,7 +171,11 @@ export function trackQuizStart(params?: Params) {
   })
 }
 
-export function trackDiagnosticoLead(params?: Params) {
+/**
+ * @param eventId event_id reaproveitado na Meta Conversions API para deduplicar
+ * com este mesmo disparo do Pixel (fbq eventID).
+ */
+export function trackDiagnosticoLead(params?: Params, eventId?: string) {
   ga("generate_lead", params)
   pixel(
     "Lead",
@@ -180,10 +184,15 @@ export function trackDiagnosticoLead(params?: Params) {
       content_category: "quiz",
       ...params,
     },
+    eventId ? { eventID: eventId } : undefined,
   )
 }
 
-export function trackQualifiedLead(params?: Params) {
+/**
+ * @param eventId event_id reaproveitado na Meta Conversions API para deduplicar
+ * com este mesmo disparo do Pixel (fbq eventID).
+ */
+export function trackQualifiedLead(params?: Params, eventId?: string) {
   ga("qualified_lead", params)
   pixelCustom(
     "QualifiedLead",
@@ -192,5 +201,6 @@ export function trackQualifiedLead(params?: Params) {
       content_category: "quiz",
       ...params,
     },
+    eventId ? { eventID: eventId } : undefined,
   )
 }

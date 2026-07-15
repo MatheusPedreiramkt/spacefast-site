@@ -15,7 +15,7 @@ import {
   classify,
   buildWhatsAppUrl,
   buildWhatsAppMessage,
-  generateLeadId,
+  generateId,
   syncDiagnosticoLead,
   QUESTIONS,
   type Answers,
@@ -99,9 +99,15 @@ function buildDiagnosticoDataLayerParams(answers: Answers, score: number, classi
   }
 }
 
-function buildPartialSheetPayload(leadId: string, nome: string, whatsapp: string): DiagnosticoLeadSheetPayload {
+function buildPartialSheetPayload(
+  leadId: string,
+  eventId: string,
+  nome: string,
+  whatsapp: string,
+): DiagnosticoLeadSheetPayload {
   return {
     lead_id: leadId,
+    event_id: eventId,
     status: "iniciou_diagnostico",
     nome,
     whatsapp,
@@ -125,6 +131,7 @@ function buildPartialSheetPayload(leadId: string, nome: string, whatsapp: string
 
 function buildFinalSheetPayload(
   leadId: string,
+  eventId: string,
   nome: string,
   whatsapp: string,
   answers: Answers,
@@ -133,6 +140,7 @@ function buildFinalSheetPayload(
 ): DiagnosticoLeadSheetPayload {
   return {
     lead_id: leadId,
+    event_id: eventId,
     status: "finalizou_diagnostico",
     nome,
     whatsapp,
@@ -204,14 +212,15 @@ export default function DiagnosticoPage() {
 
   const handleSubmitWhatsapp = useCallback(
     (whatsapp: string) => {
-      const leadId = state.leadId ?? generateLeadId()
+      const leadId = state.leadId ?? generateId()
 
       if (!leadSubmittedRef.current) {
         leadSubmittedRef.current = true
+        const leadEventId = generateId()
         const attributionParams = getAttributionParams()
         pushDataLayerEvent("lead_submit", attributionParams)
-        trackDiagnosticoLead(attributionParams)
-        void syncDiagnosticoLead(buildPartialSheetPayload(leadId, state.nome, whatsapp))
+        trackDiagnosticoLead(attributionParams, leadEventId)
+        void syncDiagnosticoLead(buildPartialSheetPayload(leadId, leadEventId, state.nome, whatsapp))
       }
 
       dispatch({ type: "SET_WHATSAPP", whatsapp, leadId })
@@ -237,15 +246,24 @@ export default function DiagnosticoPage() {
       const classification = classify(score)
       const eventParams = buildDiagnosticoEventParams(finalAnswers, score, classification)
       const dataLayerParams = buildDiagnosticoDataLayerParams(finalAnswers, score, classification)
+      const qualifiedLeadEventId = generateId()
 
       if (classification === "morno" || classification === "quente") {
         pushDataLayerEvent("qualified_lead", dataLayerParams)
-        trackQualifiedLead(eventParams)
+        trackQualifiedLead(eventParams, qualifiedLeadEventId)
       }
 
       if (state.leadId) {
         void syncDiagnosticoLead(
-          buildFinalSheetPayload(state.leadId, state.nome, state.whatsapp, finalAnswers, score, classification),
+          buildFinalSheetPayload(
+            state.leadId,
+            qualifiedLeadEventId,
+            state.nome,
+            state.whatsapp,
+            finalAnswers,
+            score,
+            classification,
+          ),
         )
       }
 

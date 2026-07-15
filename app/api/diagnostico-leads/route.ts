@@ -1,4 +1,10 @@
 import type { DiagnosticoLeadSheetPayload } from "@/lib/diagnostico"
+import {
+  buildFbcFromFbclid,
+  getClientIpFromRequest,
+  getFbpFbcFromCookies,
+  sendMetaConversionEvent,
+} from "@/lib/meta/conversions-api"
 
 export const runtime = "nodejs"
 
@@ -23,6 +29,7 @@ function normalizePayload(body: unknown): DiagnosticoLeadSheetPayload {
 
   return {
     lead_id: stringValue(input.lead_id),
+    event_id: stringValue(input.event_id),
     status: stringValue(input.status) as DiagnosticoLeadSheetPayload["status"],
     nome: stringValue(input.nome),
     whatsapp: stringValue(input.whatsapp),
@@ -50,6 +57,85 @@ function normalizePayload(body: unknown): DiagnosticoLeadSheetPayload {
   }
 }
 
+function extractFbclidFromUrl(url: string): string | undefined {
+  if (!url) return undefined
+  try {
+    return new URL(url).searchParams.get("fbclid") ?? undefined
+  } catch {
+    return undefined
+  }
+}
+
+function buildUtmCustomData(payload: DiagnosticoLeadSheetPayload) {
+  return {
+    utm_source: payload.utm_source,
+    utm_medium: payload.utm_medium,
+    utm_campaign: payload.utm_campaign,
+    utm_content: payload.utm_content,
+    utm_term: payload.utm_term,
+    placement: payload.placement,
+  }
+}
+
+// Envia Lead (lead parcial) ou QualifiedLead (lead final morno/quente) para a
+// Meta Conversions API, reaproveitando o mesmo event_id gerado no navegador
+// para o Pixel — isso permite à Meta deduplicar os dois disparos do mesmo
+// evento. Nunca lança: sendMetaConversionEvent já captura seus próprios erros.
+async function sendCapiEvent(request: Request, payload: DiagnosticoLeadSheetPayload) {
+  if (!payload.event_id) return
+
+  const { fbp, fbc: cookieFbc } = getFbpFbcFromCookies(request)
+  const fbclid = extractFbclidFromUrl(payload.pagina)
+  const fbc = cookieFbc || (fbclid ? buildFbcFromFbclid(fbclid) : undefined)
+
+  const userData = {
+    whatsapp: payload.whatsapp,
+    nome: payload.nome,
+    fbp,
+    fbc,
+    clientIpAddress: getClientIpFromRequest(request),
+    clientUserAgent: request.headers.get("user-agent") ?? undefined,
+  }
+
+  if (payload.status === "iniciou_diagnostico") {
+    await sendMetaConversionEvent({
+      eventName: "Lead",
+      eventId: payload.event_id,
+      eventSourceUrl: payload.pagina,
+      userData,
+      customData: {
+        lead_id: payload.lead_id,
+        status: payload.status,
+        pagina: payload.pagina,
+        ...buildUtmCustomData(payload),
+      },
+    })
+    return
+  }
+
+  if (
+    payload.status === "finalizou_diagnostico" &&
+    (payload.temperatura === "morno" || payload.temperatura === "quente")
+  ) {
+    await sendMetaConversionEvent({
+      eventName: "QualifiedLead",
+      eventId: payload.event_id,
+      eventSourceUrl: payload.pagina,
+      userData,
+      customData: {
+        lead_id: payload.lead_id,
+        status: payload.status,
+        score: payload.score,
+        temperatura: payload.temperatura,
+        possui_site: payload.possui_site,
+        prazo: payload.prazo,
+        investimento: payload.investimento,
+        ...buildUtmCustomData(payload),
+      },
+    })
+  }
+}
+
 export async function POST(request: Request) {
   const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL
 
@@ -61,8 +147,13 @@ export async function POST(request: Request) {
     return Response.json({ ok: false }, { status: 400 })
   }
 
+  const capiPromise = sendCapiEvent(request, payload).catch((error) => {
+    console.error("[diagnostico-leads] falha inesperada ao enviar evento para a Meta CAPI", error)
+  })
+
   if (!webhookUrl) {
     console.error("[diagnostico-leads] GOOGLE_SHEETS_WEBHOOK_URL não configurada")
+    await capiPromise
     return Response.json({ ok: true, forwarded: false })
   }
 
@@ -79,9 +170,11 @@ export async function POST(request: Request) {
       throw new Error(`Google Sheets webhook retornou ${response.status}: ${responseText}`)
     }
 
+    await capiPromise
     return Response.json({ ok: true, forwarded: true })
   } catch (error) {
     console.error("[diagnostico-leads] falha ao enviar lead para Google Sheets", error)
+    await capiPromise
     return Response.json({ ok: true, forwarded: false })
   }
 }

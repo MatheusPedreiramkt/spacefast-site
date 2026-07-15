@@ -188,6 +188,7 @@ export type DiagnosticoLeadStatus = "iniciou_diagnostico" | "finalizou_diagnosti
 // existentes na planilha atual. lead_id e status são novos.
 export interface DiagnosticoLeadSheetPayload {
   lead_id: string
+  event_id: string
   status: DiagnosticoLeadStatus
   nome: string
   whatsapp: string
@@ -214,11 +215,13 @@ export interface DiagnosticoLeadSheetPayload {
   pagina: string
 }
 
-export function generateLeadId(): string {
+// Gerador de ID genérico — usado tanto para lead_id quanto para event_id
+// (deduplicação Pixel ↔ Conversions API).
+export function generateId(): string {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
     return crypto.randomUUID()
   }
-  return `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
+  return `id_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
 }
 
 // ─── Gancho de integração — envia lead parcial e lead final ──────────────────
