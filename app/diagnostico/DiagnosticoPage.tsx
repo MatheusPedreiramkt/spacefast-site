@@ -13,81 +13,47 @@ import {
 import {
   computeScore,
   classify,
-  buildWhatsAppMessage,
   buildWhatsAppUrl,
-  onLeadComplete,
+  buildWhatsAppMessage,
+  generateLeadId,
+  syncDiagnosticoLead,
+  QUESTIONS,
   type Answers,
   type QuestionId,
-  type DiagnosticoLead,
   type DiagnosticoLeadSheetPayload,
-  type QualifiedDiagnosticoLead,
   type Classification,
 } from "@/lib/diagnostico"
 
-type Step = "quiz" | "redirecionando"
+type Step = "nome" | "whatsapp" | "quiz" | "redirecionando"
 
 interface DiagnosticoState {
   step: Step
   questionIndex: number
+  nome: string
+  whatsapp: string
+  leadId: string | null
   answers: Answers
   score: number
-  classification: Classification | null
-  lead: QualifiedDiagnosticoLead | null
+  classification: Classification
 }
 
 type Action =
+  | { type: "SET_NOME"; nome: string }
+  | { type: "SET_WHATSAPP"; whatsapp: string; leadId: string }
   | { type: "ANSWER"; id: QuestionId; value: string }
   | { type: "BACK" }
-  | {
-      type: "SUBMIT_LEAD"
-      lead: QualifiedDiagnosticoLead
-      score: number
-      classification: Classification
-    }
+  | { type: "COMPLETE"; id: QuestionId; value: string; score: number; classification: Classification }
 
 const initialState: DiagnosticoState = {
-  step: "quiz",
+  step: "nome",
   questionIndex: 0,
+  nome: "",
+  whatsapp: "",
+  leadId: null,
   answers: {},
   score: 0,
-  classification: null,
-  lead: null,
-}
-
-function buildDiagnosticoEventParams(
-  answers: Answers,
-  score: number,
-  classification: Classification,
-) {
-  return {
-    score,
-    temperatura: classification,
-    tipo_negocio: "",
-    objetivo: answers.p3 ?? "",
-    prazo: answers.p4 ?? "",
-    investimento: answers.p5 ?? "",
-    possui_site: answers.p2 ?? "",
-    decisor: "",
-    momento_negocio: answers.p1 ?? "",
-  }
-}
-
-function buildDiagnosticoDataLayerParams(
-  answers: Answers,
-  score: number,
-  classification: Classification,
-) {
-  const attributionParams = getAttributionParams()
-
-  return {
-    ...buildDiagnosticoEventParams(answers, score, classification),
-    utm_source: attributionParams.utm_source,
-    utm_medium: attributionParams.utm_medium,
-    utm_campaign: attributionParams.utm_campaign,
-    utm_content: attributionParams.utm_content,
-    utm_term: attributionParams.utm_term,
-    placement: attributionParams.placement,
-  }
+  // Nunca lido antes de "COMPLETE" definir o valor real — placeholder inofensivo.
+  classification: "frio",
 }
 
 function getAttributionParams() {
@@ -116,35 +82,84 @@ function getAttributionParams() {
   }
 }
 
-function buildSheetPayload(
-  lead: DiagnosticoLead,
+function buildDiagnosticoEventParams(answers: Answers, score: number, classification: Classification) {
+  return {
+    score,
+    temperatura: classification,
+    possui_site: answers.possui_site ?? "",
+    prazo: answers.prazo ?? "",
+    investimento: answers.investimento ?? "",
+  }
+}
+
+function buildDiagnosticoDataLayerParams(answers: Answers, score: number, classification: Classification) {
+  return {
+    ...buildDiagnosticoEventParams(answers, score, classification),
+    ...getAttributionParams(),
+  }
+}
+
+function buildPartialSheetPayload(leadId: string, nome: string, whatsapp: string): DiagnosticoLeadSheetPayload {
+  return {
+    lead_id: leadId,
+    status: "iniciou_diagnostico",
+    nome,
+    whatsapp,
+    email: "",
+    empresa: "",
+    cidade: "",
+    estado: "",
+    tipo_negocio: "",
+    possui_site: "",
+    objetivo: "",
+    prazo: "",
+    decisor: "",
+    investimento: "",
+    momento_negocio: "",
+    score: 0,
+    temperatura: "pendente",
+    mensagem_whatsapp: "",
+    ...getAttributionParams(),
+  }
+}
+
+function buildFinalSheetPayload(
+  leadId: string,
+  nome: string,
+  whatsapp: string,
   answers: Answers,
   score: number,
   classification: Classification,
 ): DiagnosticoLeadSheetPayload {
   return {
-    nome: lead.nome,
-    whatsapp: lead.whatsapp,
+    lead_id: leadId,
+    status: "finalizou_diagnostico",
+    nome,
+    whatsapp,
     email: "",
-    empresa: lead.empresa ?? "",
+    empresa: "",
     cidade: "",
     estado: "",
     tipo_negocio: "",
-    possui_site: answers.p2 ?? "",
-    objetivo: answers.p3 ?? "",
-    prazo: answers.p4 ?? "",
+    possui_site: answers.possui_site ?? "",
+    objetivo: "",
+    prazo: answers.prazo ?? "",
     decisor: "",
-    investimento: answers.p5 ?? "",
-    momento_negocio: answers.p1 ?? "",
+    investimento: answers.investimento ?? "",
+    momento_negocio: "",
     score,
     temperatura: classification,
-    mensagem_whatsapp: buildWhatsAppMessage(answers),
+    mensagem_whatsapp: buildWhatsAppMessage(classification),
     ...getAttributionParams(),
   }
 }
 
 function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
   switch (action.type) {
+    case "SET_NOME":
+      return { ...state, nome: action.nome, step: "whatsapp" }
+    case "SET_WHATSAPP":
+      return { ...state, whatsapp: action.whatsapp, leadId: action.leadId, step: "quiz", questionIndex: 0 }
     case "ANSWER":
       return {
         ...state,
@@ -152,12 +167,17 @@ function reducer(state: DiagnosticoState, action: Action): DiagnosticoState {
         questionIndex: state.questionIndex + 1,
       }
     case "BACK":
-      return state.questionIndex === 0 ? state : { ...state, questionIndex: state.questionIndex - 1 }
-    case "SUBMIT_LEAD":
+      if (state.step === "whatsapp") return { ...state, step: "nome" }
+      if (state.step === "quiz") {
+        if (state.questionIndex === 0) return { ...state, step: "whatsapp" }
+        return { ...state, questionIndex: state.questionIndex - 1 }
+      }
+      return state
+    case "COMPLETE":
       return {
         ...state,
         step: "redirecionando",
-        lead: action.lead,
+        answers: { ...state.answers, [action.id]: action.value },
         score: action.score,
         classification: action.classification,
       }
@@ -178,62 +198,84 @@ export default function DiagnosticoPage() {
     trackDiagnosticoViewContent()
   }, [])
 
-  const handleAnswer = useCallback((id: QuestionId, value: string) => {
-    if (!quizStartTrackedRef.current) {
-      quizStartTrackedRef.current = true
-      trackQuizStart()
-    }
-    dispatch({ type: "ANSWER", id, value })
+  const handleSubmitNome = useCallback((nome: string) => {
+    dispatch({ type: "SET_NOME", nome })
   }, [])
-  const handleBack = useCallback(() => dispatch({ type: "BACK" }), [])
 
-  const handleSubmitForm = useCallback(
-    async (lead: DiagnosticoLead) => {
-      if (leadSubmittedRef.current) return
-      leadSubmittedRef.current = true
+  const handleSubmitWhatsapp = useCallback(
+    (whatsapp: string) => {
+      const leadId = state.leadId ?? generateLeadId()
 
-      const score = computeScore(state.answers)
-      const classification = classify(score)
-      const eventParams = buildDiagnosticoEventParams(state.answers, score, classification)
-      const dataLayerParams = buildDiagnosticoDataLayerParams(state.answers, score, classification)
-      const sheetPayload = buildSheetPayload(lead, state.answers, score, classification)
-      const qualifiedLead: QualifiedDiagnosticoLead = {
-        ...lead,
-        score,
-        temperatura: classification,
+      if (!leadSubmittedRef.current) {
+        leadSubmittedRef.current = true
+        const attributionParams = getAttributionParams()
+        pushDataLayerEvent("lead_submit", attributionParams)
+        trackDiagnosticoLead(attributionParams)
+        void syncDiagnosticoLead(buildPartialSheetPayload(leadId, state.nome, whatsapp))
       }
 
-      console.log("[Meta Pixel] Lead fired from diagnostico submit")
-      pushDataLayerEvent("lead_submit", dataLayerParams)
-      trackDiagnosticoLead(eventParams)
+      dispatch({ type: "SET_WHATSAPP", whatsapp, leadId })
+    },
+    [state.nome, state.leadId],
+  )
+
+  const handleAnswer = useCallback(
+    (id: QuestionId, value: string) => {
+      if (!quizStartTrackedRef.current) {
+        quizStartTrackedRef.current = true
+        trackQuizStart()
+      }
+
+      const isLastQuestion = state.questionIndex === QUESTIONS.length - 1
+      if (!isLastQuestion) {
+        dispatch({ type: "ANSWER", id, value })
+        return
+      }
+
+      const finalAnswers: Answers = { ...state.answers, [id]: value }
+      const score = computeScore(finalAnswers)
+      const classification = classify(score)
+      const eventParams = buildDiagnosticoEventParams(finalAnswers, score, classification)
+      const dataLayerParams = buildDiagnosticoDataLayerParams(finalAnswers, score, classification)
 
       if (classification === "morno" || classification === "quente") {
         pushDataLayerEvent("qualified_lead", dataLayerParams)
         trackQualifiedLead(eventParams)
       }
 
-      await onLeadComplete(sheetPayload)
-      dispatch({ type: "SUBMIT_LEAD", lead: qualifiedLead, score, classification })
+      if (state.leadId) {
+        void syncDiagnosticoLead(
+          buildFinalSheetPayload(state.leadId, state.nome, state.whatsapp, finalAnswers, score, classification),
+        )
+      }
+
+      dispatch({ type: "COMPLETE", id, value, score, classification })
     },
-    [state.answers],
+    [state.answers, state.questionIndex, state.leadId, state.nome, state.whatsapp],
   )
 
-  if (state.step === "redirecionando" && state.lead && state.classification) {
+  const handleBack = useCallback(() => dispatch({ type: "BACK" }), [])
+
+  if (state.step === "redirecionando") {
     return (
       <DiagnosticoRedirecionando
         classification={state.classification}
-        whatsAppUrl={buildWhatsAppUrl(state.answers)}
+        whatsAppUrl={buildWhatsAppUrl(state.classification)}
       />
     )
   }
 
   return (
     <DiagnosticoQuiz
+      step={state.step}
       questionIndex={state.questionIndex}
+      nome={state.nome}
+      whatsapp={state.whatsapp}
       answers={state.answers}
+      onSubmitNome={handleSubmitNome}
+      onSubmitWhatsapp={handleSubmitWhatsapp}
       onAnswer={handleAnswer}
       onBack={handleBack}
-      onSubmitForm={handleSubmitForm}
     />
   )
 }

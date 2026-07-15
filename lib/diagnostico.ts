@@ -3,43 +3,31 @@
 
 import { WHATSAPP_NUMBER } from "@/lib/constants"
 
-// Usado no Hero, no bloco de Preço e na pergunta P7 do quiz.
+// Usado no Hero da /diagnostico/apresentacao.
 export const DIAGNOSTICO_PRICE = "500"
 
 // ─── Score ───────────────────────────────────────────────────────────────────
 // Mapeia cada opção de cada pergunta ao seu valor de pontuação.
 export const SCORING = {
-  p1: {
-    empresa_ativa: 30,
-    comecando_agora: 10,
-    pesquisando: -20,
-  },
-  p2: {
-    apenas_instagram_whatsapp: 25,
-    nao_tenho_site: 25,
-    site_antigo: 30,
+  possui_site: {
+    nao_tenho_site: 30,
+    apenas_instagram_whatsapp: 30,
+    site_antigo: 25,
     site_nao_gera_resultado: 30,
     quero_melhorar: 20,
   },
-  p3: {
-    passar_confianca: 20,
-    receber_clientes_whatsapp: 25,
-    aparecer_google: 20,
-    apresentar_produtos_servicos: 15,
-    vender_online: 20,
-  },
-  p4: {
-    quanto_antes: 30,
-    esta_semana: 25,
-    este_mes: 15,
+  prazo: {
+    quanto_antes: 35,
+    esta_semana: 30,
+    este_mes: 20,
     proximos_meses: 5,
-    pesquisando: -20,
+    pesquisando: -15,
   },
-  p5: {
-    consigo_investir_500: 40,
-    preciso_alinhar_com_outra_pessoa: 25,
-    preciso_entender_melhor: 10,
-    procuro_mais_barato: -40,
+  investimento: {
+    acima_1000: 40,
+    entre_500_1000: 35,
+    preciso_avaliar: 10,
+    abaixo_500: -40,
   },
 } as const
 
@@ -58,39 +46,19 @@ export interface QuizQuestion {
 
 export const QUESTIONS: QuizQuestion[] = [
   {
-    id: "p1",
-    question: "Hoje você já tem um negócio ativo?",
+    id: "possui_site",
+    question: "Você já tem site?",
     options: [
-      { value: "empresa_ativa", label: "Sim, já tenho empresa/negócio ativo" },
-      { value: "comecando_agora", label: "Estou começando agora" },
-      { value: "pesquisando", label: "Ainda estou apenas pesquisando" },
-    ],
-  },
-  {
-    id: "p2",
-    question: "Como está sua presença online hoje?",
-    options: [
-      { value: "apenas_instagram_whatsapp", label: "Tenho só Instagram/WhatsApp" },
       { value: "nao_tenho_site", label: "Não tenho site" },
+      { value: "apenas_instagram_whatsapp", label: "Tenho só Instagram/WhatsApp" },
       { value: "site_antigo", label: "Tenho site, mas está antigo" },
       { value: "site_nao_gera_resultado", label: "Tenho site, mas não gera resultado" },
       { value: "quero_melhorar", label: "Já tenho site e quero melhorar" },
     ],
   },
   {
-    id: "p3",
-    question: "Qual é o principal objetivo do site?",
-    options: [
-      { value: "passar_confianca", label: "Passar mais confiança" },
-      { value: "receber_clientes_whatsapp", label: "Receber mais clientes pelo WhatsApp" },
-      { value: "aparecer_google", label: "Aparecer melhor no Google" },
-      { value: "apresentar_produtos_servicos", label: "Apresentar produtos ou serviços" },
-      { value: "vender_online", label: "Vender online" },
-    ],
-  },
-  {
-    id: "p4",
-    question: "Quando você pretende iniciar?",
+    id: "prazo",
+    question: "Quando quer começar?",
     options: [
       { value: "quanto_antes", label: "O quanto antes" },
       { value: "esta_semana", label: "Ainda esta semana" },
@@ -100,24 +68,19 @@ export const QUESTIONS: QuizQuestion[] = [
     ],
   },
   {
-    id: "p5",
-    question: "Pensando no investimento, qual dessas opções mais combina com seu momento?",
+    id: "investimento",
+    question: "Quanto pretende investir em um site profissional?",
     options: [
-      {
-        value: "consigo_investir_500",
-        label: `Se fizer sentido para o meu negócio, consigo investir a partir de R$${DIAGNOSTICO_PRICE}`,
-      },
-      {
-        value: "preciso_alinhar_com_outra_pessoa",
-        label: "Tenho interesse, mas preciso alinhar esse investimento com outra pessoa",
-      },
-      { value: "preciso_entender_melhor", label: "Ainda preciso entender melhor antes de definir o investimento" },
-      { value: "procuro_mais_barato", label: "No momento estou procurando algo mais barato" },
+      { value: "acima_1000", label: "Acima de R$1.000 se fizer sentido" },
+      { value: "entre_500_1000", label: "Entre R$500 e R$1.000" },
+      { value: "preciso_avaliar", label: "Ainda preciso avaliar" },
+      { value: "abaixo_500", label: "Menos de R$500" },
     ],
   },
 ]
 
-export const TOTAL_STEPS = QUESTIONS.length + 1 // 8 perguntas de múltipla escolha + formulário
+// Nome + WhatsApp (2 etapas) + as perguntas do quiz.
+export const TOTAL_STEPS = 2 + QUESTIONS.length
 
 export function labelFor(id: QuestionId, value?: string): string {
   if (!value) return "-"
@@ -139,14 +102,17 @@ export function computeScore(answers: Answers): number {
 // ─── Classificação ────────────────────────────────────────────────────────────
 export type Classification = "quente" | "morno" | "frio" | "desqualificado"
 
+// Temperatura possível na planilha, incluindo o estado do lead parcial.
+export type LeadTemperatura = Classification | "pendente"
+
 export function classify(score: number): Classification {
-  if (score >= 90) return "quente"
-  if (score >= 55) return "morno"
+  if (score >= 80) return "quente"
+  if (score >= 45) return "morno"
   if (score >= 0) return "frio"
   return "desqualificado"
 }
 
-// ─── Copy de resultado — edite livremente por aqui ────────────────────────────
+// ─── Copy de resultado (usado por DiagnosticoResultado, mantido por compatibilidade) ──
 export interface ResultCopy {
   eyebrow: string
   title: string
@@ -187,19 +153,42 @@ export const RESULT_COPY: Record<Classification, ResultCopy> = {
   },
 }
 
+// ─── Mensagens do WhatsApp por temperatura ────────────────────────────────────
+export const WHATSAPP_MESSAGES: Record<Classification, string> = {
+  quente:
+    "Olá, preenchi o formulário. Pelo resultado, quero iniciar a criação do meu site.",
+  morno:
+    "Olá, preenchi o formulário. Pelo resultado, gostaria de ver alguns modelos e entender o melhor a criação do site.",
+  frio:
+    "Olá, preenchi o formulário. Gostaria de receber uma orientação sobre o melhor momento para criar um site profissional.",
+  desqualificado:
+    "Olá, preenchi o formulário. Gostaria de receber uma orientação sobre o melhor momento para criar um site profissional.",
+}
+
+export function buildWhatsAppMessage(classification: Classification): string {
+  return WHATSAPP_MESSAGES[classification]
+}
+
+export function buildWhatsAppUrl(classification: Classification): string {
+  const text = buildWhatsAppMessage(classification)
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`
+}
+
 // ─── Lead ──────────────────────────────────────────────────────────────────────
 export interface DiagnosticoLead {
   nome: string
   whatsapp: string
-  empresa?: string
 }
 
-export interface QualifiedDiagnosticoLead extends DiagnosticoLead {
-  score: number
-  temperatura: Classification
-}
+export type DiagnosticoLeadStatus = "iniciou_diagnostico" | "finalizou_diagnostico"
 
+// Payload enviado para a planilha (via webhook do Google Sheets).
+// Mantém os campos antigos (email, empresa, cidade, estado, tipo_negocio,
+// objetivo, decisor, momento_negocio) vazios para não quebrar as colunas já
+// existentes na planilha atual. lead_id e status são novos.
 export interface DiagnosticoLeadSheetPayload {
+  lead_id: string
+  status: DiagnosticoLeadStatus
   nome: string
   whatsapp: string
   email: string
@@ -214,7 +203,7 @@ export interface DiagnosticoLeadSheetPayload {
   investimento: string
   momento_negocio: string
   score: number
-  temperatura: Classification
+  temperatura: LeadTemperatura
   mensagem_whatsapp: string
   utm_source: string
   utm_medium: string
@@ -225,24 +214,17 @@ export interface DiagnosticoLeadSheetPayload {
   pagina: string
 }
 
-export function buildWhatsAppMessage(answers: Answers): string {
-  const lines = ["Oi! Fiz o diagnóstico e quero um site pro meu negócio. Como funciona? 🚀", ""]
-
-  if (answers.p2) lines.push(`Presença online: ${labelFor("p2", answers.p2)}`)
-  if (answers.p3) lines.push(`Objetivo do site: ${labelFor("p3", answers.p3)}`)
-  if (answers.p4) lines.push(`Quero começar: ${labelFor("p4", answers.p4)}`)
-
-  return lines.join("\n")
+export function generateLeadId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID()
+  }
+  return `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
 }
 
-export function buildWhatsAppUrl(answers: Answers): string {
-  const text = buildWhatsAppMessage(answers)
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`
-}
-
-// ─── Gancho de integração — fim do quiz ───────────────────────────────────────
-// Chamado assim que o lead conclui o formulário (P9), antes da tela "Analisando".
-export async function onLeadComplete(payload: DiagnosticoLeadSheetPayload) {
+// ─── Gancho de integração — envia lead parcial e lead final ──────────────────
+// Usado tanto para salvar o lead parcial (nome + whatsapp) quanto para
+// atualizar o mesmo lead ao final do quiz (mesmo lead_id).
+export async function syncDiagnosticoLead(payload: DiagnosticoLeadSheetPayload) {
   try {
     await fetch("/api/diagnostico-leads", {
       method: "POST",
@@ -251,6 +233,6 @@ export async function onLeadComplete(payload: DiagnosticoLeadSheetPayload) {
       keepalive: true,
     })
   } catch {
-    // A rota server-side registra falhas do webhook. Não bloqueia a tela de resultado.
+    // A rota server-side registra falhas do webhook. Não bloqueia o fluxo do usuário.
   }
 }

@@ -2,6 +2,12 @@ import type { DiagnosticoLeadSheetPayload } from "@/lib/diagnostico"
 
 export const runtime = "nodejs"
 
+// Esta rota só repassa o payload para o webhook do Google Sheets — o mesmo
+// lead_id é enviado duas vezes (status "iniciou_diagnostico" e depois
+// "finalizou_diagnostico"). O Apps Script que recebe o webhook precisa
+// localizar a linha pelo lead_id e atualizá-la na segunda chamada, em vez de
+// sempre adicionar uma linha nova.
+
 type SheetField = keyof DiagnosticoLeadSheetPayload
 
 function stringValue(value: unknown): string {
@@ -16,6 +22,8 @@ function normalizePayload(body: unknown): DiagnosticoLeadSheetPayload {
   const input = body && typeof body === "object" ? (body as Partial<Record<SheetField, unknown>>) : {}
 
   return {
+    lead_id: stringValue(input.lead_id),
+    status: stringValue(input.status) as DiagnosticoLeadSheetPayload["status"],
     nome: stringValue(input.nome),
     whatsapp: stringValue(input.whatsapp),
     email: stringValue(input.email),

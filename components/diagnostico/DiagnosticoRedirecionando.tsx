@@ -84,8 +84,8 @@ export default function DiagnosticoRedirecionando({
         </h1>
 
         <p className="text-gray-400 text-base leading-relaxed mb-8">
-          Estamos preparando sua conversa com um especialista da Space Fast. Você será redirecionado
-          para o WhatsApp em instantes...
+          Estamos preparando sua conversa com um especialista da Space Fast. Quando o WhatsApp
+          abrir, envie a mensagem pronta para continuar o atendimento.
         </p>
 
         <a
