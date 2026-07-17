@@ -219,8 +219,11 @@ export default function DiagnosticoPage() {
         const leadEventId = generateId()
         const attributionParams = getAttributionParams()
         pushDataLayerEvent("lead_submit", attributionParams)
-        trackDiagnosticoLead(attributionParams, leadEventId)
-        void syncDiagnosticoLead(buildPartialSheetPayload(leadId, leadEventId, state.nome, whatsapp))
+        // Só dispara o Pixel Lead depois que a planilha/CAPI confirmar o registro
+        // do lead — evita Lead no Pixel sem o lead correspondente salvo.
+        void syncDiagnosticoLead(buildPartialSheetPayload(leadId, leadEventId, state.nome, whatsapp)).then((ok) => {
+          if (ok) trackDiagnosticoLead(attributionParams, leadEventId)
+        })
       }
 
       dispatch({ type: "SET_WHATSAPP", whatsapp, leadId })
@@ -247,11 +250,7 @@ export default function DiagnosticoPage() {
       const eventParams = buildDiagnosticoEventParams(finalAnswers, score, classification)
       const dataLayerParams = buildDiagnosticoDataLayerParams(finalAnswers, score, classification)
       const qualifiedLeadEventId = generateId()
-
-      if (classification === "morno" || classification === "quente") {
-        pushDataLayerEvent("qualified_lead", dataLayerParams)
-        trackQualifiedLead(eventParams, qualifiedLeadEventId)
-      }
+      const isQualified = classification === "morno" || classification === "quente"
 
       if (state.leadId) {
         void syncDiagnosticoLead(
@@ -264,7 +263,12 @@ export default function DiagnosticoPage() {
             score,
             classification,
           ),
-        )
+        ).then((ok) => {
+          if (ok && isQualified) {
+            pushDataLayerEvent("qualified_lead", dataLayerParams)
+            trackQualifiedLead(eventParams, qualifiedLeadEventId)
+          }
+        })
       }
 
       dispatch({ type: "COMPLETE", id, value, score, classification })

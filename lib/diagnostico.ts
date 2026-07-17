@@ -227,15 +227,21 @@ export function generateId(): string {
 // ─── Gancho de integração — envia lead parcial e lead final ──────────────────
 // Usado tanto para salvar o lead parcial (nome + whatsapp) quanto para
 // atualizar o mesmo lead ao final do quiz (mesmo lead_id).
-export async function syncDiagnosticoLead(payload: DiagnosticoLeadSheetPayload) {
+// Retorna se a rota respondeu com sucesso — usado para só disparar o Pixel
+// (Lead/QualifiedLead) depois que /api/diagnostico-leads confirmar o registro.
+// A rota sempre responde ok:true mesmo se a planilha falhar (falha fica só no
+// log do servidor), então isso não bloqueia o usuário por causa do Sheets.
+export async function syncDiagnosticoLead(payload: DiagnosticoLeadSheetPayload): Promise<boolean> {
   try {
-    await fetch("/api/diagnostico-leads", {
+    const response = await fetch("/api/diagnostico-leads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
       keepalive: true,
     })
+    return response.ok
   } catch {
     // A rota server-side registra falhas do webhook. Não bloqueia o fluxo do usuário.
+    return false
   }
 }
