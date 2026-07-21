@@ -5,10 +5,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { INSTAGRAM_URL, WHATSAPP_NUMBER } from "@/lib/constants"
 import { trackCustomEvent, trackInstagramClick, trackWhatsAppClick } from "@/lib/analytics"
-import { openWhatsAppWithTracking } from "@/lib/cqc"
+import { trackWhatsAppRedirect } from "@/lib/cqc"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 
-const PORTFOLIO_URL = "/#portfolio"
+const PORTFOLIO_URL = "https://www.behance.net/matheus_websites"
 
 const CONTACT_LINKS = [
   {
@@ -113,11 +113,10 @@ export default function ContatoPage() {
                 href={buildWhatsAppUrl(item.message)}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={(event) => {
-                  event.preventDefault()
+                onClick={() => {
                   trackCustomEvent(item.eventName, { source: "instagram_bio" })
                   trackWhatsAppClick(item.source, { content_name: item.title })
-                  openWhatsAppWithTracking(item.message, WHATSAPP_NUMBER)
+                  trackWhatsAppRedirect()
                 }}
                 className="group flex min-h-[82px] w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.045] p-4 text-left shadow-xl shadow-black/18 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-400/30 hover:bg-white/[0.07] hover:shadow-blue-500/12 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
               >
@@ -141,6 +140,8 @@ export default function ContatoPage() {
 
           <Link
             href={PORTFOLIO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => trackCustomEvent("bio_portfolio_click", { source: "instagram_bio" })}
             className="group flex min-h-[82px] w-full items-center gap-3 rounded-2xl border border-cyan-400/18 bg-cyan-400/[0.035] p-4 text-left shadow-xl shadow-black/14 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300/38 hover:bg-cyan-400/[0.065] active:translate-y-0 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
           >
