@@ -91,10 +91,6 @@ export default function ContatoPage() {
         </Link>
 
         <header className="mb-8 text-center">
-          <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-cyan-500/24 bg-cyan-500/8 px-3 py-1 text-xs font-medium text-cyan-200">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" aria-hidden />
-            SpaceFast
-          </p>
           <h1 className="mx-auto max-w-[20rem] text-[2rem] font-black leading-tight tracking-tight text-white sm:max-w-none sm:text-4xl">
             Como podemos ajudar?
           </h1>
