@@ -204,3 +204,21 @@ export function trackQualifiedLead(params?: Params, eventId?: string) {
     eventId ? { eventID: eventId } : undefined,
   )
 }
+
+/**
+ * Envio do formulário "Solicitar análise do meu projeto" (Home).
+ * GA4: generate_lead  |  Meta: Lead
+ * @param eventId event_id reaproveitado na Meta Conversions API para deduplicar
+ * com este mesmo disparo do Pixel (fbq eventID).
+ */
+export function trackAnaliseProjetoLead(params?: Params, eventId?: string) {
+  ga("generate_lead", params)
+  pixel(
+    "Lead",
+    {
+      content_name: "Análise de Projeto",
+      ...params,
+    },
+    eventId ? { eventID: eventId } : undefined,
+  )
+}

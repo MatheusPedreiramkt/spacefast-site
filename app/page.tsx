@@ -1,6 +1,7 @@
 import Header from "@/components/Header"
 import Hero from "@/components/Hero"
 import Portfolio from "@/components/Portfolio"
+import QualificacaoForm from "@/components/QualificacaoForm"
 import Solution from "@/components/Solution"
 import Solutions from "@/components/Solutions"
 import MonthlyPlan from "@/components/MonthlyPlan"
@@ -17,6 +18,7 @@ export default function Home() {
       <main>
         <Hero />
         <Portfolio />
+        <QualificacaoForm />
         <Solution />
         <Solutions />
         <MonthlyPlan />

@@ -2,11 +2,8 @@
 
 import { motion, useReducedMotion } from "framer-motion"
 import { ArrowRight, ChevronRight, TrendingUp, Zap, Users, Star } from "lucide-react"
-import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
-import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 import { EASE } from "@/lib/motion"
-import { trackWhatsAppClick } from "@/lib/analytics"
-import { openWhatsAppWithTracking } from "@/lib/cqc"
+import { trackCustomEvent } from "@/lib/analytics"
 
 // All positions and classes are static so Tailwind can extract them at build time.
 const METRIC_CARDS = [
@@ -212,25 +209,32 @@ export default function Hero() {
             {/* H1 */}
             <motion.div {...animProps(0.1)}>
               <h1 className="text-[2.6rem] sm:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem] font-black leading-[1.08] tracking-tighter">
-                <span className="gradient-text">Sites que trazem</span>
+                <span className="text-white">Sua empresa precisa</span>
                 <br />
-                <span className="text-white">clientes para</span>
-                <br />
-                <span className="gradient-text-brand">o seu negócio</span>
+                <span className="gradient-text-brand">de um novo site?</span>
               </h1>
             </motion.div>
 
             {/* Subtitle */}
-            <motion.p
+            <motion.div
               {...animProps(0.2)}
-              className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px] mx-auto lg:mx-0"
+              className="space-y-4 text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px] mx-auto lg:mx-0"
             >
-              A SpaceFast cria sites estratégicos que{" "}
-              <span className="text-gray-200 font-medium">trabalham por você 24h</span> —
-              convertendo visitantes em leads qualificados, fortalecendo sua{" "}
-              <span className="text-gray-200 font-medium">autoridade de marca</span> e gerando
-              mais vendas.
-            </motion.p>
+              <p>
+                Criamos{" "}
+                <span className="text-gray-200 font-medium">
+                  sites institucionais, landing pages, catálogos, lojas virtuais e sistemas
+                  personalizados
+                </span>{" "}
+                para empresas que querem fortalecer sua presença digital e gerar novas
+                oportunidades.
+              </p>
+              <p>
+                Não importa se sua empresa ainda não possui um site ou se o site atual precisa
+                ser modernizado. Analisamos o seu momento e indicamos a estrutura mais adequada
+                para o projeto.
+              </p>
+            </motion.div>
 
             {/* CTAs */}
             <motion.div
@@ -239,18 +243,15 @@ export default function Hero() {
             >
               {/* Primary CTA */}
               <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#situacao"
                 onClick={(e) => {
                   e.preventDefault()
-                  trackWhatsAppClick("hero_cta")
-                  openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+                  trackCustomEvent("cta_click", { source: "hero_solicitar_analise" })
+                  document.querySelector("#situacao")?.scrollIntoView({ behavior: "smooth" })
                 }}
                 className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] hover:from-blue-500 hover:to-cyan-400 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
               >
-                <WhatsAppSVG className="w-4 h-4" />
-                Falar com especialista
+                Solicitar análise do meu projeto
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
               </a>
 
@@ -273,26 +274,13 @@ export default function Hero() {
               Orçamento 100% gratuito · Resposta em minutos · Sem compromisso
             </motion.p>
 
-            {/* Social proof */}
-            <motion.div
+            {/* Pointer to portfolio */}
+            <motion.p
               {...animProps(0.45)}
-              className="flex items-center gap-4 pt-1 justify-center lg:justify-start"
+              className="text-sm text-gray-500 pt-1"
             >
-              <div className="flex -space-x-2.5" aria-hidden>
-                {(["bg-blue-500", "bg-indigo-500", "bg-cyan-500", "bg-violet-500"] as const).map(
-                  (c, i) => (
-                    <div
-                      key={i}
-                      className={`w-8 h-8 rounded-full ${c} border-2 border-[#030712] flex items-center justify-center text-white text-[10px] font-bold`}
-                    />
-                  ),
-                )}
-              </div>
-              <div className="text-sm">
-                <span className="text-white font-semibold">Sites criados</span>{" "}
-                <span className="text-gray-500">para empresas que querem crescer</span>
-              </div>
-            </motion.div>
+              Veja abaixo alguns dos projetos que já desenvolvemos.
+            </motion.p>
           </div>
 
           {/* ── Right: Visual ──────────────────────────────────────────────── */}
