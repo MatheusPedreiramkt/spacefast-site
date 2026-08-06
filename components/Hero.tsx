@@ -216,25 +216,18 @@ export default function Hero() {
             </motion.div>
 
             {/* Subtitle */}
-            <motion.div
+            <motion.p
               {...animProps(0.2)}
-              className="space-y-4 text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px] mx-auto lg:mx-0"
+              className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px] mx-auto lg:mx-0"
             >
-              <p>
-                Criamos{" "}
-                <span className="text-gray-200 font-medium">
-                  sites institucionais, landing pages, catálogos, lojas virtuais e sistemas
-                  personalizados
-                </span>{" "}
-                para empresas que querem fortalecer sua presença digital e gerar novas
-                oportunidades.
-              </p>
-              <p>
-                Não importa se sua empresa ainda não possui um site ou se o site atual precisa
-                ser modernizado. Analisamos o seu momento e indicamos a estrutura mais adequada
-                para o projeto.
-              </p>
-            </motion.div>
+              Criamos{" "}
+              <span className="text-gray-200 font-medium">
+                sites institucionais, landing pages, catálogos, lojas virtuais e sistemas
+                personalizados
+              </span>{" "}
+              para empresas que querem fortalecer sua presença digital e gerar novas
+              oportunidades.
+            </motion.p>
 
             {/* CTAs */}
             <motion.div
