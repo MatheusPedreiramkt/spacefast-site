@@ -2,9 +2,7 @@ import Header from "@/components/Header"
 import Hero from "@/components/Hero"
 import Portfolio from "@/components/Portfolio"
 import QualificacaoForm from "@/components/QualificacaoForm"
-import Solution from "@/components/Solution"
 import Solutions from "@/components/Solutions"
-import MonthlyPlan from "@/components/MonthlyPlan"
 import Testimonials from "@/components/Testimonials"
 import FAQ from "@/components/FAQ"
 import CTAFinal from "@/components/CTAFinal"
@@ -19,9 +17,7 @@ export default function Home() {
         <Hero />
         <Portfolio />
         <QualificacaoForm />
-        <Solution />
         <Solutions />
-        <MonthlyPlan />
         <Testimonials />
         <FAQ />
         <CTAFinal />
