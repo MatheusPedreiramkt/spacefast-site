@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight, FileText, Globe2, Megaphone, PanelsTopLeft } from "lucide-react"
+import { ArrowRight, FileText, Globe2, Home, Megaphone, PanelsTopLeft } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { INSTAGRAM_URL, WHATSAPP_NUMBER } from "@/lib/constants"
@@ -133,6 +133,27 @@ export default function ContatoPage() {
               </a>
             )
           })}
+
+          <Link
+            href="/"
+            onClick={() => trackCustomEvent("bio_site_principal_click", { source: "instagram_bio" })}
+            className="group flex min-h-[82px] w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.045] p-4 text-left shadow-xl shadow-black/18 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-400/30 hover:bg-white/[0.07] hover:shadow-blue-500/12 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
+          >
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20">
+              <Home className="h-5 w-5" aria-hidden />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-base font-bold leading-snug text-white">
+                Site principal
+              </span>
+              <span className="mt-1 block text-sm leading-snug text-gray-400">
+                www.spacefast.com.br — conheça a SpaceFast por completo.
+              </span>
+            </span>
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 text-gray-400 transition-colors group-hover:border-cyan-400/35 group-hover:text-cyan-200">
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </span>
+          </Link>
 
           <Link
             href={PORTFOLIO_URL}
