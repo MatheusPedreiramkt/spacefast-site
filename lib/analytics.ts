@@ -115,6 +115,18 @@ export function trackScroll75() {
 }
 
 /**
+ * Progresso do vídeo do Hero (Home) — dispara apenas uma vez por sessão.
+ * GA4: hero_video_play | hero_video_25 | hero_video_50 | hero_video_75 | hero_video_complete
+ * Não envia para a Meta.
+ */
+export function trackHeroVideoEvent(
+  event: "hero_video_play" | "hero_video_25" | "hero_video_50" | "hero_video_75" | "hero_video_complete",
+) {
+  if (!once(`sf_${event}`)) return
+  ga(event)
+}
+
+/**
  * Clique em "Ver Projeto" no portfólio.
  * GA4: portfolio_click  |  project_name: nome do projeto
  */

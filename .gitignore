@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# raw video source (only the web-optimized version is committed)
+/public/hero-video.MP4

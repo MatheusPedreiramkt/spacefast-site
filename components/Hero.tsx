@@ -1,157 +1,150 @@
 "use client"
 
+import { useRef, useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
-import { ArrowRight, ChevronRight, TrendingUp, Zap, Users, Star } from "lucide-react"
+import { ArrowRight, ChevronRight, Pause, Play, Volume2, VolumeX } from "lucide-react"
 import { EASE } from "@/lib/motion"
-import { trackCustomEvent } from "@/lib/analytics"
+import { trackCustomEvent, trackHeroVideoEvent } from "@/lib/analytics"
 
-// All positions and classes are static so Tailwind can extract them at build time.
-const METRIC_CARDS = [
-  {
-    icon: Zap,
-    label: "Velocidade",
-    value: "+247%",
-    textColor: "text-cyan-300",
-    borderColor: "border-cyan-500/30",
-    bgColor: "bg-cyan-500/12",
-    iconBg: "bg-cyan-500/20 border-cyan-500/40",
-    glowShadow: "0 8px 28px rgba(6,182,212,0.20), 0 2px 8px rgba(6,182,212,0.12), inset 0 1px 0 rgba(6,182,212,0.08)",
-    position: "-top-5 -left-4 lg:-left-10",
-    delay: 0.55,
-    floatDuration: 3.1,
-  },
-  {
-    icon: TrendingUp,
-    label: "Conversão",
-    value: "+180%",
-    textColor: "text-blue-300",
-    borderColor: "border-blue-500/30",
-    bgColor: "bg-blue-500/12",
-    iconBg: "bg-blue-500/20 border-blue-500/40",
-    glowShadow: "0 8px 28px rgba(59,130,246,0.20), 0 2px 8px rgba(59,130,246,0.12), inset 0 1px 0 rgba(59,130,246,0.08)",
-    position: "top-1/4 -right-4 lg:-right-10",
-    delay: 0.7,
-    floatDuration: 3.7,
-  },
-  {
-    icon: Users,
-    label: "Leads",
-    value: "+3x",
-    textColor: "text-purple-300",
-    borderColor: "border-purple-500/30",
-    bgColor: "bg-purple-500/12",
-    iconBg: "bg-purple-500/20 border-purple-500/40",
-    glowShadow: "0 8px 28px rgba(139,92,246,0.20), 0 2px 8px rgba(139,92,246,0.12), inset 0 1px 0 rgba(139,92,246,0.08)",
-    position: "bottom-1/3 -left-4 lg:-left-12",
-    delay: 0.62,
-    floatDuration: 4.0,
-  },
-  {
-    icon: Star,
-    label: "Autoridade",
-    value: "5 ★",
-    textColor: "text-amber-300",
-    borderColor: "border-amber-500/30",
-    bgColor: "bg-amber-500/12",
-    iconBg: "bg-amber-500/20 border-amber-500/40",
-    glowShadow: "0 8px 28px rgba(245,158,11,0.20), 0 2px 8px rgba(245,158,11,0.12), inset 0 1px 0 rgba(245,158,11,0.08)",
-    position: "-bottom-3 right-6",
-    delay: 0.78,
-    floatDuration: 3.4,
-  },
-] as const
+function HeroVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [hasStarted, setHasStarted] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
 
-function LaptopMockup() {
+  function handleStart() {
+    const video = videoRef.current
+    if (!video) return
+    if (!hasStarted) {
+      setHasStarted(true)
+      trackHeroVideoEvent("hero_video_play")
+    }
+    void video
+      .play()
+      .then(() => setIsPlaying(true))
+      .catch(() => setIsPlaying(false))
+  }
+
+  function togglePlay() {
+    const video = videoRef.current
+    if (!video) return
+    if (video.paused) {
+      void video.play().then(() => setIsPlaying(true)).catch(() => {})
+    } else {
+      video.pause()
+      setIsPlaying(false)
+    }
+  }
+
+  function toggleMute() {
+    const video = videoRef.current
+    if (!video) return
+    video.muted = !video.muted
+    setIsMuted(video.muted)
+  }
+
+  function handleTimeUpdate() {
+    const video = videoRef.current
+    if (!video || !video.duration) return
+    const pct = (video.currentTime / video.duration) * 100
+    if (pct >= 75) trackHeroVideoEvent("hero_video_75")
+    else if (pct >= 50) trackHeroVideoEvent("hero_video_50")
+    else if (pct >= 25) trackHeroVideoEvent("hero_video_25")
+  }
+
   return (
-    <div className="relative w-full max-w-[560px] mx-auto select-none">
-      {/* Multi-layer glow behind screen — stronger to match larger mockup */}
-      <div className="absolute -inset-10 bg-gradient-to-br from-blue-600/22 via-purple-600/10 to-cyan-600/14 blur-3xl rounded-full" />
-      <div className="absolute -inset-3 bg-gradient-to-b from-blue-500/10 to-transparent blur-xl rounded-2xl" />
+    <div className="relative select-none">
+      {/* Ambient glow behind card */}
+      <div
+        className="absolute -inset-10 bg-gradient-to-br from-blue-600/20 via-cyan-500/10 to-purple-600/12 blur-3xl rounded-full pointer-events-none"
+        aria-hidden
+      />
 
-      {/* Screen bezel */}
-      <div className="relative bg-[#111827] rounded-2xl p-2.5 border border-white/12 shadow-2xl shadow-black/70">
-        {/* Screen */}
-        <div className="rounded-xl overflow-hidden bg-[#0d1117]">
-          {/* Browser chrome */}
-          <div className="h-8 bg-[#161b22] border-b border-white/6 flex items-center gap-2 px-3">
-            <div className="flex gap-1.5 shrink-0">
-              <div className="w-2.5 h-2.5 rounded-full bg-red-500/85" />
-              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/85" />
-              <div className="w-2.5 h-2.5 rounded-full bg-green-500/85" />
-            </div>
-            {/* URL bar */}
-            <div className="flex-1 max-w-[210px] mx-auto h-5 bg-[#21262d] rounded-md flex items-center gap-1.5 px-2">
-              <div className="w-2 h-2 rounded-full border border-green-500/60 shrink-0" />
-              <span className="text-[9px] text-white/28 font-mono tracking-wide truncate">
-                spacefast.com.br
-              </span>
-            </div>
-            {/* Toolbar icons */}
-            <div className="flex gap-1 ml-auto shrink-0">
-              {["bg-white/6", "bg-white/6", "bg-white/6"].map((bg, i) => (
-                <div key={i} className={`w-4 h-4 rounded ${bg}`} />
-              ))}
-            </div>
+      {/* Auxiliary phrase */}
+      <p className="relative text-center text-[13px] text-gray-500 mb-4 max-w-[280px] mx-auto">
+        Assista e entenda qual solução pode fazer sentido para sua empresa
+      </p>
+
+      {/* Video card */}
+      <div
+        className="relative mx-auto w-[82vw] sm:w-[320px] lg:w-[340px] xl:w-[360px] max-w-[380px] aspect-[9/16] rounded-[28px] overflow-hidden border border-white/12 bg-[#0a0f1c]"
+        style={{
+          boxShadow:
+            "0 30px 70px -20px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.03), 0 0 45px rgba(6,182,212,0.10)",
+        }}
+      >
+        <video
+          ref={videoRef}
+          poster="/hero-video-poster.jpg"
+          preload="none"
+          playsInline
+          muted={isMuted}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={() => {
+            setIsPlaying(false)
+            trackHeroVideoEvent("hero_video_complete")
+          }}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/hero-video-web.mp4" type="video/mp4" />
+        </video>
+
+        {/* Center play button — shown before first play */}
+        {!hasStarted && (
+          <button
+            type="button"
+            onClick={handleStart}
+            aria-label="Assistir vídeo de apresentação"
+            className="absolute inset-0 z-10 flex items-center justify-center bg-black/10 hover:bg-black/20 transition-colors"
+          >
+            <span className="w-16 h-16 rounded-full bg-white/10 border border-white/25 backdrop-blur-sm flex items-center justify-center shadow-lg shadow-black/40">
+              <Play className="w-7 h-7 text-white ml-0.5" fill="currentColor" />
+            </span>
+          </button>
+        )}
+
+        {/* Minimal custom controls — shown after playback starts */}
+        {hasStarted && (
+          <div className="absolute bottom-0 inset-x-0 z-10 flex items-center justify-between px-3 py-2.5 bg-gradient-to-t from-black/55 to-transparent">
+            <button
+              type="button"
+              onClick={togglePlay}
+              aria-label={isPlaying ? "Pausar vídeo" : "Reproduzir vídeo"}
+              className="w-8 h-8 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors focus-visible:ring-2 focus-visible:ring-blue-400"
+            >
+              {isPlaying ? (
+                <Pause className="w-3.5 h-3.5 text-white" fill="currentColor" />
+              ) : (
+                <Play className="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" />
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={toggleMute}
+              aria-label={isMuted ? "Ativar som" : "Desativar som"}
+              className="w-8 h-8 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors focus-visible:ring-2 focus-visible:ring-blue-400"
+            >
+              {isMuted ? (
+                <VolumeX className="w-3.5 h-3.5 text-white" />
+              ) : (
+                <Volume2 className="w-3.5 h-3.5 text-white" />
+              )}
+            </button>
           </div>
-
-          {/* Website preview */}
-          <div className="aspect-[16/9] bg-gradient-to-br from-[#090e1c] to-[#0c1630] p-3.5 relative overflow-hidden">
-            {/* Ambient gradient */}
-            <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-blue-600/12 to-transparent pointer-events-none" />
-
-            {/* Fake navbar */}
-            <div className="flex items-center justify-between mb-4 relative z-10">
-              <div className="flex items-center gap-1.5">
-                <div className="w-4 h-4 rounded-md bg-gradient-to-br from-blue-400 to-cyan-400 shrink-0" />
-                <div className="w-14 h-2 bg-white/22 rounded-full" />
-              </div>
-              <div className="hidden sm:flex gap-2.5">
-                {[28, 32, 24, 28].map((w, i) => (
-                  <div key={i} className="h-1.5 bg-white/10 rounded-full" style={{ width: w }} />
-                ))}
-              </div>
-              <div className="w-14 h-4.5 rounded-full bg-gradient-to-r from-blue-500/55 to-cyan-500/55" />
-            </div>
-
-            {/* Hero headline skeleton */}
-            <div className="space-y-2 mb-4 relative z-10">
-              <div className="h-4 bg-gradient-to-r from-white/38 to-white/18 rounded" style={{ width: "75%" }} />
-              <div className="h-3.5 bg-white/24 rounded" style={{ width: "55%" }} />
-              <div className="h-2 bg-white/10 rounded mt-1" style={{ width: "90%" }} />
-              <div className="h-2 bg-white/7 rounded" style={{ width: "65%" }} />
-            </div>
-
-            {/* CTA buttons skeleton */}
-            <div className="flex gap-2 mb-4 relative z-10">
-              <div className="h-5 w-18 rounded-full bg-gradient-to-r from-blue-500/65 to-cyan-500/65" />
-              <div className="h-5 w-16 rounded-full border border-white/18" />
-            </div>
-
-            {/* Stats cards skeleton */}
-            <div className="grid grid-cols-3 gap-2 relative z-10">
-              {[
-                { g: "from-blue-600/35", n: "+247%", l: "Speed" },
-                { g: "from-purple-600/35", n: "+180%", l: "Conv." },
-                { g: "from-cyan-600/35", n: "×3", l: "Leads" },
-              ].map((s, i) => (
-                <div
-                  key={i}
-                  className={`rounded-lg bg-gradient-to-br ${s.g} to-transparent border border-white/10 p-2`}
-                >
-                  <div className="w-3 h-3 rounded bg-white/20 mb-1" />
-                  <div className="text-[8px] font-bold text-white/65">{s.n}</div>
-                  <div className="text-[7px] text-white/30 mt-0.5">{s.l}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        )}
       </div>
 
-      {/* Laptop hinge + base */}
-      <div className="h-2.5 bg-gradient-to-b from-[#111827] to-[#0d1117] mx-6 border-x border-white/8" />
-      <div className="h-1.5 bg-[#0a0f1c] rounded-b-xl mx-2 border border-white/6" />
-      <div className="h-0.5 bg-[#0d1117]/60 rounded-full mx-10 shadow-xl shadow-black/60" />
+      {/* Identification */}
+      <div className="relative mt-4 flex flex-col items-center gap-0.5 text-center">
+        <span className="inline-flex items-center gap-1.5 text-[11px] text-blue-300/80 font-medium">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
+          Fundador da Spacefast
+        </span>
+        <p className="text-sm font-semibold text-white">Matheus Pedreira</p>
+        <p className="text-xs text-gray-500">Desenvolvimento &amp; Estratégia Digital</p>
+      </div>
     </div>
   )
 }
@@ -278,47 +271,12 @@ export default function Hero() {
 
           {/* ── Right: Visual ──────────────────────────────────────────────── */}
           <motion.div
-            initial={prefersReduced ? undefined : { opacity: 0, x: 32 }}
-            animate={prefersReduced ? undefined : { opacity: 1, x: 0 }}
+            initial={prefersReduced ? undefined : { opacity: 0, x: 32, scale: 0.97 }}
+            animate={prefersReduced ? undefined : { opacity: 1, x: 0, scale: 1 }}
             transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
             className="relative"
           >
-            <LaptopMockup />
-
-            {/* Floating metric cards */}
-            {METRIC_CARDS.map((card, i) => (
-              <motion.div
-                key={i}
-                initial={prefersReduced ? undefined : { opacity: 0, scale: 0.85 }}
-                animate={prefersReduced ? undefined : { opacity: 1, scale: 1 }}
-                transition={{ duration: 0.45, delay: card.delay, ease: EASE }}
-                className={`absolute ${card.position} z-20`}
-              >
-                <motion.div
-                  animate={prefersReduced ? undefined : { y: [0, -7, 0] }}
-                  transition={{
-                    duration: card.floatDuration,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: card.delay + 0.5,
-                  }}
-                  className={`glass-card rounded-xl p-2.5 flex items-center gap-2.5 border ${card.borderColor}`}
-                  style={{ boxShadow: card.glowShadow }}
-                >
-                  <div
-                    className={`w-8 h-8 rounded-lg ${card.iconBg} border flex items-center justify-center shrink-0`}
-                  >
-                    <card.icon className={`w-4 h-4 ${card.textColor}`} />
-                  </div>
-                  <div>
-                    <p className={`text-sm font-bold leading-none ${card.textColor}`}>
-                      {card.value}
-                    </p>
-                    <p className="text-[10px] text-gray-400 mt-0.5 leading-none">{card.label}</p>
-                  </div>
-                </motion.div>
-              </motion.div>
-            ))}
+            <HeroVideo />
           </motion.div>
         </div>
       </div>
