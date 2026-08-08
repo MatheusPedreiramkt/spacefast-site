@@ -27,7 +27,7 @@ export default function Process() {
             <span className="gradient-text-brand">o seu site</span>
           </h2>
           <p className="text-gray-400 text-[1.05rem] leading-relaxed">
-            Um processo claro, organizado e com entrega no prazo — sempre.
+            Um processo claro e organizado, do planejamento à publicação.
           </p>
         </motion.div>
 

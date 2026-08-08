@@ -160,7 +160,7 @@ function HeroSEO() {
             {/* H1 — única, com a keyword principal no início */}
             <motion.div {...anim(0.1)}>
               <h1 className="text-[2.3rem] sm:text-[2.9rem] lg:text-[3.4rem] xl:text-[3.8rem] font-black leading-[1.1] tracking-tighter">
-                <span className="text-white">Criação de sites que</span>
+                <span className="text-white">Criação de sites profissionais que</span>
                 <br />
                 <span className="gradient-text-brand">transformam sua presença digital</span>
               </h1>
@@ -476,6 +476,20 @@ function ParaQuemESection() {
             </motion.span>
           ))}
         </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.65, delay: 0.2 }}
+          className="text-gray-500 text-sm leading-relaxed text-center max-w-2xl mx-auto mt-10"
+        >
+          Desenvolvemos sites profissionais para empresas de diferentes segmentos, sempre
+          adaptando estrutura, conteúdo e experiência ao processo comercial de cada negócio. Seja
+          para apresentar serviços, gerar solicitações de orçamento, fortalecer a presença no
+          Google ou apoiar campanhas de tráfego pago, o projeto é planejado de acordo com o
+          objetivo da empresa.
+        </motion.p>
       </div>
     </section>
   )
