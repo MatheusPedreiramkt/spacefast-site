@@ -23,21 +23,21 @@ export default function Process() {
             Como funciona
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight tracking-tight">
-            Do primeiro contato ao{" "}
-            <span className="gradient-text-brand">site no ar</span>
+            Como criamos{" "}
+            <span className="gradient-text-brand">o seu site</span>
           </h2>
           <p className="text-gray-400 text-[1.05rem] leading-relaxed">
             Um processo claro, organizado e com entrega no prazo — sempre.
           </p>
         </motion.div>
 
-        {/* 2×3 grid on desktop, 1-column on mobile */}
+        {/* 1 col mobile, 2×2 tablet, 1×4 desktop */}
         <motion.div
           variants={stagger}
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
         >
           {processSteps.map((step, i) => (
             <motion.div key={i} variants={fadeUp}>

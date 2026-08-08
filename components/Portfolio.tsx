@@ -182,7 +182,25 @@ function ProjectCard({
 }
 
 // ─── Section ──────────────────────────────────────────────────────────────────
-export default function Portfolio({ onCtaClick }: { onCtaClick?: () => void } = {}) {
+export default function Portfolio({
+  onCtaClick,
+  badge = "Portfólio",
+  heading = (
+    <>
+      Projetos que transmitem{" "}
+      <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+        confiança
+      </span>{" "}
+      e geram contatos
+    </>
+  ),
+  subtitle = "Cada projeto desenvolvido com estratégia, design premium e foco total em conversão.",
+}: {
+  onCtaClick?: () => void
+  badge?: string
+  heading?: React.ReactNode
+  subtitle?: string
+} = {}) {
   const prefersReduced = useReducedMotion() ?? false
   const [showAll, setShowAll] = useState(false)
   const featuredProjects = portfolioProjects.slice(0, FEATURED_COUNT)
@@ -204,17 +222,13 @@ export default function Portfolio({ onCtaClick }: { onCtaClick?: () => void } = 
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/8 text-cyan-300 text-sm font-medium mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0" aria-hidden />
-            Portfólio
+            {badge}
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight tracking-tight">
-            Projetos que transmitem{" "}
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              confiança
-            </span>{" "}
-            e geram contatos
+            {heading}
           </h2>
           <p className="text-gray-400 text-[1.05rem] leading-relaxed">
-            Cada projeto desenvolvido com estratégia, design premium e foco total em conversão.
+            {subtitle}
           </p>
         </motion.div>
 

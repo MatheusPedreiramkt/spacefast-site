@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Link from "next/link"
 import { Globe, Rocket, BarChart2, Megaphone } from "lucide-react"
 import { stagger, fadeUp, VIEWPORT, SECTION_ANIM } from "@/lib/motion"
 import type { LucideIcon } from "lucide-react"
@@ -10,6 +11,7 @@ interface SolutionCard {
   title: string
   description: string
   gradient: string
+  href?: string
 }
 
 const ITEMS: SolutionCard[] = [
@@ -18,6 +20,7 @@ const ITEMS: SolutionCard[] = [
     title: "Sites Profissionais",
     description: "Sites modernos e estratégicos para transmitir credibilidade e gerar contatos qualificados.",
     gradient: "from-blue-500 to-cyan-500",
+    href: "/criacao-de-sites",
   },
   {
     icon: Rocket,
@@ -74,9 +77,11 @@ export default function Solutions() {
           viewport={VIEWPORT}
           className="grid grid-cols-2 lg:grid-cols-4 gap-4"
         >
-          {ITEMS.map((item, i) => (
-            <motion.div key={i} variants={fadeUp}>
-              <div className="group glass glass-hover rounded-2xl p-5 h-full border border-white/8 hover:border-white/16 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/20">
+          {ITEMS.map((item, i) => {
+            const cardClass =
+              "group glass glass-hover rounded-2xl p-5 h-full border border-white/8 hover:border-white/16 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/20"
+            const content = (
+              <>
                 <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.gradient} p-px mb-4 shrink-0`}>
                   <div className="w-full h-full rounded-[11px] bg-[#080e1e] flex items-center justify-center">
                     <item.icon className="w-5 h-5 text-white" aria-hidden />
@@ -88,9 +93,23 @@ export default function Solutions() {
                 <p className="text-gray-500 text-xs leading-relaxed">
                   {item.description}
                 </p>
-              </div>
-            </motion.div>
-          ))}
+              </>
+            )
+            return (
+              <motion.div key={i} variants={fadeUp}>
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className={`${cardClass} block focus-visible:ring-2 focus-visible:ring-blue-400`}
+                  >
+                    {content}
+                  </Link>
+                ) : (
+                  <div className={cardClass}>{content}</div>
+                )}
+              </motion.div>
+            )
+          })}
         </motion.div>
       </div>
     </section>

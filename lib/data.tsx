@@ -354,39 +354,27 @@ export const monthlyPlanFeatures = [
 export const processSteps: ProcessStep[] = [
   {
     number: "01",
-    title: "Conversa inicial",
+    title: "Entendemos sua empresa",
     description:
-      "Entendemos seu negócio, seus objetivos e o que você precisa para crescer na internet.",
+      "Conhecemos seus serviços, público, objetivos e diferenciais.",
   },
   {
     number: "02",
-    title: "Planejamento",
+    title: "Planejamos a estratégia",
     description:
-      "Definimos a estrutura, as seções e a estratégia do site com foco em conversão.",
+      "Definimos estrutura, conteúdo, navegação e direção visual.",
   },
   {
     number: "03",
-    title: "Criação do design",
+    title: "Desenvolvemos o site",
     description:
-      "Desenvolvemos o layout visual, escolhemos cores e tipografia alinhados à sua marca.",
+      "Criamos o projeto responsivo e fazemos os ajustes necessários.",
   },
   {
     number: "04",
-    title: "Desenvolvimento",
+    title: "Publicamos",
     description:
-      "Codificamos o site com tecnologia moderna, rápido e responsivo em todos os dispositivos.",
-  },
-  {
-    number: "05",
-    title: "Ajustes finais",
-    description:
-      "Revisamos juntos, fazemos os ajustes necessários e garantimos que tudo está perfeito.",
-  },
-  {
-    number: "06",
-    title: "Publicação",
-    description:
-      "Colocamos o site no ar com domínio, hospedagem e tudo configurado para funcionar.",
+      "Depois da aprovação, colocamos o site no ar e deixamos tudo pronto para começar a receber visitantes.",
   },
 ]
 
