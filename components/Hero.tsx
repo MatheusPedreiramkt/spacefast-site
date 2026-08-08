@@ -190,15 +190,6 @@ export default function Hero() {
           {/* ── Left: Text ─────────────────────────────────────────────────── */}
           <div className="space-y-7 lg:space-y-6 [@media(max-height:800px)]:lg:space-y-4 text-center lg:text-left">
 
-            {/* Badge */}
-            <motion.div {...animProps(0)} className="flex justify-center lg:justify-start">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/8 text-blue-300 text-sm font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse shrink-0" />
-                Especialistas em Geração de Clientes
-                <ChevronRight className="w-3.5 h-3.5 opacity-60" />
-              </span>
-            </motion.div>
-
             {/* H1 */}
             <motion.div {...animProps(0.1)}>
               <h1 className="text-[2.6rem] sm:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem] font-black leading-[1.08] tracking-tighter">
