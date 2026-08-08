@@ -61,13 +61,13 @@ function HeroVideo() {
       />
 
       {/* Auxiliary phrase */}
-      <p className="relative text-center text-[13px] text-gray-500 mb-4 max-w-[280px] mx-auto">
+      <p className="relative text-center text-[13px] text-gray-500 mb-2.5 max-w-[280px] mx-auto">
         Assista e entenda qual solução pode fazer sentido para sua empresa
       </p>
 
       {/* Video card */}
       <div
-        className="relative mx-auto w-[82vw] sm:w-[320px] lg:w-[340px] xl:w-[360px] max-w-[380px] aspect-[9/16] rounded-[28px] overflow-hidden border border-white/12 bg-[#0a0f1c]"
+        className="relative mx-auto w-[82vw] sm:w-[300px] lg:w-[320px] xl:w-[340px] [@media(max-height:800px)]:lg:w-[290px] max-w-[380px] aspect-[9/16] rounded-[28px] overflow-hidden border border-white/12 bg-[#0a0f1c]"
         style={{
           boxShadow:
             "0 30px 70px -20px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.03), 0 0 45px rgba(6,182,212,0.10)",
@@ -137,7 +137,7 @@ function HeroVideo() {
       </div>
 
       {/* Identification */}
-      <div className="relative mt-4 flex flex-col items-center gap-0.5 text-center">
+      <div className="relative mt-3 flex flex-col items-center gap-0.5 text-center">
         <span className="inline-flex items-center gap-1.5 text-[11px] text-blue-300/80 font-medium">
           <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
           Fundador da Spacefast
@@ -165,7 +165,7 @@ export default function Hero() {
     <section
       id="inicio"
       aria-label="Início"
-      className="relative min-h-screen flex items-center overflow-hidden bg-[#030712] pt-16"
+      className="relative min-h-[100svh] flex items-center overflow-hidden bg-[#030712] pt-16"
     >
       {/* Layered backgrounds */}
       <div className="absolute inset-0 bg-grid bg-grid-fade opacity-60" />
@@ -184,11 +184,11 @@ export default function Hero() {
       {/* Subtle center-bottom warmth */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[280px] bg-blue-900/8 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 w-full">
-        <div className="grid lg:grid-cols-2 gap-14 lg:gap-10 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:pt-8 lg:pb-12 [@media(max-height:800px)]:lg:pt-5 [@media(max-height:800px)]:lg:pb-8 w-full">
+        <div className="grid lg:grid-cols-2 gap-14 lg:gap-8 [@media(max-height:800px)]:lg:gap-6 items-center">
 
           {/* ── Left: Text ─────────────────────────────────────────────────── */}
-          <div className="space-y-7 lg:space-y-8 text-center lg:text-left">
+          <div className="space-y-7 lg:space-y-6 [@media(max-height:800px)]:lg:space-y-4 text-center lg:text-left">
 
             {/* Badge */}
             <motion.div {...animProps(0)} className="flex justify-center lg:justify-start">
