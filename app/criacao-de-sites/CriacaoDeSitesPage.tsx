@@ -808,10 +808,6 @@ function CTASEOFinal() {
               Falar com especialista
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
             </a>
-
-            <p className="mt-4 text-xs text-gray-600">
-              Mais de 40 empresas atendidas · Orçamento gratuito · Resposta em até 2h
-            </p>
           </div>
         </motion.div>
       </div>

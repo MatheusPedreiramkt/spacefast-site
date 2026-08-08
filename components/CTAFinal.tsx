@@ -73,11 +73,6 @@ export default function CTAFinal() {
               Falar no WhatsApp agora
               <ArrowRight className="w-4.5 h-4.5 group-hover:translate-x-1 transition-transform shrink-0" />
             </a>
-
-            {/* Microcopy */}
-            <p className="mt-4 text-xs text-gray-600">
-              Mais de 40 empresas atendidas · Resposta em até 2h
-            </p>
           </div>
         </motion.div>
       </div>
