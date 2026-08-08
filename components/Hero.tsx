@@ -246,11 +246,6 @@ export default function Hero() {
               </a>
             </motion.div>
 
-            {/* Microcopy */}
-            <motion.p {...animProps(0.35)} className="text-xs text-gray-400 -mt-4">
-              Orçamento 100% gratuito · Resposta em minutos · Sem compromisso
-            </motion.p>
-
             {/* Pointer to portfolio */}
             <motion.p
               {...animProps(0.45)}
