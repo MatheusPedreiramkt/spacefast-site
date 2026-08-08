@@ -8,13 +8,6 @@ import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 import { trackWhatsAppClick } from "@/lib/analytics"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
 
-const TRUST_BADGES = [
-  { color: "bg-emerald-500", label: "Resposta em até 2h" },
-  { color: "bg-blue-500", label: "Sem compromisso" },
-  { color: "bg-purple-500", label: "Orçamento gratuito" },
-  { color: "bg-cyan-500", label: "Suporte humano" },
-]
-
 export default function CTAFinal() {
   return (
     <section id="contato" className="relative py-24 lg:py-36 overflow-hidden">
@@ -85,16 +78,6 @@ export default function CTAFinal() {
             <p className="mt-4 text-xs text-gray-600">
               Mais de 40 empresas atendidas · Resposta em até 2h
             </p>
-
-            {/* Trust badges */}
-            <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2.5">
-              {TRUST_BADGES.map((b) => (
-                <span key={b.label} className="flex items-center gap-1.5 text-sm text-gray-500">
-                  <span className={`w-1.5 h-1.5 rounded-full ${b.color} shrink-0`} aria-hidden />
-                  {b.label}
-                </span>
-              ))}
-            </div>
           </div>
         </motion.div>
       </div>
