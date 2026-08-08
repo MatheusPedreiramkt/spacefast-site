@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
-import { CheckCircle2, ArrowRight, Sparkles, Send } from "lucide-react"
+import { CheckCircle2, ArrowRight, Send } from "lucide-react"
 import { stagger, fadeUp, VIEWPORT, SECTION_ANIM, EASE } from "@/lib/motion"
 import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
@@ -385,44 +385,6 @@ export default function QualificacaoForm() {
               </p>
             </form>
           )}
-        </motion.div>
-
-        {/* ── Pacote de entrada ────────────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={VIEWPORT}
-          transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
-          className="mt-8 glass rounded-2xl border border-white/8 p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-5 sm:gap-6 text-center sm:text-left"
-        >
-          <div className="w-12 h-12 rounded-xl bg-amber-500/12 border border-amber-500/25 flex items-center justify-center shrink-0">
-            <Sparkles className="w-6 h-6 text-amber-400" />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-white font-semibold text-lg mb-1">
-              Precisa apenas de uma presença digital objetiva?
-            </h3>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Também desenvolvemos sites essenciais de uma página, com projetos a partir de{" "}
-              <span className="text-white font-semibold">R$ 500</span>.
-            </p>
-          </div>
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => {
-              e.preventDefault()
-              openWhatsAppWithTracking(
-                "Olá! Vi que vocês fazem sites a partir de R$ 500 e quero saber mais.",
-                WHATSAPP_NUMBER,
-              )
-            }}
-            className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/15 text-white/85 text-sm font-medium hover:bg-white/[0.06] hover:border-white/25 transition-all"
-          >
-            Saber mais
-            <ArrowRight className="w-3.5 h-3.5" />
-          </a>
         </motion.div>
       </div>
     </section>
