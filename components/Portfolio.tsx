@@ -1,14 +1,17 @@
 "use client"
 
-import { motion, useReducedMotion } from "framer-motion"
+import { useState } from "react"
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { portfolioProjects } from "@/lib/data"
 import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
-import { ArrowRight, CheckCircle2, ExternalLink } from "lucide-react"
+import { ArrowRight, ChevronDown, CheckCircle2, ExternalLink } from "lucide-react"
 import { stagger, fadeUp, VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
 import type { PortfolioProject } from "@/lib/data"
-import { trackPortfolioClick } from "@/lib/analytics"
+import { trackPortfolioClick, trackCustomEvent } from "@/lib/analytics"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
+
+const FEATURED_COUNT = 4
 
 // ─── Per-accent glow color (RGB) and image-area tint ─────────────────────────
 const ACCENT: Record<string, { rgb: string; bg: string }> = {
@@ -181,6 +184,9 @@ function ProjectCard({
 // ─── Section ──────────────────────────────────────────────────────────────────
 export default function Portfolio({ onCtaClick }: { onCtaClick?: () => void } = {}) {
   const prefersReduced = useReducedMotion() ?? false
+  const [showAll, setShowAll] = useState(false)
+  const featuredProjects = portfolioProjects.slice(0, FEATURED_COUNT)
+  const remainingProjects = portfolioProjects.slice(FEATURED_COUNT)
 
   return (
     <section id="portfolio" className="relative py-20 lg:py-32 overflow-hidden">
@@ -212,7 +218,7 @@ export default function Portfolio({ onCtaClick }: { onCtaClick?: () => void } = 
           </p>
         </motion.div>
 
-        {/* Grid — 2 colunas, gap generoso */}
+        {/* Grid — 4 projetos principais */}
         <motion.div
           variants={stagger}
           initial="hidden"
@@ -220,20 +226,20 @@ export default function Portfolio({ onCtaClick }: { onCtaClick?: () => void } = 
           viewport={VIEWPORT}
           className="grid sm:grid-cols-2 gap-5"
         >
-          {portfolioProjects.map((project, i) => (
+          {featuredProjects.map((project, i) => (
             <motion.div key={i} variants={fadeUp}>
               <ProjectCard project={project} reducedMotion={prefersReduced} />
             </motion.div>
           ))}
         </motion.div>
 
-        {/* CTA bottom */}
+        {/* CTA + Ver mais projetos */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={VIEWPORT}
           transition={{ duration: 0.65, delay: 0.3 }}
-          className="mt-12 text-center"
+          className="mt-12 flex flex-col items-center gap-4"
         >
           {onCtaClick ? (
             <button
@@ -241,7 +247,7 @@ export default function Portfolio({ onCtaClick }: { onCtaClick?: () => void } = 
               onClick={onCtaClick}
               className="group inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] hover:from-blue-500 hover:to-cyan-400 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
             >
-              Quero um projeto assim
+              Quero um site assim para minha empresa
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" aria-hidden />
             </button>
           ) : (
@@ -253,13 +259,53 @@ export default function Portfolio({ onCtaClick }: { onCtaClick?: () => void } = 
                 e.preventDefault()
                 openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
               }}
-              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 text-gray-300 text-sm font-medium hover:border-white/20 hover:text-white hover:bg-white/4 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-white/40"
+              className="group inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] hover:from-blue-500 hover:to-cyan-400 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
             >
-              Quero um projeto assim
+              Quero um site assim para minha empresa
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" aria-hidden />
             </a>
           )}
+
+          {remainingProjects.length > 0 && !showAll && (
+            <button
+              type="button"
+              onClick={() => {
+                setShowAll(true)
+                trackCustomEvent("cta_click", { source: "portfolio_ver_mais_projetos" })
+              }}
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 text-gray-300 text-sm font-medium hover:border-white/20 hover:text-white hover:bg-white/4 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-white/40"
+            >
+              Ver mais projetos
+              <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform duration-200" aria-hidden />
+            </button>
+          )}
         </motion.div>
+
+        {/* Demais projetos — revelados ao clicar em "Ver mais projetos" */}
+        <AnimatePresence>
+          {showAll && remainingProjects.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.5, ease: EASE }}
+              className="overflow-hidden"
+            >
+              <motion.div
+                variants={stagger}
+                initial="hidden"
+                animate="visible"
+                className="grid sm:grid-cols-2 gap-5 mt-10"
+              >
+                {remainingProjects.map((project, i) => (
+                  <motion.div key={i} variants={fadeUp}>
+                    <ProjectCard project={project} reducedMotion={prefersReduced} />
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
     </section>

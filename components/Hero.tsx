@@ -190,12 +190,20 @@ export default function Hero() {
           {/* ── Left: Text ─────────────────────────────────────────────────── */}
           <div className="space-y-7 lg:space-y-6 [@media(max-height:800px)]:lg:space-y-4 text-center lg:text-left">
 
+            {/* Identification */}
+            <motion.div {...animProps(0)} className="flex justify-center lg:justify-start">
+              <span className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-[0.15em] text-blue-400 uppercase">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" aria-hidden />
+                Criação de Sites Profissionais
+              </span>
+            </motion.div>
+
             {/* H1 */}
             <motion.div {...animProps(0.1)}>
               <h1 className="text-[2.6rem] sm:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem] font-black leading-[1.08] tracking-tighter">
-                <span className="text-white">Sua empresa precisa</span>
+                <span className="text-white">Sua empresa precisa de um site</span>
                 <br />
-                <span className="gradient-text-brand">de um novo site?</span>
+                <span className="gradient-text-brand">que realmente gere resultados?</span>
               </h1>
             </motion.div>
 
@@ -204,13 +212,8 @@ export default function Hero() {
               {...animProps(0.2)}
               className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[480px] mx-auto lg:mx-0"
             >
-              Criamos{" "}
-              <span className="text-gray-200 font-medium">
-                sites institucionais, landing pages, catálogos, lojas virtuais e sistemas
-                personalizados
-              </span>{" "}
-              para empresas que querem fortalecer sua presença digital e gerar novas
-              oportunidades.
+              Desenvolvo sites modernos, rápidos e estratégicos para transformar sua presença
+              digital em mais credibilidade, contatos e oportunidades para sua empresa.
             </motion.p>
 
             {/* CTAs */}
@@ -228,7 +231,7 @@ export default function Hero() {
                 }}
                 className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] hover:from-blue-500 hover:to-cyan-400 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
               >
-                Solicitar análise do meu projeto
+                Quero criar meu site
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
               </a>
 
