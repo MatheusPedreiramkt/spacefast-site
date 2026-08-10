@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
@@ -8,17 +8,8 @@ import {
   ArrowRight,
   ChevronRight,
   ChevronDown,
-  Globe,
-  Clock,
-  XCircle,
-  FileText,
-  Target,
+  CheckCircle2,
   Smartphone,
-  Share2,
-  Building2,
-  Briefcase,
-  Rocket,
-  LayoutTemplate,
   PenTool,
   Gauge,
   Search,
@@ -26,21 +17,17 @@ import {
   Megaphone,
   BarChart3,
   MousePointerClick,
-  Factory,
-  MapPin,
-  Users,
-  Store,
 } from "lucide-react"
 import Header from "@/components/Header"
 import Portfolio from "@/components/Portfolio"
 import Process from "@/components/Process"
-import QualificacaoForm from "@/components/QualificacaoForm"
+import OrcamentoForm from "@/components/OrcamentoForm"
 import Footer from "@/components/Footer"
 import WhatsAppButton from "@/components/WhatsAppButton"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { stagger, fadeUp, VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
-import { trackWhatsAppClick } from "@/lib/analytics"
+import { trackCriacaoSitesView } from "@/lib/analytics"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 // ─── Breadcrumbs ────────────────────────────────────────────────────────────
@@ -113,6 +100,13 @@ function RealProjectsShowcase() {
 
 // ─── Section 1: Hero ──────────────────────────────────────────────────────────
 
+const HERO_BENEFITS = [
+  "Site responsivo para celular",
+  "Integração com WhatsApp",
+  "Design profissional",
+  "Orçamento sem compromisso",
+] as const
+
 function HeroSEO() {
   const prefersReduced = useReducedMotion()
 
@@ -128,7 +122,7 @@ function HeroSEO() {
   return (
     <section
       id="inicio"
-      aria-label="Criação de Sites Profissionais para Empresas"
+      aria-label="Criação de Sites Profissionais a partir de R$500"
       className="relative overflow-hidden bg-[#030712]"
     >
       {/* Backgrounds */}
@@ -143,11 +137,11 @@ function HeroSEO() {
       <div className="absolute top-1/3 -left-64 w-[700px] h-[700px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-64 w-[700px] h-[700px] bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 lg:py-20 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-14 lg:py-20 w-full">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-10 items-center">
 
           {/* Left: Text */}
-          <div className="space-y-6 lg:space-y-7 text-center lg:text-left">
+          <div className="space-y-5 lg:space-y-6 text-center lg:text-left">
 
             {/* Identification */}
             <motion.div {...anim(0)} className="flex justify-center lg:justify-start">
@@ -157,42 +151,51 @@ function HeroSEO() {
               </span>
             </motion.div>
 
-            {/* H1 — única, com a keyword principal no início */}
+            {/* H1 — headline com a keyword principal + preço acima da dobra */}
             <motion.div {...anim(0.1)}>
-              <h1 className="text-[2.3rem] sm:text-[2.9rem] lg:text-[3.4rem] xl:text-[3.8rem] font-black leading-[1.1] tracking-tighter">
-                <span className="text-white">Criação de sites profissionais que</span>
+              <h1 className="text-[2.1rem] sm:text-[2.75rem] lg:text-[3.2rem] xl:text-[3.6rem] font-black leading-[1.12] tracking-tighter">
+                <span className="text-white">Criação de Sites Profissionais</span>
                 <br />
-                <span className="gradient-text-brand">transformam sua presença digital</span>
+                <span className="gradient-text-brand">a partir de R$500</span>
               </h1>
             </motion.div>
 
             {/* Subtitle */}
             <motion.p
-              {...anim(0.2)}
-              className="text-[1.05rem] text-gray-400 leading-[1.75] max-w-[500px] mx-auto lg:mx-0"
+              {...anim(0.18)}
+              className="text-[1.05rem] text-gray-400 leading-[1.7] max-w-[480px] mx-auto lg:mx-0"
             >
-              Desenvolvemos sites modernos, rápidos e estratégicos para empresas que querem
-              transmitir mais credibilidade, apresentar seus serviços profissionalmente e
-              transformar visitantes em novos contatos.
+              Tenha um site moderno, responsivo e integrado ao WhatsApp para apresentar sua
+              empresa e conquistar novos clientes.
             </motion.p>
+
+            {/* Benefits checklist */}
+            <motion.ul
+              {...anim(0.26)}
+              className="flex flex-col sm:grid sm:grid-cols-2 gap-x-5 gap-y-2.5 max-w-[480px] mx-auto lg:mx-0"
+            >
+              {HERO_BENEFITS.map((benefit) => (
+                <li key={benefit} className="flex items-center gap-2 justify-center lg:justify-start">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden />
+                  <span className="text-gray-300 text-sm">{benefit}</span>
+                </li>
+              ))}
+            </motion.ul>
 
             {/* CTAs */}
             <motion.div
-              {...anim(0.3)}
-              className="flex flex-col sm:flex-row gap-3 items-center lg:items-start"
+              {...anim(0.34)}
+              className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-center lg:justify-start pt-1"
             >
               <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#orcamento"
                 onClick={(e) => {
                   e.preventDefault()
-                  trackWhatsAppClick("hero_criacao_sites")
-                  openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+                  document.querySelector("#orcamento")?.scrollIntoView({ behavior: "smooth", block: "start" })
                 }}
-                className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] hover:from-blue-500 hover:to-cyan-400 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
+                className="group inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] tracking-wide hover:from-blue-500 hover:to-cyan-400 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
               >
-                Quero criar meu site
+                RECEBER ORÇAMENTO
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
               </a>
 
@@ -202,7 +205,7 @@ function HeroSEO() {
                   e.preventDefault()
                   document.querySelector("#portfolio")?.scrollIntoView({ behavior: "smooth" })
                 }}
-                className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full border border-white/22 bg-white/[0.05] backdrop-blur-sm text-white/80 font-semibold text-[0.95rem] hover:bg-white/[0.09] hover:border-white/35 hover:text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
+                className="group inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full border border-white/22 bg-white/[0.05] backdrop-blur-sm text-white/80 font-semibold text-[0.95rem] hover:bg-white/[0.09] hover:border-white/35 hover:text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
               >
                 Ver projetos
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
@@ -227,143 +230,7 @@ function HeroSEO() {
   )
 }
 
-// ─── Section 2: Problema / Contexto ───────────────────────────────────────────
-
-const SITE_PROBLEMS = [
-  { icon: Globe, label: "Empresa ainda sem site próprio" },
-  { icon: Clock, label: "Site antigo e desatualizado" },
-  { icon: XCircle, label: "Aparência pouco profissional" },
-  { icon: FileText, label: "Dificuldade para apresentar os serviços" },
-  { icon: Target, label: "Falta de contatos e orçamentos" },
-  { icon: Smartphone, label: "Experiência ruim no celular" },
-  { icon: Share2, label: "Dependência apenas do Instagram e redes sociais" },
-] as const
-
-function ProblemaSection() {
-  return (
-    <section className="relative py-20 lg:py-28 bg-[#030712] overflow-hidden">
-      <div className="absolute inset-0 bg-dots opacity-30" />
-
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          {...SECTION_ANIM}
-          viewport={VIEWPORT}
-          className="text-center max-w-2xl mx-auto mb-12"
-        >
-          <h2 className="text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-bold text-white mb-5 leading-tight tracking-tight">
-            Seu site precisa trabalhar{" "}
-            <span className="gradient-text-brand">a favor da sua empresa</span>
-          </h2>
-          <p className="text-gray-400 text-[1.02rem] leading-relaxed">
-            Um site não deve existir apenas para &ldquo;estar na internet&rdquo;. Ele precisa
-            apresentar sua empresa com profissionalismo e transformar visitantes em contatos
-            reais. Reconhece algum desses problemas?
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT}
-          className="grid sm:grid-cols-2 gap-x-8 gap-y-5 max-w-3xl mx-auto"
-        >
-          {SITE_PROBLEMS.map((p, i) => (
-            <motion.div key={i} variants={fadeUp} className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
-                <p.icon className="w-4 h-4 text-red-400" aria-hidden />
-              </div>
-              <p className="text-gray-300 text-[0.95rem] leading-snug pt-1.5">{p.label}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  )
-}
-
-// ─── Section 3: O que desenvolvemos ──────────────────────────────────────────
-
-const O_QUE_DESENVOLVEMOS = [
-  {
-    icon: Building2,
-    title: "Sites institucionais",
-    description: "Apresentam sua empresa, serviços e diferenciais com credibilidade.",
-  },
-  {
-    icon: Briefcase,
-    title: "Sites para prestadores de serviços",
-    description: "Focados em gerar contatos qualificados via WhatsApp.",
-  },
-  {
-    icon: Rocket,
-    title: "Landing pages",
-    description: "Páginas de alta conversão para campanhas específicas.",
-  },
-  {
-    icon: LayoutTemplate,
-    title: "Sites catálogo",
-    description: "Exibem produtos e serviços de forma organizada e visual.",
-  },
-  {
-    icon: PenTool,
-    title: "Sites personalizados",
-    description: "Projetos sob medida para necessidades específicas do seu negócio.",
-  },
-] as const
-
-function OQueDesenvolvemos() {
-  return (
-    <section className="relative py-20 lg:py-28 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#030712] via-[#060d1f] to-[#030712]" />
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/7 to-transparent" />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          {...SECTION_ANIM}
-          viewport={VIEWPORT}
-          className="text-center max-w-2xl mx-auto mb-14"
-        >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight tracking-tight">
-            O que{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              desenvolvemos
-            </span>
-          </h2>
-          <p className="text-gray-400 text-[1.05rem] leading-relaxed">
-            Soluções sob medida para diferentes necessidades e momentos da sua empresa.
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT}
-          className="grid grid-cols-2 lg:grid-cols-5 gap-4"
-        >
-          {O_QUE_DESENVOLVEMOS.map((item, i) => (
-            <motion.div key={i} variants={fadeUp}>
-              <div className="glass rounded-2xl p-5 h-full border border-white/8 hover:border-white/16 transition-all duration-300">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 p-px mb-4 shrink-0">
-                  <div className="w-full h-full rounded-[11px] bg-[#080e1e] flex items-center justify-center">
-                    <item.icon className="w-5 h-5 text-white" aria-hidden />
-                  </div>
-                </div>
-                <h3 className="text-white font-semibold text-[0.9rem] mb-1.5 leading-snug">
-                  {item.title}
-                </h3>
-                <p className="text-gray-500 text-xs leading-relaxed">{item.description}</p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  )
-}
-
-// ─── Section 5: Diferenciais ──────────────────────────────────────────────────
+// ─── Section: Diferenciais ────────────────────────────────────────────────────
 
 const DIFERENCIAIS = [
   { icon: PenTool, title: "Design profissional e personalizado" },
@@ -423,110 +290,43 @@ function DiferenciaisSection() {
   )
 }
 
-// ─── Section 8: Para quem é ───────────────────────────────────────────────────
-
-const SEGMENTOS = [
-  { icon: Briefcase, label: "Prestadores de serviços" },
-  { icon: Factory, label: "Indústrias" },
-  { icon: MapPin, label: "Empresas locais" },
-  { icon: Users, label: "Profissionais liberais" },
-  { icon: Store, label: "Comércio" },
-  { icon: Building2, label: "Empresas B2B" },
-  { icon: Megaphone, label: "Negócios que anunciam no Google e Meta" },
-] as const
-
-function ParaQuemESection() {
-  return (
-    <section className="relative py-20 lg:py-28 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#030712] via-[#060d1f] to-[#030712]" />
-
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          {...SECTION_ANIM}
-          viewport={VIEWPORT}
-          className="text-center max-w-2xl mx-auto mb-10"
-        >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight tracking-tight">
-            Sites para empresas de{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              diferentes segmentos
-            </span>
-          </h2>
-          <p className="text-gray-400 text-[1.05rem] leading-relaxed">
-            Desenvolvemos projetos de criação de site para empresas de todos os tamanhos e áreas
-            de atuação.
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT}
-          className="flex flex-wrap justify-center gap-3"
-        >
-          {SEGMENTOS.map((s, i) => (
-            <motion.span
-              key={i}
-              variants={fadeUp}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/10 bg-white/[0.03] text-gray-300 text-sm"
-            >
-              <s.icon className="w-4 h-4 text-blue-400 shrink-0" aria-hidden />
-              {s.label}
-            </motion.span>
-          ))}
-        </motion.div>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={VIEWPORT}
-          transition={{ duration: 0.65, delay: 0.2 }}
-          className="text-gray-500 text-sm leading-relaxed text-center max-w-2xl mx-auto mt-10"
-        >
-          Desenvolvemos sites profissionais para empresas de diferentes segmentos, sempre
-          adaptando estrutura, conteúdo e experiência ao processo comercial de cada negócio. Seja
-          para apresentar serviços, gerar solicitações de orçamento, fortalecer a presença no
-          Google ou apoiar campanhas de tráfego pago, o projeto é planejado de acordo com o
-          objetivo da empresa.
-        </motion.p>
-      </div>
-    </section>
-  )
-}
-
-// ─── Section 9: FAQ ───────────────────────────────────────────────────────────
+// ─── Section: FAQ ───────────────────────────────────────────────────────────
 
 const FAQ_ITEMS = [
   {
-    question: "Quanto custa criar um site profissional?",
+    question: "Quanto custa um site?",
     answer:
-      "O investimento varia de acordo com o escopo, as funcionalidades e os objetivos do seu projeto. Solicite um orçamento gratuito e personalizado pelo WhatsApp — sem compromisso.",
+      "Nossos projetos de criação de site começam a partir de R$500, com o valor final definido conforme as funcionalidades e o escopo do seu projeto. Solicite um orçamento gratuito e sem compromisso pelo formulário desta página.",
   },
   {
-    question: "O prazo para desenvolver um site é de quanto tempo?",
+    question: "Em quanto tempo o site fica pronto?",
     answer:
-      "O prazo depende da complexidade e do escopo do projeto. Definimos um cronograma claro logo na conversa inicial, para que você saiba exatamente quando o site ficará pronto.",
+      "O prazo varia conforme a complexidade do projeto. Assim que enviamos o orçamento, você já recebe um cronograma claro, para saber exatamente quando o site ficará pronto.",
   },
   {
-    question: "O site funciona bem no celular?",
+    question: "O site funciona no celular?",
     answer:
-      "Com certeza. Todos os nossos sites são 100% responsivos — funcionam perfeitamente em smartphones, tablets e computadores. Desenvolvemos com abordagem mobile-first, já que a maior parte dos acessos vem de dispositivos móveis.",
+      "Sim. Todos os sites são 100% responsivos e desenvolvidos com abordagem mobile-first, garantindo uma boa experiência em celular, tablet e computador.",
   },
   {
-    question: "O site pode aparecer no Google?",
+    question: "O site terá botão para WhatsApp?",
     answer:
-      "Sim. Todos os sites são desenvolvidos com boas práticas de SEO técnico — estrutura semântica, meta tags otimizadas, sitemap e velocidade de carregamento — a base para o site ser bem indexado e ranquear ao longo do tempo.",
+      "Sim. Todo site sai com botão de WhatsApp integrado e CTAs estratégicos posicionados ao longo da página, para transformar visitantes em conversas reais com sua empresa.",
   },
   {
-    question: "Vocês fazem integração com WhatsApp?",
+    question: "Preciso já possuir domínio?",
     answer:
-      "Sim! Todos os sites já saem com botão flutuante do WhatsApp e CTAs estratégicos posicionados ao longo da página, para transformar visitantes em conversas reais.",
+      "Não. Se você ainda não tem domínio nem hospedagem, nós te orientamos e ajudamos a providenciar tudo durante o processo de criação do site.",
   },
   {
-    question: "Depois que o site estiver pronto, consigo fazer alterações?",
+    question: "Posso solicitar alterações?",
     answer:
-      "Sim! Você recebe orientações para atualizar textos e informações, e também conta com suporte direto para ajustes — sem depender de terceiros para pequenas mudanças.",
+      "Sim. Depois que o site é entregue, você recebe orientações para atualizar textos e informações, além de contar com suporte direto para ajustes.",
+  },
+  {
+    question: "Vocês atendem empresas de todo o Brasil?",
+    answer:
+      "Sim. Atendemos empresas de todo o Brasil — todo o processo de criação de site é feito remotamente, do orçamento até a entrega.",
   },
 ] as const
 
@@ -635,7 +435,7 @@ function FaqSection() {
   )
 }
 
-// ─── Section 10: CTA Final ─────────────────────────────────────────────────────
+// ─── Section: CTA Final ─────────────────────────────────────────────────────
 
 function CTASEOFinal() {
   return (
@@ -679,23 +479,20 @@ function CTASEOFinal() {
             </h2>
 
             <p className="text-gray-400 text-[1.1rem] max-w-xl mx-auto leading-relaxed mb-10">
-              Conte um pouco sobre o seu projeto e vamos avaliar a melhor solução para transformar
-              sua presença digital.
+              Solicite um orçamento gratuito, a partir de R$500, e vamos avaliar a melhor solução
+              para o seu site profissional.
             </p>
 
             <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#orcamento"
               onClick={(e) => {
                 e.preventDefault()
-                trackWhatsAppClick("cta_final_criacao_sites")
-                openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+                document.querySelector("#orcamento")?.scrollIntoView({ behavior: "smooth", block: "start" })
               }}
-              className="group inline-flex items-center gap-3 px-9 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-base hover:from-blue-500 hover:to-cyan-400 transition-all shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
+              className="group inline-flex items-center gap-3 px-9 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-base tracking-wide hover:from-blue-500 hover:to-cyan-400 transition-all shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
             >
               <WhatsAppSVG className="w-5 h-5 shrink-0" />
-              Falar sobre meu projeto
+              RECEBER ORÇAMENTO
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
             </a>
           </div>
@@ -708,18 +505,20 @@ function CTASEOFinal() {
 // ─── Page root ────────────────────────────────────────────────────────────────
 
 export default function CriacaoDeSitesPage() {
+  useEffect(() => {
+    trackCriacaoSitesView()
+  }, [])
+
   return (
     <>
       <Header />
       <main>
         <Breadcrumbs />
         <HeroSEO />
-        <ProblemaSection />
-        <OQueDesenvolvemos />
         <Portfolio
           heading={
             <>
-              Sites que já{" "}
+              Alguns sites que já{" "}
               <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
                 desenvolvemos
               </span>
@@ -727,10 +526,9 @@ export default function CriacaoDeSitesPage() {
           }
           subtitle="Projetos reais, de segmentos diferentes, desenvolvidos com estratégia e design premium."
         />
-        <DiferenciaisSection />
         <Process />
-        <QualificacaoForm />
-        <ParaQuemESection />
+        <OrcamentoForm />
+        <DiferenciaisSection />
         <FaqSection />
         <CTASEOFinal />
       </main>

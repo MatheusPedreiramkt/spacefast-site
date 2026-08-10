@@ -119,50 +119,58 @@ const jsonLd = {
       mainEntity: [
         {
           "@type": "Question",
-          name: "Quanto custa criar um site profissional?",
+          name: "Quanto custa um site?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "O investimento varia de acordo com o escopo, as funcionalidades e os objetivos do seu projeto. Solicite um orçamento gratuito e personalizado pelo WhatsApp — sem compromisso.",
+            text: "Nossos projetos de criação de site começam a partir de R$500, com o valor final definido conforme as funcionalidades e o escopo do seu projeto. Solicite um orçamento gratuito e sem compromisso pelo formulário desta página.",
           },
         },
         {
           "@type": "Question",
-          name: "O prazo para desenvolver um site é de quanto tempo?",
+          name: "Em quanto tempo o site fica pronto?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "O prazo depende da complexidade e do escopo do projeto. Definimos um cronograma claro logo na conversa inicial, para que você saiba exatamente quando o site ficará pronto.",
+            text: "O prazo varia conforme a complexidade do projeto. Assim que enviamos o orçamento, você já recebe um cronograma claro, para saber exatamente quando o site ficará pronto.",
           },
         },
         {
           "@type": "Question",
-          name: "O site funciona bem no celular?",
+          name: "O site funciona no celular?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Com certeza. Todos os nossos sites são 100% responsivos — funcionam perfeitamente em smartphones, tablets e computadores. Desenvolvemos com abordagem mobile-first, já que a maior parte dos acessos vem de dispositivos móveis.",
+            text: "Sim. Todos os sites são 100% responsivos e desenvolvidos com abordagem mobile-first, garantindo uma boa experiência em celular, tablet e computador.",
           },
         },
         {
           "@type": "Question",
-          name: "O site pode aparecer no Google?",
+          name: "O site terá botão para WhatsApp?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Sim. Todos os sites são desenvolvidos com boas práticas de SEO técnico — estrutura semântica, meta tags otimizadas, sitemap e velocidade de carregamento — a base para o site ser bem indexado e ranquear ao longo do tempo.",
+            text: "Sim. Todo site sai com botão de WhatsApp integrado e CTAs estratégicos posicionados ao longo da página, para transformar visitantes em conversas reais com sua empresa.",
           },
         },
         {
           "@type": "Question",
-          name: "Vocês fazem integração com WhatsApp?",
+          name: "Preciso já possuir domínio?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Sim! Todos os sites já saem com botão flutuante do WhatsApp e CTAs estratégicos posicionados ao longo da página, para transformar visitantes em conversas reais.",
+            text: "Não. Se você ainda não tem domínio nem hospedagem, nós te orientamos e ajudamos a providenciar tudo durante o processo de criação do site.",
           },
         },
         {
           "@type": "Question",
-          name: "Depois que o site estiver pronto, consigo fazer alterações?",
+          name: "Posso solicitar alterações?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Sim! Você recebe orientações para atualizar textos e informações, e também conta com suporte direto para ajustes — sem depender de terceiros para pequenas mudanças.",
+            text: "Sim. Depois que o site é entregue, você recebe orientações para atualizar textos e informações, além de contar com suporte direto para ajustes.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Vocês atendem empresas de todo o Brasil?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Sim. Atendemos empresas de todo o Brasil — todo o processo de criação de site é feito remotamente, do orçamento até a entrega.",
           },
         },
       ],

@@ -10,6 +10,9 @@ export const WHATSAPP_MESSAGE = encodeURIComponent(WHATSAPP_MESSAGE_TEXT)
 
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`
 
+export const ORCAMENTO_WHATSAPP_MESSAGE_TEXT =
+  "Olá! Acabei de solicitar um orçamento pelo site da SpaceFast e gostaria de saber como funciona."
+
 export const INSTAGRAM_URL = "https://instagram.com/spacefastmkt"
 export const EMAIL = "spacefastmkt@gmail.com"
 export const SITE_URL = "https://www.spacefast.com.br"

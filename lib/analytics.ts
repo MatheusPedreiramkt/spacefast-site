@@ -81,9 +81,7 @@ function once(key: string): boolean {
 export function trackWhatsAppClick(source = "generic", params?: Params) {
   const eventParams = { content_name: "WhatsApp Click", source, ...params }
   ga("whatsapp_click", { source })
-  if (typeof window !== "undefined" && window.location.pathname.startsWith("/diagnostico")) {
-    pushDataLayerEvent("whatsapp_click", eventParams)
-  }
+  pushDataLayerEvent("whatsapp_click", eventParams)
   pixel("Contact", eventParams)
 }
 
@@ -229,6 +227,36 @@ export function trackAnaliseProjetoLead(params?: Params, eventId?: string) {
     "Lead",
     {
       content_name: "Análise de Projeto",
+      ...params,
+    },
+    eventId ? { eventID: eventId } : undefined,
+  )
+}
+
+/**
+ * Visualização da página /criacao-de-sites — evento de topo de funil para
+ * mensuração de campanhas de Google Ads.
+ */
+export function trackCriacaoSitesView() {
+  pushDataLayerEvent("criacao_sites_view")
+  ga("criacao_sites_view")
+}
+
+/**
+ * Conversão principal da landing page /criacao-de-sites: envio bem-sucedido
+ * do formulário curto de orçamento. Disparado somente após confirmação do
+ * backend — nunca ao simples clique no botão.
+ * GA4: generate_lead  |  Meta: Lead  |  dataLayer: lead_form_submit
+ * @param eventId event_id reaproveitado na Meta Conversions API para deduplicar
+ * com este mesmo disparo do Pixel (fbq eventID).
+ */
+export function trackOrcamentoSiteLead(params?: Params, eventId?: string) {
+  pushDataLayerEvent("lead_form_submit", params)
+  ga("generate_lead", params)
+  pixel(
+    "Lead",
+    {
+      content_name: "Orçamento Criação de Site",
       ...params,
     },
     eventId ? { eventID: eventId } : undefined,
