@@ -64,7 +64,10 @@ const SERVICE_LINKS: ServiceItem[] = [
   },
 ]
 
-export default function Header({ pixelContentName }: { pixelContentName?: string } = {}) {
+export default function Header({
+  pixelContentName,
+  compact = false,
+}: { pixelContentName?: string; compact?: boolean } = {}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isServicesOpen, setIsServicesOpen] = useState(false)
@@ -134,7 +137,7 @@ export default function Header({ pixelContentName }: { pixelContentName?: string
       transition={{ duration: 0.55, ease: EASE }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className={`flex items-center justify-between ${compact ? "h-12 sm:h-16" : "h-16"}`}>
 
           {/* Logo */}
           <a
@@ -148,7 +151,7 @@ export default function Header({ pixelContentName }: { pixelContentName?: string
               alt="SpaceFast"
               width={220}
               height={102}
-              className="h-10 w-auto object-contain"
+              className={`${compact ? "h-8 sm:h-10" : "h-10"} w-auto object-contain`}
             />
           </a>
 

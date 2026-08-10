@@ -69,11 +69,11 @@ function HeroSEO() {
       <div className="absolute top-1/3 -left-64 w-[700px] h-[700px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-64 w-[700px] h-[700px] bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-14 lg:py-20 w-full">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-10 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-10 pb-6 sm:pb-14 lg:py-20 w-full">
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-10 items-center">
 
           {/* Left: Text */}
-          <div className="space-y-5 lg:space-y-6 text-center lg:text-left">
+          <div className="space-y-3 sm:space-y-5 lg:space-y-6 text-center lg:text-left">
 
             {/* Identification */}
             <motion.div {...anim(0)} className="flex justify-center lg:justify-start">
@@ -85,7 +85,7 @@ function HeroSEO() {
 
             {/* H1 — headline com a keyword principal + preço acima da dobra */}
             <motion.div {...anim(0.1)}>
-              <h1 className="text-[2.1rem] sm:text-[2.75rem] lg:text-[3.2rem] xl:text-[3.6rem] font-black leading-[1.12] tracking-tighter">
+              <h1 className="text-[1.85rem] sm:text-[2.75rem] lg:text-[3.2rem] xl:text-[3.6rem] font-black leading-[1.08] sm:leading-[1.12] tracking-tighter">
                 <span className="text-white">Criação de Sites Profissionais</span>
                 <br />
                 <span className="gradient-text-brand">a partir de R$500</span>
@@ -95,7 +95,7 @@ function HeroSEO() {
             {/* Subtitle */}
             <motion.p
               {...anim(0.18)}
-              className="text-[1.05rem] text-gray-400 leading-[1.7] max-w-[480px] mx-auto lg:mx-0"
+              className="text-[0.95rem] sm:text-[1.05rem] text-gray-400 leading-[1.5] sm:leading-[1.7] max-w-[480px] mx-auto lg:mx-0"
             >
               Tenha um site moderno, responsivo e integrado ao WhatsApp para apresentar sua
               empresa e conquistar novos clientes.
@@ -104,7 +104,7 @@ function HeroSEO() {
             {/* Benefits checklist */}
             <motion.ul
               {...anim(0.26)}
-              className="flex flex-col sm:grid sm:grid-cols-2 gap-x-5 gap-y-2.5 max-w-[480px] mx-auto lg:mx-0"
+              className="flex flex-col sm:grid sm:grid-cols-2 gap-x-5 gap-y-1.5 sm:gap-y-2.5 max-w-[480px] mx-auto lg:mx-0"
             >
               {HERO_BENEFITS.map((benefit) => (
                 <li key={benefit} className="flex items-center gap-2 justify-center lg:justify-start">
@@ -117,7 +117,7 @@ function HeroSEO() {
             {/* CTAs */}
             <motion.div
               {...anim(0.34)}
-              className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-center lg:justify-start pt-1"
+              className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch sm:items-center justify-center lg:justify-start pt-1"
             >
               <a
                 href="#orcamento"
@@ -137,7 +137,7 @@ function HeroSEO() {
                   e.preventDefault()
                   document.querySelector("#portfolio")?.scrollIntoView({ behavior: "smooth" })
                 }}
-                className="group inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full border border-white/22 bg-white/[0.05] backdrop-blur-sm text-white/80 font-semibold text-[0.95rem] hover:bg-white/[0.09] hover:border-white/35 hover:text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
+                className="group inline-flex items-center justify-center gap-2 sm:gap-2.5 px-5 py-2.5 sm:px-7 sm:py-4 rounded-full border border-white/12 sm:border-white/22 bg-transparent sm:bg-white/[0.05] backdrop-blur-sm text-white/60 sm:text-white/80 font-medium sm:font-semibold text-[0.85rem] sm:text-[0.95rem] hover:bg-white/[0.09] hover:border-white/35 hover:text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
               >
                 Ver projetos
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
@@ -447,7 +447,7 @@ export default function CriacaoDeSitesPage() {
 
   return (
     <>
-      <Header />
+      <Header compact />
       <main>
         <HeroSEO />
         <Portfolio
