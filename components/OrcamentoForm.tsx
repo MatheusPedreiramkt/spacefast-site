@@ -1,14 +1,12 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
-import { CheckCircle2, ChevronDown, ArrowRight, Send } from "lucide-react"
+import { ChevronDown, Send } from "lucide-react"
 import { SECTION_ANIM, VIEWPORT, EASE } from "@/lib/motion"
-import { WHATSAPP_NUMBER, ORCAMENTO_WHATSAPP_MESSAGE_TEXT } from "@/lib/constants"
-import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
-import { trackWhatsAppClick, trackOrcamentoSiteLead } from "@/lib/analytics"
-import { openWhatsAppWithTracking } from "@/lib/cqc"
-import { generateId, syncAnaliseProjeto, type AnaliseProjetoPayload } from "@/lib/analiseProjeto"
+import { WHATSAPP_NUMBER } from "@/lib/constants"
+import { trackWhatsAppClick } from "@/lib/analytics"
+import { trackWhatsAppRedirect } from "@/lib/cqc"
 
 const INTERESSES = [
   { value: "criar_site_novo", label: "Criar um site novo" },
@@ -32,41 +30,35 @@ function formatWhatsApp(raw: string): string {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`
 }
 
-function getAttributionParams() {
-  if (typeof window === "undefined") {
-    return {
-      utm_source: "",
-      utm_medium: "",
-      utm_campaign: "",
-      utm_content: "",
-      utm_term: "",
-      placement: "",
-      pagina: "/",
-    }
-  }
+function buildWhatsAppMessage({
+  nome,
+  whatsapp,
+  solucao,
+  code,
+}: {
+  nome: string
+  whatsapp: string
+  solucao: string
+  code: string
+}) {
+  const lines = ["Olá! Vim pelo site da SpaceFast e gostaria de falar sobre um projeto.", ""]
 
-  const params = new URLSearchParams(window.location.search)
+  if (nome) lines.push(`Nome: ${nome}`)
+  if (whatsapp) lines.push(`WhatsApp: ${whatsapp}`)
+  if (solucao) lines.push(`Tenho interesse em: ${solucao}`)
 
-  return {
-    utm_source: params.get("utm_source") ?? "",
-    utm_medium: params.get("utm_medium") ?? "",
-    utm_campaign: params.get("utm_campaign") ?? "",
-    utm_content: params.get("utm_content") ?? "",
-    utm_term: params.get("utm_term") ?? "",
-    placement: params.get("placement") ?? "",
-    pagina: window.location.href,
-  }
+  lines.push("", `Código: ${code}`)
+
+  return lines.join("\n")
 }
 
 export default function OrcamentoForm() {
   const prefersReduced = useReducedMotion()
-  const leadIdRef = useRef<string | null>(null)
 
   const [nome, setNome] = useState("")
   const [whatsapp, setWhatsapp] = useState("")
   const [interesse, setInteresse] = useState("")
   const [error, setError] = useState("")
-  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -77,38 +69,22 @@ export default function OrcamentoForm() {
       return
     }
     setError("")
-    setStatus("sending")
 
-    const leadId = leadIdRef.current ?? generateId()
-    leadIdRef.current = leadId
-    const eventId = generateId()
-    const attribution = getAttributionParams()
     const interesseLabel = INTERESSES.find((i) => i.value === interesse)?.label ?? interesse
-
-    const payload: AnaliseProjetoPayload = {
-      lead_id: leadId,
-      event_id: eventId,
+    const code = trackWhatsAppRedirect()
+    const message = buildWhatsAppMessage({
       nome: nome.trim(),
       whatsapp: whatsapp.trim(),
-      empresa: "",
-      segmento: "",
-      situacao: "",
       solucao: interesseLabel,
-      link_site_atual: "",
-      descricao: "",
-      ...attribution,
-    }
-
-    void syncAnaliseProjeto(payload).then((ok) => {
-      if (ok) trackOrcamentoSiteLead({ form_name: "orcamento_criacao_sites", ...attribution }, eventId)
+      code,
     })
 
-    setStatus("sent")
-  }
-
-  function handleWhatsAppContinue() {
     trackWhatsAppClick("form_orcamento_criacao_sites")
-    openWhatsAppWithTracking(ORCAMENTO_WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
+      "_blank",
+      "noopener,noreferrer",
+    )
   }
 
   return (
@@ -122,7 +98,7 @@ export default function OrcamentoForm() {
             Receba um orçamento para seu site
           </h2>
           <p className="text-gray-400 text-[1.02rem] leading-relaxed">
-            Preencha os dados abaixo. Entraremos em contato pelo WhatsApp.
+            Preencha os dados abaixo para abrir uma mensagem no WhatsApp.
           </p>
         </motion.div>
 
@@ -133,102 +109,80 @@ export default function OrcamentoForm() {
           transition={{ duration: 0.65, ease: EASE }}
           className="glass-strong rounded-3xl border border-white/8 p-6 sm:p-8"
         >
-          {status === "sent" ? (
-            <div className="text-center py-6">
-              <div className="w-14 h-14 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mx-auto mb-5">
-                <CheckCircle2 className="w-7 h-7 text-emerald-400" />
-              </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">Recebemos sua solicitação!</h3>
-              <p className="text-gray-400 max-w-sm mx-auto mb-6 text-sm leading-relaxed">
-                Entraremos em contato pelo WhatsApp em breve. Se preferir, continue a conversa agora mesmo.
-              </p>
-              <button
-                type="button"
-                onClick={handleWhatsAppContinue}
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] tracking-wide hover:from-blue-500 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/25 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
-              >
-                <WhatsAppSVG className="w-4 h-4" />
-                CONTINUAR NO WHATSAPP
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
-              </button>
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
+            <div>
+              <label className={labelClass} htmlFor="of-nome">
+                Nome
+              </label>
+              <input
+                id="of-nome"
+                type="text"
+                autoComplete="name"
+                required
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                className={inputClass}
+              />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} noValidate className="space-y-4">
-              <div>
-                <label className={labelClass} htmlFor="of-nome">
-                  Nome
-                </label>
-                <input
-                  id="of-nome"
-                  type="text"
-                  autoComplete="name"
-                  required
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                  className={inputClass}
-                />
-              </div>
 
-              <div>
-                <label className={labelClass} htmlFor="of-whatsapp">
-                  WhatsApp
-                </label>
-                <input
-                  id="of-whatsapp"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  required
-                  placeholder="(00) 00000-0000"
-                  value={whatsapp}
-                  onChange={(e) => setWhatsapp(formatWhatsApp(e.target.value))}
-                  className={inputClass}
-                />
-              </div>
+            <div>
+              <label className={labelClass} htmlFor="of-whatsapp">
+                WhatsApp
+              </label>
+              <input
+                id="of-whatsapp"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                required
+                placeholder="(00) 00000-0000"
+                value={whatsapp}
+                onChange={(e) => setWhatsapp(formatWhatsApp(e.target.value))}
+                className={inputClass}
+              />
+            </div>
 
-              <div>
-                <label className={labelClass} htmlFor="of-interesse">
-                  O que você precisa?
-                </label>
-                <div className="relative">
-                  <select
-                    id="of-interesse"
-                    required
-                    value={interesse}
-                    onChange={(e) => setInteresse(e.target.value)}
-                    className={`${inputClass} appearance-none pr-10`}
-                  >
-                    <option value="" className="bg-[#0b1222]">
-                      Selecione
+            <div>
+              <label className={labelClass} htmlFor="of-interesse">
+                O que você precisa?
+              </label>
+              <div className="relative">
+                <select
+                  id="of-interesse"
+                  required
+                  value={interesse}
+                  onChange={(e) => setInteresse(e.target.value)}
+                  className={`${inputClass} appearance-none pr-10`}
+                >
+                  <option value="" className="bg-[#0b1222]">
+                    Selecione
+                  </option>
+                  {INTERESSES.map((opt) => (
+                    <option key={opt.value} value={opt.value} className="bg-[#0b1222]">
+                      {opt.label}
                     </option>
-                    {INTERESSES.map((opt) => (
-                      <option key={opt.value} value={opt.value} className="bg-[#0b1222]">
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown
-                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"
-                    aria-hidden
-                  />
-                </div>
+                  ))}
+                </select>
+                <ChevronDown
+                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"
+                  aria-hidden
+                />
               </div>
+            </div>
 
-              {error && <p className="text-red-400 text-sm">{error}</p>}
+            {error && <p className="text-red-400 text-sm">{error}</p>}
 
-              <button
-                type="submit"
-                disabled={status === "sending"}
-                className="w-full inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] tracking-wide hover:from-blue-500 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
-              >
-                <Send className="w-4 h-4" />
-                {status === "sending" ? "Enviando..." : "RECEBER ORÇAMENTO"}
-              </button>
-              <p className="text-xs text-gray-500 text-center">
-                Sem compromisso • Atendimento pelo WhatsApp
-              </p>
-            </form>
-          )}
+            <button
+              type="submit"
+              className="w-full inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] tracking-wide hover:from-blue-500 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
+            >
+              <Send className="w-4 h-4" />
+              RECEBER ORÇAMENTO
+            </button>
+            <p className="text-xs text-gray-500 text-center">
+              Sem compromisso • Atendimento pelo WhatsApp
+            </p>
+          </form>
         </motion.div>
       </div>
     </section>
