@@ -44,6 +44,7 @@ const SERVICE_LINKS: ServiceItem[] = [
   {
     label: "Landing Pages",
     description: "Páginas estratégicas para campanhas.",
+    href: "/landing-pages",
     icon: LayoutTemplate,
   },
   {

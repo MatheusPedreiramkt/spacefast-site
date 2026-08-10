@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import {
   ArrowRight,
@@ -411,7 +412,11 @@ function CTASEOFinal() {
 
             <p className="text-gray-400 text-[1.1rem] max-w-xl mx-auto leading-relaxed mb-10">
               Solicite um orçamento gratuito, a partir de R$500, e vamos avaliar a melhor solução
-              para o seu site profissional.
+              para o seu site profissional. Se o foco for uma campanha específica, conheça também nossa{" "}
+              <Link href="/landing-pages" className="text-cyan-300 underline underline-offset-4 transition-colors hover:text-cyan-200">
+                criação de landing pages
+              </Link>
+              .
             </p>
 
             <a

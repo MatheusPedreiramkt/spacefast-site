@@ -27,6 +27,7 @@ const ITEMS: SolutionCard[] = [
     title: "Landing Pages",
     description: "Páginas de alta conversão para campanhas, lançamentos e captação de leads.",
     gradient: "from-purple-500 to-pink-500",
+    href: "/landing-pages",
   },
   {
     icon: BarChart2,

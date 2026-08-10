@@ -34,11 +34,13 @@ function buildWhatsAppMessage({
   nome,
   whatsapp,
   solucao,
+  projectGoal,
   code,
 }: {
   nome: string
   whatsapp: string
   solucao: string
+  projectGoal?: string
   code: string
 }) {
   const lines = ["Olá! Vim pelo site da SpaceFast e gostaria de falar sobre um projeto.", ""]
@@ -46,18 +48,29 @@ function buildWhatsAppMessage({
   if (nome) lines.push(`Nome: ${nome}`)
   if (whatsapp) lines.push(`WhatsApp: ${whatsapp}`)
   if (solucao) lines.push(`Tenho interesse em: ${solucao}`)
+  if (projectGoal) lines.push(`Objetivo: ${projectGoal}`)
 
   lines.push("", `Código: ${code}`)
 
   return lines.join("\n")
 }
 
-export default function OrcamentoForm() {
+export default function OrcamentoForm({
+  title = "Receba um orçamento para seu site",
+  subtitle = "Preencha os dados abaixo para abrir uma mensagem no WhatsApp.",
+  defaultInterest = "",
+  projectGoal = "",
+}: {
+  title?: string
+  subtitle?: string
+  defaultInterest?: string
+  projectGoal?: string
+} = {}) {
   const prefersReduced = useReducedMotion()
 
   const [nome, setNome] = useState("")
   const [whatsapp, setWhatsapp] = useState("")
-  const [interesse, setInteresse] = useState("")
+  const [interesse, setInteresse] = useState(defaultInterest)
   const [error, setError] = useState("")
 
   function handleSubmit(e: React.FormEvent) {
@@ -76,6 +89,7 @@ export default function OrcamentoForm() {
       nome: nome.trim(),
       whatsapp: whatsapp.trim(),
       solucao: interesseLabel,
+      projectGoal,
       code,
     })
 
@@ -95,10 +109,10 @@ export default function OrcamentoForm() {
       <div className="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div {...SECTION_ANIM} viewport={VIEWPORT} className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 leading-tight tracking-tight">
-            Receba um orçamento para seu site
+            {title}
           </h2>
           <p className="text-gray-400 text-[1.02rem] leading-relaxed">
-            Preencha os dados abaixo para abrir uma mensagem no WhatsApp.
+            {subtitle}
           </p>
         </motion.div>
 
