@@ -12,6 +12,7 @@ const INTERESSES = [
   { value: "criar_site_novo", label: "Criar um site novo" },
   { value: "refazer_site_atual", label: "Refazer meu site atual" },
   { value: "landing_page", label: "Landing page" },
+  { value: "sistema_personalizado", label: "Sistema personalizado" },
   { value: "ainda_nao_sei", label: "Ainda não sei" },
 ]
 

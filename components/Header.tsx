@@ -50,6 +50,7 @@ const SERVICE_LINKS: ServiceItem[] = [
   {
     label: "Sistemas Personalizados",
     description: "Soluções digitais para processos e operações.",
+    href: "/sistemas-personalizados",
     icon: Workflow,
   },
   {
