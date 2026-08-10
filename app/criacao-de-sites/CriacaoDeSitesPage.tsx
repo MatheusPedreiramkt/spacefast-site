@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import {
   ArrowRight,
@@ -29,30 +28,6 @@ import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/cons
 import { stagger, fadeUp, VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
 import { trackCriacaoSitesView } from "@/lib/analytics"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
-
-// ─── Breadcrumbs ────────────────────────────────────────────────────────────
-
-function Breadcrumbs() {
-  return (
-    <div className="relative bg-[#030712] pt-20">
-      <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ol className="flex items-center gap-1.5 text-xs text-gray-500">
-          <li>
-            <Link href="/" className="hover:text-gray-300 transition-colors">
-              Início
-            </Link>
-          </li>
-          <li aria-hidden className="text-gray-700">
-            /
-          </li>
-          <li className="text-gray-400" aria-current="page">
-            Criação de Sites
-          </li>
-        </ol>
-      </nav>
-    </div>
-  )
-}
 
 // ─── Hero: composição visual com projetos reais ──────────────────────────────
 
@@ -513,7 +488,6 @@ export default function CriacaoDeSitesPage() {
     <>
       <Header />
       <main>
-        <Breadcrumbs />
         <HeroSEO />
         <Portfolio
           heading={
