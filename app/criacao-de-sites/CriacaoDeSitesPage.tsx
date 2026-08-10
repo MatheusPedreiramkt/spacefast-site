@@ -500,8 +500,8 @@ export default function CriacaoDeSitesPage() {
           }
           subtitle="Projetos reais, de segmentos diferentes, desenvolvidos com estratégia e design premium."
         />
-        <Process />
         <OrcamentoForm />
+        <Process />
         <DiferenciaisSection />
         <FaqSection />
         <CTASEOFinal />
