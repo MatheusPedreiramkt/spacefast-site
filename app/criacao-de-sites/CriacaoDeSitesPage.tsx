@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import {
   ArrowRight,
@@ -18,6 +17,7 @@ import {
   MousePointerClick,
 } from "lucide-react"
 import Header from "@/components/Header"
+import { HeroVideo } from "@/components/Hero"
 import Portfolio from "@/components/Portfolio"
 import Process from "@/components/Process"
 import OrcamentoForm from "@/components/OrcamentoForm"
@@ -28,50 +28,6 @@ import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/cons
 import { stagger, fadeUp, VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
 import { trackCriacaoSitesView } from "@/lib/analytics"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
-
-// ─── Hero: composição visual com projetos reais ──────────────────────────────
-
-function RealProjectsShowcase() {
-  return (
-    <div className="relative w-full max-w-[440px] mx-auto select-none">
-      <div
-        className="absolute -inset-10 bg-gradient-to-br from-blue-600/20 via-cyan-500/10 to-emerald-600/12 blur-3xl rounded-full pointer-events-none"
-        aria-hidden
-      />
-
-      {/* Card secundário — espiando atrás */}
-      <div
-        className="absolute -right-3 -bottom-7 w-[58%] aspect-[16/10] rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 rotate-3 z-0"
-        style={{ background: "linear-gradient(150deg,#0a1630 0%,#070d1c 55%)" }}
-      >
-        <Image
-          src="/projects/nm-corretora.webp"
-          alt="Site institucional da NM Corretora, desenvolvido pela SpaceFast"
-          fill
-          sizes="260px"
-          className="object-contain p-2"
-        />
-      </div>
-
-      {/* Card principal */}
-      <div
-        className="relative z-10 rounded-2xl overflow-hidden border border-white/12 shadow-2xl shadow-black/60"
-        style={{ background: "linear-gradient(150deg,#071a10 0%,#070d1c 55%)" }}
-      >
-        <div className="aspect-[16/10] relative">
-          <Image
-            src="/projects/green-irrigation.webp"
-            alt="Site institucional da Green Irrigation, desenvolvido pela SpaceFast"
-            fill
-            sizes="(max-width: 1024px) 78vw, 440px"
-            className="object-contain p-3"
-            priority
-          />
-        </div>
-      </div>
-    </div>
-  )
-}
 
 // ─── Section 1: Hero ──────────────────────────────────────────────────────────
 
@@ -190,12 +146,12 @@ function HeroSEO() {
 
           {/* Right: Visual */}
           <motion.div
-            initial={prefersReduced ? undefined : { opacity: 0, x: 32 }}
-            animate={prefersReduced ? undefined : { opacity: 1, x: 0 }}
+            initial={prefersReduced ? undefined : { opacity: 0, x: 32, scale: 0.97 }}
+            animate={prefersReduced ? undefined : { opacity: 1, x: 0, scale: 1 }}
             transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
             className="relative"
           >
-            <RealProjectsShowcase />
+            <HeroVideo />
           </motion.div>
         </div>
       </div>

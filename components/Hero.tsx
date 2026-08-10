@@ -6,7 +6,7 @@ import { ArrowRight, ChevronRight, Pause, Play, Volume2, VolumeX } from "lucide-
 import { EASE } from "@/lib/motion"
 import { trackCustomEvent, trackHeroVideoEvent } from "@/lib/analytics"
 
-function HeroVideo() {
+export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [hasStarted, setHasStarted] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
