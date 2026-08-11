@@ -86,9 +86,9 @@ function HeroSEO() {
             {/* H1 — headline com a keyword principal + preço acima da dobra */}
             <motion.div {...anim(0.1)}>
               <h1 className="text-[1.85rem] sm:text-[2.75rem] lg:text-[3.2rem] xl:text-[3.6rem] font-black leading-[1.08] sm:leading-[1.12] tracking-tighter">
-                <span className="text-white">Criação de Sites Profissionais</span>
+                <span className="text-white">Sua empresa precisa de um site</span>
                 <br />
-                <span className="gradient-text-brand">a partir de R$500</span>
+                <span className="gradient-text-brand">que realmente gere resultados?</span>
               </h1>
             </motion.div>
 
