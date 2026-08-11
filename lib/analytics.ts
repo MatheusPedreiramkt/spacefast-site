@@ -124,3 +124,14 @@ export function trackOrcamentoSiteLead(params?: Params, eventId?: string) {
   void params
   void eventId
 }
+
+export function trackLeadFormSuccess() {
+  if (typeof window === "undefined") return
+
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push({
+    event: "lead_form_success",
+    form_id: "orcamento_criacao_sites",
+    form_name: "Formulario Orcamento Criacao de Sites",
+  })
+}

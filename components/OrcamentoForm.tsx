@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion"
 import { ChevronDown, Send } from "lucide-react"
 import { SECTION_ANIM, VIEWPORT, EASE } from "@/lib/motion"
 import { WHATSAPP_NUMBER } from "@/lib/constants"
-import { trackWhatsAppClick, trackOrcamentoSiteLead } from "@/lib/analytics"
+import { trackWhatsAppClick, trackLeadFormSuccess } from "@/lib/analytics"
 import { trackWhatsAppRedirect } from "@/lib/cqc"
 
 const INTERESSES = [
@@ -94,7 +94,7 @@ export default function OrcamentoForm({
       code,
     })
 
-    trackOrcamentoSiteLead({ form_id: "of-orcamento", form_name: "orcamento_criacao_sites" })
+    trackLeadFormSuccess()
     trackWhatsAppClick("form_orcamento_criacao_sites")
     window.open(
       `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
