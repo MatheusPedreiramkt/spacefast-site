@@ -76,7 +76,7 @@ function HeroSEO() {
           <div className="flex flex-col gap-2.5 sm:gap-5 lg:gap-6 text-center lg:text-left">
 
             {/* Identification */}
-            <motion.div {...anim(0)} className="order-1 flex justify-center lg:justify-start">
+            <motion.div {...anim(0)} className="order-1 hidden sm:flex justify-center lg:justify-start">
               <span className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-[0.15em] text-blue-400 uppercase">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" aria-hidden />
                 Criação de Sites Profissionais
