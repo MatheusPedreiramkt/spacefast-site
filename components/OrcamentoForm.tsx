@@ -1,12 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { ChevronDown, Send } from "lucide-react"
 import { SECTION_ANIM, VIEWPORT, EASE } from "@/lib/motion"
 import { WHATSAPP_NUMBER } from "@/lib/constants"
 import { trackWhatsAppClick, trackLeadFormSuccess } from "@/lib/analytics"
 import { trackWhatsAppRedirect } from "@/lib/cqc"
+import { getPersistedAttribution, captureAndPersistAttribution } from "@/lib/attribution"
+import {
+  ORCAMENTO_LEAD_DEFAULT_STATUS,
+  ORCAMENTO_LEAD_ORIGIN,
+  generateLeadId,
+  isValidBrazilianMobile,
+  syncOrcamentoLead,
+} from "@/lib/orcamentoLead"
 
 const INTERESSES = [
   { value: "criar_site_novo", label: "Criar um site novo" },
@@ -20,43 +28,6 @@ const inputClass =
   "w-full px-4 py-3.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-base placeholder:text-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus:border-blue-400/50 transition-colors"
 
 const labelClass = "block text-sm font-medium text-gray-300 mb-1.5"
-
-const VALID_BRAZILIAN_DDDS = new Set([
-  "11", "12", "13", "14", "15", "16", "17", "18", "19",
-  "21", "22", "24", "27", "28",
-  "31", "32", "33", "34", "35", "37", "38",
-  "41", "42", "43", "44", "45", "46", "47", "48", "49",
-  "51", "53", "54", "55",
-  "61", "62", "63", "64", "65", "66", "67", "68", "69",
-  "71", "73", "74", "75", "77", "79",
-  "81", "82", "83", "84", "85", "86", "87", "88", "89",
-  "91", "92", "93", "94", "95", "96", "97", "98", "99",
-])
-
-function onlyDigits(value: string): string {
-  return value.replace(/\D/g, "")
-}
-
-export function isValidBrazilianMobile(raw: string): boolean {
-  const digits = onlyDigits(raw)
-  if (digits.length !== 11) return false
-
-  const ddd = digits.slice(0, 2)
-  const subscriberNumber = digits.slice(2)
-  if (!VALID_BRAZILIAN_DDDS.has(ddd)) return false
-  if (!subscriberNumber.startsWith("9")) return false
-
-  const uniqueFullDigits = new Set(digits)
-  if (uniqueFullDigits.size === 1) return false
-
-  const digitCounts = new Map<string, number>()
-  for (const digit of subscriberNumber) {
-    digitCounts.set(digit, (digitCounts.get(digit) ?? 0) + 1)
-  }
-
-  const highestRepeatedCount = Math.max(...digitCounts.values())
-  return highestRepeatedCount < 8
-}
 
 function formatWhatsApp(raw: string): string {
   const digits = raw.replace(/\D/g, "").slice(0, 11)
@@ -110,9 +81,18 @@ export default function OrcamentoForm({
   const [whatsapp, setWhatsapp] = useState("")
   const [interesse, setInteresse] = useState(defaultInterest)
   const [error, setError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const isSubmittingRef = useRef(false)
+  const leadIdRef = useRef<string | null>(null)
 
-  function handleSubmit(e: React.FormEvent) {
+  useEffect(() => {
+    captureAndPersistAttribution()
+  }, [])
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+
+    if (isSubmittingRef.current) return
 
     if (!nome.trim()) {
       setError("Preencha seu nome para continuar.")
@@ -129,6 +109,11 @@ export default function OrcamentoForm({
       return
     }
     setError("")
+    isSubmittingRef.current = true
+    setIsSubmitting(true)
+
+    const leadId = leadIdRef.current ?? generateLeadId()
+    leadIdRef.current = leadId
 
     const interesseLabel = INTERESSES.find((i) => i.value === interesse)?.label ?? interesse
     const code = trackWhatsAppRedirect()
@@ -140,6 +125,26 @@ export default function OrcamentoForm({
       code,
     })
 
+    const attribution = getPersistedAttribution()
+    const saved = await syncOrcamentoLead({
+      lead_id: leadId,
+      nome: nome.trim(),
+      whatsapp: whatsapp.trim(),
+      interesse: interesseLabel,
+      origem: ORCAMENTO_LEAD_ORIGIN,
+      pagina: typeof window !== "undefined" ? window.location.href : "",
+      ...attribution,
+      status: ORCAMENTO_LEAD_DEFAULT_STATUS,
+    })
+
+    if (!saved) {
+      setError("Não foi possível salvar seus dados agora. Tente novamente em instantes.")
+      isSubmittingRef.current = false
+      setIsSubmitting(false)
+      return
+    }
+
+    leadIdRef.current = null
     trackLeadFormSuccess()
     trackWhatsAppClick("form_orcamento_criacao_sites")
     window.open(
@@ -147,6 +152,8 @@ export default function OrcamentoForm({
       "_blank",
       "noopener,noreferrer",
     )
+    isSubmittingRef.current = false
+    setIsSubmitting(false)
   }
 
   return (
@@ -236,10 +243,11 @@ export default function OrcamentoForm({
 
             <button
               type="submit"
+              disabled={isSubmitting}
               className="w-full inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] tracking-wide hover:from-blue-500 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
             >
               <Send className="w-4 h-4" />
-              RECEBER ORÇAMENTO
+              {isSubmitting ? "ENVIANDO..." : "RECEBER ORÇAMENTO"}
             </button>
             <p className="text-xs text-gray-500 text-center">
               Sem compromisso • Atendimento pelo WhatsApp
