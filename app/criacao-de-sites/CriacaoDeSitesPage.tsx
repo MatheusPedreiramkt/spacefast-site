@@ -168,19 +168,6 @@ function HeroSEO() {
               </a>
             </motion.div>
 
-            <motion.div {...anim(0.42)} className="order-7 lg:hidden">
-              <a
-                href="#portfolio"
-                onClick={(e) => {
-                  e.preventDefault()
-                  document.querySelector("#portfolio")?.scrollIntoView({ behavior: "smooth" })
-                }}
-                className="group inline-flex items-center justify-center gap-1.5 px-2 py-0.5 text-white/55 font-medium text-[0.82rem] hover:text-white transition-colors hover:underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
-              >
-                Ver projetos
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
-              </a>
-            </motion.div>
           </div>
 
           {/* Desktop visual */}
