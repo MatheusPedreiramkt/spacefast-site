@@ -69,14 +69,14 @@ function HeroSEO() {
       <div className="absolute top-1/3 -left-64 w-[700px] h-[700px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-64 w-[700px] h-[700px] bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-11 sm:pt-10 pb-4 sm:pb-14 lg:py-20 w-full">
-        <div className="grid lg:grid-cols-2 gap-4 sm:gap-10 lg:gap-10 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[68px] sm:pt-10 pb-4 sm:pb-14 lg:py-20 w-full">
+        <div className="grid lg:grid-cols-2 gap-3 sm:gap-10 lg:gap-10 items-center">
 
           {/* Left: Text */}
-          <div className="space-y-2.5 sm:space-y-5 lg:space-y-6 text-center lg:text-left">
+          <div className="flex flex-col gap-2.5 sm:gap-5 lg:gap-6 text-center lg:text-left">
 
             {/* Identification */}
-            <motion.div {...anim(0)} className="flex justify-center lg:justify-start">
+            <motion.div {...anim(0)} className="order-1 flex justify-center lg:justify-start">
               <span className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-[0.15em] text-blue-400 uppercase">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" aria-hidden />
                 Criação de Sites Profissionais
@@ -84,18 +84,34 @@ function HeroSEO() {
             </motion.div>
 
             {/* H1 — headline com a keyword principal + preço acima da dobra */}
-            <motion.div {...anim(0.1)}>
-              <h1 className="text-[1.85rem] sm:text-[2.75rem] lg:text-[3.2rem] xl:text-[3.6rem] font-black leading-[1.08] sm:leading-[1.12] tracking-tighter">
-                <span className="text-white">Sua empresa precisa de um site</span>
-                <br />
-                <span className="gradient-text-brand">que realmente gere resultados?</span>
+            <motion.div {...anim(0.1)} className="order-2">
+              <h1 className="mx-auto text-[1.62rem] sm:max-w-none sm:text-[2.75rem] lg:text-[3.2rem] xl:text-[3.6rem] font-black leading-[1.08] sm:leading-[1.12] tracking-tighter lg:mx-0">
+                <span className="sm:hidden">
+                  <span className="block text-white">Sua empresa precisa</span>
+                  <span className="block text-white">de um site</span>
+                  <span className="block gradient-text-brand">que realmente gere</span>
+                  <span className="block gradient-text-brand">resultados?</span>
+                </span>
+                <span className="hidden sm:inline text-white">Sua empresa precisa de um site</span>
+                <br className="hidden sm:block" />
+                <span className="hidden sm:inline gradient-text-brand">que realmente gere resultados?</span>
               </h1>
+            </motion.div>
+
+            {/* Mobile video */}
+            <motion.div
+              initial={prefersReduced ? undefined : { opacity: 0, y: 16, scale: 0.98 }}
+              animate={prefersReduced ? undefined : { opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.14, ease: EASE }}
+              className="order-3 -my-0.5 lg:hidden"
+            >
+              <HeroVideo compactMobile hideCaptionOnMobile hideMetaOnMobile />
             </motion.div>
 
             {/* Subtitle */}
             <motion.p
               {...anim(0.18)}
-              className="text-[0.95rem] sm:text-[1.05rem] text-gray-400 leading-[1.5] sm:leading-[1.7] max-w-[480px] mx-auto lg:mx-0"
+              className="order-4 text-[0.92rem] sm:text-[1.05rem] text-gray-300 sm:text-gray-400 leading-[1.45] sm:leading-[1.7] max-w-[460px] sm:max-w-[480px] mx-auto lg:mx-0"
             >
               <span className="sm:hidden">
                 Site profissional, rápido e integrado ao WhatsApp para transformar visitas em novos clientes.
@@ -109,15 +125,15 @@ function HeroSEO() {
             {/* Benefits checklist */}
             <motion.ul
               {...anim(0.26)}
-              className="flex flex-col sm:grid sm:grid-cols-2 gap-x-5 gap-y-1.5 sm:gap-y-2.5 max-w-[480px] mx-auto lg:mx-0"
+              className="order-6 lg:order-4 flex flex-col sm:grid sm:grid-cols-2 gap-x-5 gap-y-1 sm:gap-y-2.5 max-w-[480px] mx-auto lg:mx-0"
             >
               {HERO_BENEFITS.map((benefit) => (
                 <li
                   key={benefit}
                   className={`${benefit === "Orçamento sem compromisso" ? "hidden sm:flex" : "flex"} items-center gap-2 justify-center lg:justify-start`}
                 >
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden />
-                  <span className="text-gray-300 text-sm">{benefit}</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" aria-hidden />
+                  <span className="text-gray-300 text-[0.82rem] sm:text-sm">{benefit}</span>
                 </li>
               ))}
             </motion.ul>
@@ -125,7 +141,7 @@ function HeroSEO() {
             {/* CTAs */}
             <motion.div
               {...anim(0.34)}
-              className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch sm:items-center justify-center lg:justify-start pt-1"
+              className="order-5 flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch sm:items-center justify-center lg:justify-start pt-0 lg:pt-1"
             >
               <a
                 href="#orcamento"
@@ -145,7 +161,21 @@ function HeroSEO() {
                   e.preventDefault()
                   document.querySelector("#portfolio")?.scrollIntoView({ behavior: "smooth" })
                 }}
-                className="group inline-flex items-center justify-center gap-1.5 sm:gap-2.5 px-2 sm:px-7 py-1 sm:py-4 rounded-none sm:rounded-full border-0 sm:border sm:border-white/22 bg-transparent sm:bg-white/[0.05] backdrop-blur-sm text-white/55 sm:text-white/80 font-medium sm:font-semibold text-[0.82rem] sm:text-[0.95rem] hover:bg-transparent sm:hover:bg-white/[0.09] hover:border-white/35 hover:text-white transition-all duration-200 hover:underline sm:hover:no-underline underline-offset-4 sm:hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
+                className="group hidden lg:inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full border border-white/22 bg-white/[0.05] backdrop-blur-sm text-white/80 font-semibold text-[0.95rem] hover:bg-white/[0.09] hover:border-white/35 hover:text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
+              >
+                Ver projetos
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
+              </a>
+            </motion.div>
+
+            <motion.div {...anim(0.42)} className="order-7 lg:hidden">
+              <a
+                href="#portfolio"
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.querySelector("#portfolio")?.scrollIntoView({ behavior: "smooth" })
+                }}
+                className="group inline-flex items-center justify-center gap-1.5 px-2 py-0.5 text-white/55 font-medium text-[0.82rem] hover:text-white transition-colors hover:underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
               >
                 Ver projetos
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
@@ -153,12 +183,12 @@ function HeroSEO() {
             </motion.div>
           </div>
 
-          {/* Right: Visual */}
+          {/* Desktop visual */}
           <motion.div
             initial={prefersReduced ? undefined : { opacity: 0, x: 32, scale: 0.97 }}
             animate={prefersReduced ? undefined : { opacity: 1, x: 0, scale: 1 }}
             transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
-            className="relative -mt-1 sm:mt-0"
+            className="relative hidden lg:block"
           >
             <HeroVideo compactMobile />
           </motion.div>

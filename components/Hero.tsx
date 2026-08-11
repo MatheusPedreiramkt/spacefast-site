@@ -6,7 +6,11 @@ import { ArrowRight, ChevronRight, Pause, Play, Volume2, VolumeX } from "lucide-
 import { EASE } from "@/lib/motion"
 import { trackHeroVideoEvent } from "@/lib/analytics"
 
-export function HeroVideo({ compactMobile = false }: { compactMobile?: boolean } = {}) {
+export function HeroVideo({
+  compactMobile = false,
+  hideCaptionOnMobile = false,
+  hideMetaOnMobile = false,
+}: { compactMobile?: boolean; hideCaptionOnMobile?: boolean; hideMetaOnMobile?: boolean } = {}) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [hasStarted, setHasStarted] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -63,6 +67,8 @@ export function HeroVideo({ compactMobile = false }: { compactMobile?: boolean }
       {/* Auxiliary phrase */}
       <p
         className={`relative text-center text-[13px] mb-2.5 max-w-[280px] mx-auto ${
+          hideCaptionOnMobile ? "hidden lg:block" : ""
+        } ${
           compactMobile ? "text-gray-200 font-medium sm:text-gray-500 sm:font-normal" : "text-gray-500"
         }`}
       >
@@ -73,9 +79,11 @@ export function HeroVideo({ compactMobile = false }: { compactMobile?: boolean }
       <div
         className={`relative mx-auto ${
           compactMobile
-            ? "w-[68vw] max-w-[255px] sm:w-[300px] sm:max-w-[380px] rounded-[24px] sm:rounded-[28px]"
+            ? "w-[76vw] max-w-[275px] sm:w-[300px] sm:max-w-[380px] aspect-[4/5] sm:aspect-[9/16] rounded-[22px] sm:rounded-[28px]"
             : "w-[82vw] max-w-[380px] sm:w-[300px] rounded-[28px]"
-        } lg:w-[320px] xl:w-[340px] [@media(max-height:800px)]:lg:w-[290px] aspect-[9/16] overflow-hidden border border-white/12 bg-[#0a0f1c]`}
+        } lg:w-[320px] xl:w-[340px] [@media(max-height:800px)]:lg:w-[290px] ${
+          compactMobile ? "" : "aspect-[9/16]"
+        } overflow-hidden border border-white/12 bg-[#0a0f1c]`}
         style={{
           boxShadow:
             "0 30px 70px -20px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.03), 0 0 45px rgba(6,182,212,0.10)",
@@ -94,7 +102,9 @@ export function HeroVideo({ compactMobile = false }: { compactMobile?: boolean }
             setIsPlaying(false)
             trackHeroVideoEvent("hero_video_complete")
           }}
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full object-cover ${
+            compactMobile ? "object-[center_38%] sm:object-center" : ""
+          }`}
         >
           <source src="/hero-video-web.mp4" type="video/mp4" />
         </video>
@@ -145,7 +155,11 @@ export function HeroVideo({ compactMobile = false }: { compactMobile?: boolean }
       </div>
 
       {/* Identification */}
-      <div className="relative mt-3 flex flex-col items-center gap-0.5 text-center">
+      <div
+        className={`relative mt-3 flex flex-col items-center gap-0.5 text-center ${
+          hideMetaOnMobile ? "hidden lg:flex" : ""
+        }`}
+      >
         <span className="inline-flex items-center gap-1.5 text-[11px] text-blue-300/80 font-medium">
           <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
           Fundador da Spacefast
