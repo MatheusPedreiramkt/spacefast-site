@@ -51,7 +51,7 @@ function buildWhatsAppMessage({
   if (solucao) lines.push(`Tenho interesse em: ${solucao}`)
   if (projectGoal) lines.push(`Objetivo: ${projectGoal}`)
 
-  lines.push("", `Código: ${code}`)
+  if (code) lines.push("", `Código: ${code}`)
 
   return lines.join("\n")
 }

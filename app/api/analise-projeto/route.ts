@@ -1,10 +1,4 @@
 import type { AnaliseProjetoPayload } from "@/lib/analiseProjeto"
-import {
-  buildFbcFromFbclid,
-  getClientIpFromRequest,
-  getFbpFbcFromCookies,
-  sendMetaConversionEvent,
-} from "@/lib/meta/conversions-api"
 
 export const runtime = "nodejs"
 
@@ -38,56 +32,6 @@ function normalizePayload(body: unknown): AnaliseProjetoPayload {
   }
 }
 
-function extractFbclidFromUrl(url: string): string | undefined {
-  if (!url) return undefined
-  try {
-    return new URL(url).searchParams.get("fbclid") ?? undefined
-  } catch {
-    return undefined
-  }
-}
-
-// Envia o lead (Lead) para a Meta Conversions API, reaproveitando o mesmo
-// event_id gerado no navegador para o Pixel — permite à Meta deduplicar os
-// dois disparos do mesmo evento. Nunca lança: sendMetaConversionEvent já
-// captura seus próprios erros.
-async function sendCapiEvent(request: Request, payload: AnaliseProjetoPayload) {
-  if (!payload.event_id) return
-
-  const { fbp, fbc: cookieFbc } = getFbpFbcFromCookies(request)
-  const fbclid = extractFbclidFromUrl(payload.pagina)
-  const fbc = cookieFbc || (fbclid ? buildFbcFromFbclid(fbclid) : undefined)
-
-  await sendMetaConversionEvent({
-    eventName: "Lead",
-    eventId: payload.event_id,
-    eventSourceUrl: payload.pagina,
-    userData: {
-      whatsapp: payload.whatsapp,
-      nome: payload.nome,
-      fbp,
-      fbc,
-      clientIpAddress: getClientIpFromRequest(request),
-      clientUserAgent: request.headers.get("user-agent") ?? undefined,
-    },
-    customData: {
-      lead_id: payload.lead_id,
-      content_name: "Análise de Projeto",
-      empresa: payload.empresa,
-      segmento: payload.segmento,
-      situacao: payload.situacao,
-      solucao: payload.solucao,
-      pagina: payload.pagina,
-      utm_source: payload.utm_source,
-      utm_medium: payload.utm_medium,
-      utm_campaign: payload.utm_campaign,
-      utm_content: payload.utm_content,
-      utm_term: payload.utm_term,
-      placement: payload.placement,
-    },
-  })
-}
-
 export async function POST(request: Request) {
   const webhookUrl = process.env.ANALISE_PROJETO_WEBHOOK_URL
 
@@ -99,13 +43,8 @@ export async function POST(request: Request) {
     return Response.json({ ok: false }, { status: 400 })
   }
 
-  const capiPromise = sendCapiEvent(request, payload).catch((error) => {
-    console.error("[analise-projeto] falha inesperada ao enviar evento para a Meta CAPI", error)
-  })
-
   if (!webhookUrl) {
     console.error("[analise-projeto] ANALISE_PROJETO_WEBHOOK_URL não configurada")
-    await capiPromise
     return Response.json({ ok: true, forwarded: false })
   }
 
@@ -122,11 +61,9 @@ export async function POST(request: Request) {
       throw new Error(`Google Sheets webhook retornou ${response.status}: ${responseText}`)
     }
 
-    await capiPromise
     return Response.json({ ok: true, forwarded: true })
   } catch (error) {
     console.error("[analise-projeto] falha ao enviar lead para Google Sheets", error)
-    await capiPromise
     return Response.json({ ok: true, forwarded: false })
   }
 }

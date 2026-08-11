@@ -215,8 +215,7 @@ export interface DiagnosticoLeadSheetPayload {
   pagina: string
 }
 
-// Gerador de ID genérico — usado tanto para lead_id quanto para event_id
-// (deduplicação Pixel ↔ Conversions API).
+// Gerador de ID genérico — usado tanto para lead_id quanto para event_id.
 export function generateId(): string {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
     return crypto.randomUUID()
@@ -227,8 +226,8 @@ export function generateId(): string {
 // ─── Gancho de integração — envia lead parcial e lead final ──────────────────
 // Usado tanto para salvar o lead parcial (nome + whatsapp) quanto para
 // atualizar o mesmo lead ao final do quiz (mesmo lead_id).
-// Retorna se a rota respondeu com sucesso — usado para só disparar o Pixel
-// (Lead/QualifiedLead) depois que /api/diagnostico-leads confirmar o registro.
+// Retorna se a rota respondeu com sucesso depois que /api/diagnostico-leads
+// confirmar o registro.
 // A rota sempre responde ok:true mesmo se a planilha falhar (falha fica só no
 // log do servidor), então isso não bloqueia o usuário por causa do Sheets.
 export async function syncDiagnosticoLead(payload: DiagnosticoLeadSheetPayload): Promise<boolean> {

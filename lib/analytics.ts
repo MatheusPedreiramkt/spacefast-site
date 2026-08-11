@@ -4,14 +4,11 @@
 
 declare global {
   interface Window {
-    gtag?: (...args: unknown[]) => void
-    fbq?: (...args: unknown[]) => void
     dataLayer?: Record<string, unknown>[]
   }
 }
 
 type Params = Record<string, unknown>
-type PixelOptions = Record<string, unknown>
 
 // ─── Wrappers internos ────────────────────────────────────────────────────────
 
@@ -23,41 +20,6 @@ export function pushDataLayerEvent(event: string, params?: Params) {
     event,
     ...(params ?? {}),
   })
-}
-
-function ga(event: string, params?: Params) {
-  if (typeof window === "undefined" || typeof window.gtag !== "function") return
-  window.gtag("event", event, params ?? {})
-}
-
-function callPixel(command: "track" | "trackCustom", event: string, params?: Params, options?: PixelOptions) {
-  if (typeof window === "undefined") return
-
-  if (typeof window.fbq === "function") {
-    if (options) {
-      window.fbq(command, event, params ?? {}, options)
-    } else {
-      window.fbq(command, event, params ?? {})
-    }
-    return
-  }
-
-  window.setTimeout(() => {
-    if (typeof window.fbq !== "function") return
-    if (options) {
-      window.fbq(command, event, params ?? {}, options)
-    } else {
-      window.fbq(command, event, params ?? {})
-    }
-  }, 750)
-}
-
-function pixel(event: string, params?: Params, options?: PixelOptions) {
-  callPixel("track", event, params, options)
-}
-
-function pixelCustom(event: string, params?: Params, options?: PixelOptions) {
-  callPixel("trackCustom", event, params, options)
 }
 
 /** Retorna true e marca na sessão — garante disparo único por session. */
@@ -75,190 +37,120 @@ function once(key: string): boolean {
 
 /**
  * Clique em qualquer botão de WhatsApp.
- * GA4: whatsapp_click  |  Meta: Contact
- * @param source identifica qual botão disparou (ex: "hero_cta", "botao_flutuante")
+ * Eventos de WhatsApp serão configurados separadamente no GTM.
  */
 export function trackWhatsAppClick(source = "generic", params?: Params) {
-  const eventParams = { content_name: "WhatsApp Click", source, ...params }
-  ga("whatsapp_click", { source })
-  pushDataLayerEvent("whatsapp_click", eventParams)
-  pixel("Contact", eventParams)
+  void source
+  void params
 }
 
 /**
  * Clique no link do Instagram.
- * GA4: instagram_click  |  Meta: ViewContent
  */
 export function trackInstagramClick() {
-  ga("instagram_click")
-  pixel("ViewContent", { content_name: "Instagram" })
+  pushDataLayerEvent("instagram_click")
 }
 
 /**
  * Envio de formulário.
- * GA4: form_submit  |  Meta: Lead
+ * Eventos de formulário serão configurados separadamente no GTM.
  */
 export function trackFormSubmit(formName = "contato") {
-  ga("form_submit", { form_name: formName })
-  pixel("Lead", { content_name: formName })
+  void formName
 }
 
 /**
  * Usuário rolou 75% da página — dispara uma vez por sessão.
- * GA4: scroll_75
  */
 export function trackScroll75() {
   if (!once("sf_scroll75")) return
-  ga("scroll_75")
+  pushDataLayerEvent("scroll_75")
 }
 
 /**
  * Progresso do vídeo do Hero (Home) — dispara apenas uma vez por sessão.
- * GA4: hero_video_play | hero_video_25 | hero_video_50 | hero_video_75 | hero_video_complete
- * Não envia para a Meta.
  */
 export function trackHeroVideoEvent(
   event: "hero_video_play" | "hero_video_25" | "hero_video_50" | "hero_video_75" | "hero_video_complete",
 ) {
   if (!once(`sf_${event}`)) return
-  ga(event)
+  pushDataLayerEvent(event)
 }
 
 /**
  * Clique em "Ver Projeto" no portfólio.
- * GA4: portfolio_click  |  project_name: nome do projeto
  */
 export function trackPortfolioClick(projectName: string) {
-  ga("portfolio_click", { project_name: projectName })
+  pushDataLayerEvent("portfolio_click", { project_name: projectName })
 }
 
 /**
  * Clique em "Solicitar orçamento" ou "Plano mensal".
- * GA4: plan_click  |  Meta: ViewContent
  */
 export function trackPlanClick(planName: string) {
-  ga("plan_click", { plan_name: planName })
-  pixel("ViewContent", { content_name: planName })
+  pushDataLayerEvent("plan_click", { plan_name: planName })
 }
 
 // ─── Funções genéricas reutilizáveis ─────────────────────────────────────────
 
 export function trackLead(params?: Params) {
-  ga("generate_lead", params)
-  pixel("Lead", params)
+  void params
 }
 
 export function trackContact(params?: Params) {
-  ga("contact", params)
-  pixel("Contact", params)
+  void params
 }
 
 export function trackPageView() {
-  ga("page_view")
-  pixel("PageView")
+  pushDataLayerEvent("page_view")
 }
 
 export function trackCustomEvent(eventName: string, params?: Params) {
-  ga(eventName, params)
-  pixelCustom(eventName, params)
+  pushDataLayerEvent(eventName, params)
 }
 
 export function trackDiagnosticoViewContent() {
   pushDataLayerEvent("diagnostico_view")
-  pixel("ViewContent", {
-    content_name: "Diagnóstico",
-    content_category: "quiz",
-  })
 }
 
 export function trackQuizStart(params?: Params) {
-  ga("quiz_start", params)
   pushDataLayerEvent("quiz_start", params)
-  pixelCustom("QuizStart", {
-    content_name: "Diagnóstico",
-    content_category: "quiz",
-    ...params,
-  })
 }
 
-/**
- * @param eventId event_id reaproveitado na Meta Conversions API para deduplicar
- * com este mesmo disparo do Pixel (fbq eventID).
- */
 export function trackDiagnosticoLead(params?: Params, eventId?: string) {
-  ga("generate_lead", params)
-  pixel(
-    "Lead",
-    {
-      content_name: "Diagnóstico",
-      content_category: "quiz",
-      ...params,
-    },
-    eventId ? { eventID: eventId } : undefined,
-  )
+  void params
+  void eventId
 }
 
-/**
- * @param eventId event_id reaproveitado na Meta Conversions API para deduplicar
- * com este mesmo disparo do Pixel (fbq eventID).
- */
 export function trackQualifiedLead(params?: Params, eventId?: string) {
-  ga("qualified_lead", params)
-  pixelCustom(
-    "QualifiedLead",
-    {
-      content_name: "Diagnóstico",
-      content_category: "quiz",
-      ...params,
-    },
-    eventId ? { eventID: eventId } : undefined,
-  )
+  void params
+  void eventId
 }
 
 /**
  * Envio do formulário "Solicitar análise do meu projeto" (Home).
- * GA4: generate_lead  |  Meta: Lead
- * @param eventId event_id reaproveitado na Meta Conversions API para deduplicar
- * com este mesmo disparo do Pixel (fbq eventID).
+ * Eventos de formulário serão configurados separadamente no GTM.
  */
 export function trackAnaliseProjetoLead(params?: Params, eventId?: string) {
-  ga("generate_lead", params)
-  pixel(
-    "Lead",
-    {
-      content_name: "Análise de Projeto",
-      ...params,
-    },
-    eventId ? { eventID: eventId } : undefined,
-  )
+  void params
+  void eventId
 }
 
 /**
  * Visualização da página /criacao-de-sites — evento de topo de funil para
- * mensuração de campanhas de Google Ads.
+ * mensuração dentro do GTM.
  */
 export function trackCriacaoSitesView() {
   pushDataLayerEvent("criacao_sites_view")
-  ga("criacao_sites_view")
 }
 
 /**
  * Conversão principal da landing page /criacao-de-sites: envio bem-sucedido
  * do formulário curto de orçamento. Disparado somente após confirmação do
  * backend — nunca ao simples clique no botão.
- * GA4: generate_lead  |  Meta: Lead  |  dataLayer: lead_form_submit
- * @param eventId event_id reaproveitado na Meta Conversions API para deduplicar
- * com este mesmo disparo do Pixel (fbq eventID).
+ * Eventos de formulário serão configurados separadamente no GTM.
  */
 export function trackOrcamentoSiteLead(params?: Params, eventId?: string) {
-  pushDataLayerEvent("lead_form_submit", params)
-  ga("generate_lead", params)
-  pixel(
-    "Lead",
-    {
-      content_name: "Orçamento Criação de Site",
-      ...params,
-    },
-    eventId ? { eventID: eventId } : undefined,
-  )
+  void params
+  void eventId
 }

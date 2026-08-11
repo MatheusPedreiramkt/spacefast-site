@@ -29,7 +29,7 @@ export function labelForSolucao(value: string): string {
   return SOLUCOES.find((s) => s.value === value)?.label ?? ""
 }
 
-// Payload enviado para a planilha (via webhook do Google Sheets) e usado na Meta CAPI.
+// Payload enviado para a planilha via webhook do Google Sheets.
 export interface AnaliseProjetoPayload {
   lead_id: string
   event_id: string
@@ -57,8 +57,8 @@ export function generateId(): string {
   return `id_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
 }
 
-// Retorna se a rota respondeu com sucesso — usado para só disparar o Pixel Lead
-// depois que /api/analise-projeto confirmar o registro do lead.
+// Retorna se a rota respondeu com sucesso depois que /api/analise-projeto
+// confirmar o registro do lead.
 export async function syncAnaliseProjeto(payload: AnaliseProjetoPayload): Promise<boolean> {
   try {
     const response = await fetch("/api/analise-projeto", {

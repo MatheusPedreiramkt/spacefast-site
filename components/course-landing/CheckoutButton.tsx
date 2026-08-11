@@ -1,11 +1,7 @@
 'use client'
 
 import { CHECKOUT_URL } from '@/lib/course-config'
-
-type WindowWithTracking = Window & {
-  gtag?: (...args: unknown[]) => void
-  fbq?: (...args: unknown[]) => void
-}
+import { pushDataLayerEvent } from '@/lib/analytics'
 
 function buildCheckoutUrl(base: string): string {
   if (typeof window === 'undefined') return base
@@ -21,9 +17,7 @@ function buildCheckoutUrl(base: string): string {
 
 function fireEvents() {
   try {
-    const win = window as WindowWithTracking
-    if (win.gtag) win.gtag('event', 'begin_checkout')
-    if (win.fbq) win.fbq('track', 'InitiateCheckout')
+    pushDataLayerEvent('begin_checkout')
   } catch {}
 }
 

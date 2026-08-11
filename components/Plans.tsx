@@ -5,7 +5,7 @@ import { plans } from "@/lib/data"
 import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { CheckCircle2, ArrowRight } from "lucide-react"
 import { stagger, scaleUp, VIEWPORT } from "@/lib/motion"
-import { trackPlanClick, trackWhatsAppClick } from "@/lib/analytics"
+import { trackWhatsAppClick } from "@/lib/analytics"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 export default function Plans() {
@@ -139,7 +139,6 @@ export default function Plans() {
                     rel="noopener noreferrer"
                     onClick={(e) => {
                       e.preventDefault()
-                      trackPlanClick(plan.name)
                       openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
                     }}
                     className={`group flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712] ${

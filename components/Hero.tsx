@@ -4,7 +4,7 @@ import { useRef, useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { ArrowRight, ChevronRight, Pause, Play, Volume2, VolumeX } from "lucide-react"
 import { EASE } from "@/lib/motion"
-import { trackCustomEvent, trackHeroVideoEvent } from "@/lib/analytics"
+import { trackHeroVideoEvent } from "@/lib/analytics"
 
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -226,7 +226,6 @@ export default function Hero() {
                 href="#situacao"
                 onClick={(e) => {
                   e.preventDefault()
-                  trackCustomEvent("cta_click", { source: "hero_solicitar_analise" })
                   document.querySelector("#situacao")?.scrollIntoView({ behavior: "smooth" })
                 }}
                 className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-[0.95rem] hover:from-blue-500 hover:to-cyan-400 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"

@@ -2,11 +2,8 @@ import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { SITE_URL, EMAIL, INSTAGRAM_URL } from "@/lib/constants"
-import { GoogleAnalytics } from "@/components/GoogleAnalytics"
 import { GoogleTagManager } from "@/components/GoogleTagManager"
-import MetaPixel from "@/components/MetaPixel"
 import ScrollTracker from "@/components/ScrollTracker"
-import CQCTracker from "@/components/CQCTracker"
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" })
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" })
@@ -129,8 +126,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {/* JSON-LD */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-        {/* Meta Pixel */}
-        <MetaPixel />
       </head>
 
       <body className="min-h-full flex flex-col bg-[#030712] text-white overflow-x-hidden">
@@ -146,13 +141,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
         {children}
 
-        <GoogleAnalytics />
-
         {/* Rastreia scroll 75% — componente invisível */}
         <ScrollTracker />
 
-        {/* Captura fbclid/UTMs/fbp/fbc para o CQC manual — componente invisível */}
-        <CQCTracker />
       </body>
     </html>
   )

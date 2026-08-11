@@ -4,8 +4,7 @@ import { ArrowRight, FileText, Globe2, Home, Megaphone, PanelsTopLeft } from "lu
 import Image from "next/image"
 import Link from "next/link"
 import { INSTAGRAM_URL, WHATSAPP_NUMBER } from "@/lib/constants"
-import { trackCustomEvent, trackInstagramClick, trackWhatsAppClick } from "@/lib/analytics"
-import { trackWhatsAppRedirect } from "@/lib/cqc"
+import { trackCustomEvent, trackInstagramClick } from "@/lib/analytics"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 
 const PORTFOLIO_URL = "https://www.behance.net/matheus_websites"
@@ -109,11 +108,6 @@ export default function ContatoPage() {
                 href={buildWhatsAppUrl(item.message)}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => {
-                  trackCustomEvent(item.eventName, { source: "instagram_bio" })
-                  trackWhatsAppClick(item.source, { content_name: item.title })
-                  trackWhatsAppRedirect()
-                }}
                 className="group flex min-h-[82px] w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.045] p-4 text-left shadow-xl shadow-black/18 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-400/30 hover:bg-white/[0.07] hover:shadow-blue-500/12 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712]"
               >
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20">

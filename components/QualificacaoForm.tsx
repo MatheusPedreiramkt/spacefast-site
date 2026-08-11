@@ -6,7 +6,7 @@ import { CheckCircle2, ArrowRight, Send } from "lucide-react"
 import { stagger, fadeUp, VIEWPORT, SECTION_ANIM, EASE } from "@/lib/motion"
 import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
-import { trackFormSubmit, trackAnaliseProjetoLead, pushDataLayerEvent } from "@/lib/analytics"
+import { trackFormSubmit, trackAnaliseProjetoLead } from "@/lib/analytics"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
 import {
   SITUACOES,
@@ -118,7 +118,6 @@ export default function QualificacaoForm() {
       ...attribution,
     }
 
-    pushDataLayerEvent("lead_submit", { form_name: "analise_projeto", ...attribution })
     trackFormSubmit("analise_projeto")
 
     void syncAnaliseProjeto(payload).then((ok) => {

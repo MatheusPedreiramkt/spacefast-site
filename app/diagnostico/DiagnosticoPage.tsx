@@ -4,7 +4,6 @@ import { useCallback, useEffect, useReducer, useRef } from "react"
 import DiagnosticoQuiz from "@/components/diagnostico/DiagnosticoQuiz"
 import DiagnosticoRedirecionando from "@/components/diagnostico/DiagnosticoRedirecionando"
 import {
-  pushDataLayerEvent,
   trackDiagnosticoLead,
   trackDiagnosticoViewContent,
   trackQualifiedLead,
@@ -89,13 +88,6 @@ function buildDiagnosticoEventParams(answers: Answers, score: number, classifica
     possui_site: answers.possui_site ?? "",
     prazo: answers.prazo ?? "",
     investimento: answers.investimento ?? "",
-  }
-}
-
-function buildDiagnosticoDataLayerParams(answers: Answers, score: number, classification: Classification) {
-  return {
-    ...buildDiagnosticoEventParams(answers, score, classification),
-    ...getAttributionParams(),
   }
 }
 
@@ -218,9 +210,6 @@ export default function DiagnosticoPage() {
         leadSubmittedRef.current = true
         const leadEventId = generateId()
         const attributionParams = getAttributionParams()
-        pushDataLayerEvent("lead_submit", attributionParams)
-        // Só dispara o Pixel Lead depois que a planilha/CAPI confirmar o registro
-        // do lead — evita Lead no Pixel sem o lead correspondente salvo.
         void syncDiagnosticoLead(buildPartialSheetPayload(leadId, leadEventId, state.nome, whatsapp)).then((ok) => {
           if (ok) trackDiagnosticoLead(attributionParams, leadEventId)
         })
@@ -248,7 +237,6 @@ export default function DiagnosticoPage() {
       const score = computeScore(finalAnswers)
       const classification = classify(score)
       const eventParams = buildDiagnosticoEventParams(finalAnswers, score, classification)
-      const dataLayerParams = buildDiagnosticoDataLayerParams(finalAnswers, score, classification)
       const qualifiedLeadEventId = generateId()
       const isQualified = classification === "morno" || classification === "quente"
 
@@ -265,7 +253,6 @@ export default function DiagnosticoPage() {
           ),
         ).then((ok) => {
           if (ok && isQualified) {
-            pushDataLayerEvent("qualified_lead", dataLayerParams)
             trackQualifiedLead(eventParams, qualifiedLeadEventId)
           }
         })

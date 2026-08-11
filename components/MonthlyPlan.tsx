@@ -6,7 +6,7 @@ import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/cons
 import { CheckCircle2, ArrowRight, Sparkles, TrendingUp } from "lucide-react"
 import { staggerFast, fadeUp, VIEWPORT, SECTION_ANIM } from "@/lib/motion"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
-import { trackPlanClick, trackWhatsAppClick } from "@/lib/analytics"
+import { trackWhatsAppClick } from "@/lib/analytics"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 export default function MonthlyPlan() {
@@ -92,7 +92,6 @@ export default function MonthlyPlan() {
                     rel="noopener noreferrer"
                     onClick={(e) => {
                       e.preventDefault()
-                      trackPlanClick("Plano Mensal")
                       openWhatsAppWithTracking(WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER)
                     }}
                   className="group flex items-center justify-center gap-2.5 w-full px-6 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold hover:from-blue-500 hover:to-cyan-400 transition-all shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-blue-400"

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Play, CheckCircle } from 'lucide-react'
+import { pushDataLayerEvent } from '@/lib/analytics'
 
 const stats = [
   { label: 'Pesquisa executada', detail: 'Google Maps API retorna empresas da região' },
@@ -13,9 +14,7 @@ const stats = [
 
 function fireVideoClick() {
   try {
-    const win = window as Window & { gtag?: (...a: unknown[]) => void; fbq?: (...a: unknown[]) => void }
-    if (win.gtag) win.gtag('event', 'video_play', { event_category: 'engagement' })
-    if (win.fbq) win.fbq('track', 'ViewContent', { content_name: 'demo_video' })
+    pushDataLayerEvent('video_play', { event_category: 'engagement' })
   } catch {}
 }
 
