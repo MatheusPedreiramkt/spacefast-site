@@ -21,6 +21,43 @@ const inputClass =
 
 const labelClass = "block text-sm font-medium text-gray-300 mb-1.5"
 
+const VALID_BRAZILIAN_DDDS = new Set([
+  "11", "12", "13", "14", "15", "16", "17", "18", "19",
+  "21", "22", "24", "27", "28",
+  "31", "32", "33", "34", "35", "37", "38",
+  "41", "42", "43", "44", "45", "46", "47", "48", "49",
+  "51", "53", "54", "55",
+  "61", "62", "63", "64", "65", "66", "67", "68", "69",
+  "71", "73", "74", "75", "77", "79",
+  "81", "82", "83", "84", "85", "86", "87", "88", "89",
+  "91", "92", "93", "94", "95", "96", "97", "98", "99",
+])
+
+function onlyDigits(value: string): string {
+  return value.replace(/\D/g, "")
+}
+
+export function isValidBrazilianMobile(raw: string): boolean {
+  const digits = onlyDigits(raw)
+  if (digits.length !== 11) return false
+
+  const ddd = digits.slice(0, 2)
+  const subscriberNumber = digits.slice(2)
+  if (!VALID_BRAZILIAN_DDDS.has(ddd)) return false
+  if (!subscriberNumber.startsWith("9")) return false
+
+  const uniqueFullDigits = new Set(digits)
+  if (uniqueFullDigits.size === 1) return false
+
+  const digitCounts = new Map<string, number>()
+  for (const digit of subscriberNumber) {
+    digitCounts.set(digit, (digitCounts.get(digit) ?? 0) + 1)
+  }
+
+  const highestRepeatedCount = Math.max(...digitCounts.values())
+  return highestRepeatedCount < 8
+}
+
 function formatWhatsApp(raw: string): string {
   const digits = raw.replace(/\D/g, "").slice(0, 11)
   const len = digits.length
@@ -77,9 +114,18 @@ export default function OrcamentoForm({
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
-    const whatsappDigits = whatsapp.replace(/\D/g, "")
-    if (!nome.trim() || whatsappDigits.length < 10 || !interesse) {
-      setError("Preencha nome, WhatsApp e o que você precisa para continuar.")
+    if (!nome.trim()) {
+      setError("Preencha seu nome para continuar.")
+      return
+    }
+
+    if (!isValidBrazilianMobile(whatsapp)) {
+      setError("Informe um celular brasileiro válido com DDD, no formato (00) 90000-0000.")
+      return
+    }
+
+    if (!interesse) {
+      setError("Selecione o que você precisa para continuar.")
       return
     }
     setError("")
