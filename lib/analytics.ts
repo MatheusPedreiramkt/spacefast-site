@@ -93,38 +93,8 @@ export function trackPlanClick(planName: string) {
 
 // ─── Funções genéricas reutilizáveis ─────────────────────────────────────────
 
-export function trackLead(params?: Params) {
-  void params
-}
-
-export function trackContact(params?: Params) {
-  void params
-}
-
-export function trackPageView() {
-  pushDataLayerEvent("page_view")
-}
-
 export function trackCustomEvent(eventName: string, params?: Params) {
   pushDataLayerEvent(eventName, params)
-}
-
-export function trackDiagnosticoViewContent() {
-  pushDataLayerEvent("diagnostico_view")
-}
-
-export function trackQuizStart(params?: Params) {
-  pushDataLayerEvent("quiz_start", params)
-}
-
-export function trackDiagnosticoLead(params?: Params, eventId?: string) {
-  void params
-  void eventId
-}
-
-export function trackQualifiedLead(params?: Params, eventId?: string) {
-  void params
-  void eventId
 }
 
 /**
