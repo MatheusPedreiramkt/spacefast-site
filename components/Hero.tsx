@@ -6,7 +6,7 @@ import { ArrowRight, ChevronRight, Pause, Play, Volume2, VolumeX } from "lucide-
 import { EASE } from "@/lib/motion"
 import { trackHeroVideoEvent } from "@/lib/analytics"
 
-export function HeroVideo() {
+export function HeroVideo({ compactMobile = false }: { compactMobile?: boolean } = {}) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [hasStarted, setHasStarted] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -61,13 +61,21 @@ export function HeroVideo() {
       />
 
       {/* Auxiliary phrase */}
-      <p className="relative text-center text-[13px] text-gray-500 mb-2.5 max-w-[280px] mx-auto">
+      <p
+        className={`relative text-center text-[13px] mb-2.5 max-w-[280px] mx-auto ${
+          compactMobile ? "text-gray-200 font-medium sm:text-gray-500 sm:font-normal" : "text-gray-500"
+        }`}
+      >
         Assista e entenda qual solução pode fazer sentido para sua empresa
       </p>
 
       {/* Video card */}
       <div
-        className="relative mx-auto w-[82vw] sm:w-[300px] lg:w-[320px] xl:w-[340px] [@media(max-height:800px)]:lg:w-[290px] max-w-[380px] aspect-[9/16] rounded-[28px] overflow-hidden border border-white/12 bg-[#0a0f1c]"
+        className={`relative mx-auto ${
+          compactMobile
+            ? "w-[68vw] max-w-[255px] sm:w-[300px] sm:max-w-[380px] rounded-[24px] sm:rounded-[28px]"
+            : "w-[82vw] max-w-[380px] sm:w-[300px] rounded-[28px]"
+        } lg:w-[320px] xl:w-[340px] [@media(max-height:800px)]:lg:w-[290px] aspect-[9/16] overflow-hidden border border-white/12 bg-[#0a0f1c]`}
         style={{
           boxShadow:
             "0 30px 70px -20px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.03), 0 0 45px rgba(6,182,212,0.10)",
