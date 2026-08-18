@@ -493,7 +493,10 @@ export default function CriacaoDeSitesPage() {
         <CTASEOFinal />
       </main>
       <Footer />
-      <WhatsAppButton compactMobile />
+      <WhatsAppButton
+        compactMobile
+        message="Olá! Vi a página de criação de sites da Space Fast e gostaria de solicitar um orçamento."
+      />
     </>
   )
 }
