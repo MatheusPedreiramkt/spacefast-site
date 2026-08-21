@@ -67,11 +67,13 @@ function buildWhatsAppMessage({
 export default function OrcamentoForm({
   title = "Receba um orçamento para seu site",
   subtitle = "Preencha os dados abaixo para abrir uma mensagem no WhatsApp.",
+  priceNote,
   defaultInterest = "",
   projectGoal = "",
 }: {
   title?: string
   subtitle?: string
+  priceNote?: string
   defaultInterest?: string
   projectGoal?: string
 } = {}) {
@@ -169,6 +171,11 @@ export default function OrcamentoForm({
           <p className="text-gray-400 text-[1.02rem] leading-relaxed">
             {subtitle}
           </p>
+          {priceNote && (
+            <p className="text-xs text-gray-500 mt-2">
+              {priceNote}
+            </p>
+          )}
         </motion.div>
 
         <motion.div

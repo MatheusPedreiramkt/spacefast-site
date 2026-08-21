@@ -36,7 +36,7 @@ const HERO_BENEFITS = [
   "Site responsivo para celular",
   "Integração com WhatsApp",
   "Design profissional",
-  "Orçamento sem compromisso",
+  "Investimento a partir de R$500",
 ] as const
 
 function HeroSEO() {
@@ -114,7 +114,7 @@ function HeroSEO() {
               className="order-4 text-[0.92rem] sm:text-[1.05rem] text-gray-300 sm:text-gray-400 leading-[1.45] sm:leading-[1.7] max-w-[460px] sm:max-w-[480px] mx-auto lg:mx-0"
             >
               <span className="sm:hidden">
-                Site profissional, rápido e integrado ao WhatsApp para transformar visitas em novos clientes.
+                Sites profissionais a partir de R$500, com estratégia e integração ao WhatsApp — sob medida para empresas que querem gerar novos clientes.
               </span>
               <span className="hidden sm:inline">
                 Tenha um site moderno, responsivo e integrado ao WhatsApp para apresentar sua
@@ -130,7 +130,7 @@ function HeroSEO() {
               {HERO_BENEFITS.map((benefit) => (
                 <li
                   key={benefit}
-                  className={`${benefit === "Orçamento sem compromisso" ? "hidden sm:flex" : "flex"} items-center gap-2 justify-center lg:justify-start`}
+                  className={`${benefit === "Investimento a partir de R$500" ? "hidden sm:flex" : "flex"} items-center gap-2 justify-center lg:justify-start`}
                 >
                   <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" aria-hidden />
                   <span className="text-gray-300 text-[0.82rem] sm:text-sm">{benefit}</span>
@@ -486,7 +486,7 @@ export default function CriacaoDeSitesPage() {
           }
           subtitle="Projetos reais, de segmentos diferentes, desenvolvidos com estratégia e design premium."
         />
-        <OrcamentoForm />
+        <OrcamentoForm priceNote="Projetos a partir de R$500 • Orçamento sem compromisso" />
         <Process />
         <DiferenciaisSection />
         <FaqSection />
