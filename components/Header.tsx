@@ -74,6 +74,8 @@ export default function Header({
   const [isServicesOpen, setIsServicesOpen] = useState(false)
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false)
   const servicesMenuRef = useRef<HTMLDivElement>(null)
+  const servicesButtonRef = useRef<HTMLButtonElement>(null)
+  const isRestoringServicesFocusRef = useRef(false)
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 24)
@@ -86,6 +88,15 @@ export default function Header({
     if (!isMenuOpen && !isServicesOpen && !isMobileServicesOpen) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        if (isServicesOpen && servicesMenuRef.current?.contains(document.activeElement)) {
+          // Restore focus before the panel becomes inert, without reopening it.
+          isRestoringServicesFocusRef.current = true
+          try {
+            servicesButtonRef.current?.focus({ preventScroll: true })
+          } finally {
+            isRestoringServicesFocusRef.current = false
+          }
+        }
         setIsMenuOpen(false)
         setIsServicesOpen(false)
         setIsMobileServicesOpen(false)
@@ -180,10 +191,13 @@ export default function Header({
               }}
             >
               <button
+                ref={servicesButtonRef}
                 type="button"
                 className="group inline-flex items-center gap-1.5 px-3.5 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all duration-150 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:rounded-lg"
                 onClick={() => setIsServicesOpen((v) => !v)}
-                onFocus={() => setIsServicesOpen(true)}
+                onFocus={() => {
+                  if (!isRestoringServicesFocusRef.current) setIsServicesOpen(true)
+                }}
                 aria-haspopup="true"
                 aria-expanded={isServicesOpen}
                 aria-controls="services-menu"
@@ -196,13 +210,15 @@ export default function Header({
               </button>
 
               <AnimatePresence>
-                {isServicesOpen && (
                   <motion.div
                     id="services-menu"
                     aria-label="Serviços SpaceFast"
-                    initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                    aria-hidden={!isServicesOpen}
+                    inert={!isServicesOpen}
+                    initial={{ opacity: 0, y: 8, scale: 0.98, visibility: "hidden" }}
+                    animate={isServicesOpen
+                      ? { opacity: 1, y: 0, scale: 1, visibility: "visible" }
+                      : { opacity: 0, y: 6, scale: 0.98, transitionEnd: { visibility: "hidden" } }}
                     transition={{ duration: 0.18, ease: EASE }}
                     className="absolute left-1/2 top-full mt-3 w-[380px] -translate-x-1/2 rounded-2xl border border-white/10 bg-[#030712]/92 p-2 shadow-2xl shadow-black/35 backdrop-blur-2xl"
                   >
@@ -256,7 +272,6 @@ export default function Header({
                       })}
                     </div>
                   </motion.div>
-                )}
               </AnimatePresence>
             </div>
           </nav>

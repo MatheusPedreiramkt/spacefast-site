@@ -32,22 +32,12 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: "SpaceFast",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "SpaceFast — Criação de Sites Profissionais para Empresas",
-        type: "image/jpeg",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Criação de Sites Profissionais para Empresas | SpaceFast",
     description:
       "Criação de sites profissionais, rápidos, responsivos e estratégicos para empresas que querem transmitir credibilidade e gerar novos contatos.",
-    images: ["/og-image.jpg"],
     creator: "@spacefastmkt",
   },
   robots: {
@@ -98,7 +88,6 @@ const jsonLd = {
       url: SITE_URL,
       email: EMAIL,
       priceRange: "$$",
-      image: `${SITE_URL}/og-image.jpg`,
       address: { "@type": "PostalAddress", addressCountry: "BR" },
     },
     {

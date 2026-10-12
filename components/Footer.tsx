@@ -7,18 +7,18 @@ import { trackWhatsAppClick, trackInstagramClick } from "@/lib/analytics"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 const QUICK_LINKS = [
-  { label: "Início", href: "#inicio" },
-  { label: "Serviços", href: "#servicos" },
-  { label: "Portfólio", href: "#portfolio" },
-  { label: "Planos", href: "#planos" },
-  { label: "Processo", href: "#processo" },
-  { label: "Depoimentos", href: "#depoimentos" },
-  { label: "Contato", href: "#contato" },
+  { label: "Início", href: "/#inicio" },
+  { label: "Serviços", href: "/#servicos" },
+  { label: "Portfólio", href: "/#portfolio" },
+  { label: "Planos", href: "/criacao-de-sites#orcamento" },
+  { label: "Processo", href: "/criacao-de-sites#processo" },
+  { label: "Depoimentos", href: "/#depoimentos" },
+  { label: "Contato", href: "/contato" },
 ]
 
 const SERVICE_LINKS: { label: string; href?: string }[] = [
   { label: "Criação de sites", href: "/criacao-de-sites" },
-  { label: "Landing pages" },
+  { label: "Landing pages", href: "/landing-pages" },
   { label: "Google Ads" },
   { label: "Facebook & Instagram Ads" },
   { label: "SEO básico" },

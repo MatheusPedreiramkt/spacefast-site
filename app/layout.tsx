@@ -35,13 +35,11 @@ export const metadata: Metadata = {
     title: "SpaceFast | Sites Profissionais que Geram Clientes",
     description:
       "Agência digital premium. Sites rápidos, modernos e focados em conversão para empresas que querem crescer na internet.",
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "SpaceFast — Agência Digital Premium", type: "image/jpeg" }],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "SpaceFast | Sites Profissionais que Geram Clientes",
     description: "Agência digital premium. Sites rápidos, modernos e focados em conversão.",
-    images: ["/og-image.jpg"],
     creator: "@spacefastmkt",
   },
   robots: {
@@ -56,8 +54,7 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [{ url: "/favicon.ico", sizes: "any" }, { url: "/icon.svg", type: "image/svg+xml" }],
-    apple: "/apple-touch-icon.png",
+    icon: [{ url: "/favicon.ico", sizes: "any" }],
   },
 }
 
@@ -91,7 +88,6 @@ const jsonLd = {
       url: SITE_URL,
       email: EMAIL,
       priceRange: "$$",
-      image: `${SITE_URL}/og-image.jpg`,
       address: { "@type": "PostalAddress", addressCountry: "BR" },
       openingHoursSpecification: { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday"], opens: "09:00", closes: "18:00" },
       hasOfferCatalog: {

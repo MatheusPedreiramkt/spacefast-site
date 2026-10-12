@@ -20,21 +20,11 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: "SpaceFast",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "SpaceFast — Sites, Landing Pages e Anúncios",
-        type: "image/jpeg",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Fale com a SpaceFast | Sites, Landing Pages e Anúncios",
     description: "Escolha o serviço ideal para sua empresa e fale diretamente com a SpaceFast.",
-    images: ["/og-image.jpg"],
     creator: "@spacefastmkt",
   },
   robots: {

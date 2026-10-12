@@ -45,7 +45,7 @@ const ITEMS: SolutionCard[] = [
 
 export default function Solutions() {
   return (
-    <section className="relative py-16 lg:py-20 bg-[#030712] overflow-hidden">
+    <section id="servicos" className="relative py-16 lg:py-20 bg-[#030712] overflow-hidden">
       <div className="absolute inset-0 bg-dots opacity-25" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/7 to-transparent" />
 
