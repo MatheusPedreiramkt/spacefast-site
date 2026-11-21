@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { OG_IMAGE } from "@/lib/seo"
-import { SITE_URL, EMAIL } from "@/lib/constants"
+import { SITE_URL } from "@/lib/constants"
 import SistemasPersonalizadosPage from "./SistemasPersonalizadosPage"
 import { FAQ_ITEMS } from "./faq"
 
@@ -67,29 +67,10 @@ const jsonLd = {
       name: "Sistemas Personalizados para Empresas",
       description:
         "Desenvolvimento de sistemas personalizados para organizar processos, centralizar informações, automatizar tarefas e melhorar a gestão empresarial.",
-      provider: {
-        "@type": "Organization",
-        "@id": `${SITE_URL}/#organization`,
-        name: "SpaceFast",
-        url: SITE_URL,
-      },
+      provider: { "@id": `${SITE_URL}/#organization` },
       serviceType: "Custom Software Development",
       areaServed: { "@type": "Country", name: "Brasil" },
       url: PAGE_URL,
-      offers: {
-        "@type": "Offer",
-        url: PAGE_URL,
-        priceCurrency: "BRL",
-        availability: "https://schema.org/InStock",
-        seller: { "@type": "Organization", name: "SpaceFast" },
-      },
-    },
-    {
-      "@type": "Organization",
-      "@id": `${SITE_URL}/#organization`,
-      name: "SpaceFast",
-      url: SITE_URL,
-      email: EMAIL,
     },
     {
       "@type": "WebPage",

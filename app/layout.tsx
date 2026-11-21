@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
-import { SITE_URL, EMAIL, INSTAGRAM_URL } from "@/lib/constants"
+import { SITE_URL, EMAIL, INSTAGRAM_URL, WHATSAPP_NUMBER } from "@/lib/constants"
 import { GoogleTagManager } from "@/components/GoogleTagManager"
 import ScrollTracker from "@/components/ScrollTracker"
 
@@ -70,36 +70,35 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      // Somente dados publicados no próprio site: nome, URL, logo, e-mail,
+      // WhatsApp, Instagram, fundador (citado no hero) e atendimento no Brasil.
+      // Sem endereço, CNPJ, horário ou avaliações até serem confirmados.
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
       name: "SpaceFast",
       url: SITE_URL,
-      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png`, width: 512, height: 512 },
-      description: "Agência digital especializada em criação de sites profissionais, landing pages, Google Ads, Facebook Ads e marketing digital.",
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png`, width: 628, height: 110 },
+      description:
+        "Criação de sites profissionais, landing pages, sistemas personalizados e gestão de anúncios para empresas.",
       email: EMAIL,
       sameAs: [INSTAGRAM_URL],
-      contactPoint: { "@type": "ContactPoint", contactType: "customer service", availableLanguage: "Portuguese", email: EMAIL },
-    },
-    {
-      "@type": "LocalBusiness",
-      "@id": `${SITE_URL}/#localbusiness`,
-      name: "SpaceFast",
-      description: "Agência digital premium especializada em criação de sites profissionais, landing pages, gestão de anúncios e marketing digital.",
-      url: SITE_URL,
-      email: EMAIL,
-      priceRange: "$$",
-      address: { "@type": "PostalAddress", addressCountry: "BR" },
-      openingHoursSpecification: { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday"], opens: "09:00", closes: "18:00" },
+      founder: { "@type": "Person", name: "Matheus Pedreira", jobTitle: "Fundador" },
+      areaServed: { "@type": "Country", name: "Brasil" },
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer service",
+        telephone: `+${WHATSAPP_NUMBER}`,
+        email: EMAIL,
+        availableLanguage: "Portuguese",
+      },
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Serviços SpaceFast",
         itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Criação de Sites Profissionais" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Landing Pages" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Google Ads" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Facebook e Instagram Ads" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "SEO" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Pacote Mensal de Marketing" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Criação de Sites Profissionais", url: `${SITE_URL}/criacao-de-sites` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Criação de Landing Pages", url: `${SITE_URL}/landing-pages` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Sistemas Personalizados", url: `${SITE_URL}/sistemas-personalizados` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Gestão de anúncios no Google Ads, Facebook e Instagram" } },
         ],
       },
     },

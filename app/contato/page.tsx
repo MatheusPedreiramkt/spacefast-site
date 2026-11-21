@@ -43,6 +43,33 @@ export const metadata: Metadata = {
   },
 }
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "@id": `${PAGE_URL}/#webpage`,
+      url: PAGE_URL,
+      name: "Fale com a SpaceFast",
+      isPartOf: { "@id": `${SITE_URL}/#website` },
+      about: { "@id": `${SITE_URL}/#organization` },
+      inLanguage: "pt-BR",
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Início", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Contato", item: PAGE_URL },
+      ],
+    },
+  ],
+}
+
 export default function Page() {
-  return <ContatoPage />
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <ContatoPage />
+    </>
+  )
 }

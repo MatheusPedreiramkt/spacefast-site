@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { preload } from "react-dom"
 import { OG_IMAGE } from "@/lib/seo"
-import { SITE_URL, EMAIL } from "@/lib/constants"
+import { SITE_URL } from "@/lib/constants"
 import CriacaoDeSitesPage from "./CriacaoDeSitesPage"
 import { FAQ_ITEMS } from "./faq"
 
@@ -66,40 +66,18 @@ const jsonLd = {
       name: "Criação de Sites Profissionais",
       description:
         "Desenvolvimento de sites profissionais, rápidos, responsivos e otimizados para SEO, para empresas de qualquer segmento.",
-      provider: {
-        "@type": "Organization",
-        "@id": `${SITE_URL}/#organization`,
-        name: "SpaceFast",
-        url: SITE_URL,
-      },
+      provider: { "@id": `${SITE_URL}/#organization` },
       serviceType: "Web Design and Development",
       areaServed: { "@type": "Country", name: "Brasil" },
       url: PAGE_URL,
+      // "Investimento a partir de R$500" é exibido no hero e no FAQ desta página.
       offers: {
         "@type": "Offer",
         url: PAGE_URL,
         priceCurrency: "BRL",
-        availability: "https://schema.org/InStock",
-        seller: { "@type": "Organization", name: "SpaceFast" },
+        priceSpecification: { "@type": "PriceSpecification", minPrice: 500, priceCurrency: "BRL" },
+        seller: { "@id": `${SITE_URL}/#organization` },
       },
-    },
-    {
-      "@type": "LocalBusiness",
-      "@id": `${SITE_URL}/#localbusiness`,
-      name: "SpaceFast",
-      description:
-        "Agência especializada em criação de sites profissionais para empresas de qualquer segmento.",
-      url: SITE_URL,
-      email: EMAIL,
-      priceRange: "$$",
-      address: { "@type": "PostalAddress", addressCountry: "BR" },
-    },
-    {
-      "@type": "Organization",
-      "@id": `${SITE_URL}/#organization`,
-      name: "SpaceFast",
-      url: SITE_URL,
-      email: EMAIL,
     },
     {
       "@type": "BreadcrumbList",
