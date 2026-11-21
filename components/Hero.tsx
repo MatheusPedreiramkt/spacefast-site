@@ -292,8 +292,8 @@ export default function Hero() {
 
           {/* ── Right: Visual ──────────────────────────────────────────────── */}
           <motion.div
-            initial={prefersReduced ? undefined : { opacity: 0, x: 32, scale: 0.97 }}
-            animate={prefersReduced ? undefined : { opacity: 1, x: 0, scale: 1 }}
+            initial={prefersReduced ? undefined : { x: 32, scale: 0.97 }}
+            animate={prefersReduced ? undefined : { x: 0, scale: 1 }}
             transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
             className="relative"
           >

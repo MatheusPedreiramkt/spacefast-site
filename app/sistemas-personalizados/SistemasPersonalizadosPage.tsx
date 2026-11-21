@@ -303,8 +303,8 @@ function HeroSection() {
           transition: { duration: 0.55, delay, ease: EASE },
         }
 
-  // H1 sem fade a partir de opacity 0: o texto fica visível já no HTML do
-  // servidor (candidato a LCP), mantendo apenas o deslize de entrada.
+  // Sem fade a partir de opacity 0 nos candidatos a LCP do hero (H1, subtítulo,
+  // vídeo): visíveis já no HTML do servidor, mantendo apenas o deslize de entrada.
   const slide = (delay = 0) =>
     prefersReduced
       ? {}
@@ -341,7 +341,7 @@ function HeroSection() {
           </motion.h1>
 
           <motion.p
-            {...anim(0.16)}
+            {...slide(0.16)}
             className="mx-auto mt-5 max-w-[20rem] text-[0.98rem] leading-[1.7] text-gray-400 sm:max-w-[620px] sm:text-[1.04rem] lg:mx-0"
           >
             Criamos sistemas personalizados para organizar processos, centralizar informações, automatizar tarefas

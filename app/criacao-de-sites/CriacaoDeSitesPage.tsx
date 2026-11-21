@@ -51,8 +51,8 @@ function HeroSEO() {
           transition: { duration: 0.55, delay, ease: EASE },
         }
 
-  // H1 sem fade a partir de opacity 0: o texto fica visível já no HTML do
-  // servidor (candidato a LCP), mantendo apenas o deslize de entrada.
+  // Sem fade a partir de opacity 0 nos candidatos a LCP do hero (H1, subtítulo,
+  // vídeo): visíveis já no HTML do servidor, mantendo apenas o deslize de entrada.
   const slide = (delay = 0) =>
     prefersReduced
       ? {}
@@ -110,8 +110,8 @@ function HeroSEO() {
 
             {/* Mobile video */}
             <motion.div
-              initial={prefersReduced ? undefined : { opacity: 0, y: 16, scale: 0.98 }}
-              animate={prefersReduced ? undefined : { opacity: 1, y: 0, scale: 1 }}
+              initial={prefersReduced ? undefined : { y: 16, scale: 0.98 }}
+              animate={prefersReduced ? undefined : { y: 0, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.14, ease: EASE }}
               className="order-3 -my-0.5 lg:hidden"
             >
@@ -120,7 +120,7 @@ function HeroSEO() {
 
             {/* Subtitle */}
             <motion.p
-              {...anim(0.18)}
+              {...slide(0.18)}
               className="order-4 text-[0.92rem] sm:text-[1.05rem] text-gray-300 sm:text-gray-400 leading-[1.45] sm:leading-[1.7] max-w-[460px] sm:max-w-[480px] mx-auto lg:mx-0"
             >
               <span className="sm:hidden">
@@ -182,8 +182,8 @@ function HeroSEO() {
 
           {/* Desktop visual */}
           <motion.div
-            initial={prefersReduced ? undefined : { opacity: 0, x: 32, scale: 0.97 }}
-            animate={prefersReduced ? undefined : { opacity: 1, x: 0, scale: 1 }}
+            initial={prefersReduced ? undefined : { x: 32, scale: 0.97 }}
+            animate={prefersReduced ? undefined : { x: 0, scale: 1 }}
             transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
             className="relative hidden lg:block"
           >
