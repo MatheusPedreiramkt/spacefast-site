@@ -171,7 +171,7 @@ const jsonLd = {
 export default function Page() {
   // Poster do vídeo do Hero é o elemento de LCP nesta página — adianta o
   // download com prioridade alta, antes do JS de hidratação competir por banda.
-  preload("/hero-video-poster.jpg", { as: "image", fetchPriority: "high" })
+  preload("/hero-video-poster.webp", { as: "image", type: "image/webp", fetchPriority: "high" })
 
   return (
     <>

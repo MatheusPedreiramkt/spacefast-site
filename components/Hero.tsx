@@ -91,7 +91,7 @@ export function HeroVideo({
       >
         <video
           ref={videoRef}
-          poster="/hero-video-poster.jpg"
+          poster="/hero-video-poster.webp"
           preload="none"
           playsInline
           muted={isMuted}
