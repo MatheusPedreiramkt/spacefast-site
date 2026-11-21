@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { preload } from "react-dom"
 import { SITE_URL, EMAIL } from "@/lib/constants"
 import CriacaoDeSitesPage from "./CriacaoDeSitesPage"
+import { FAQ_ITEMS } from "./faq"
 
 const PAGE_URL = `${SITE_URL}/criacao-de-sites`
 
@@ -106,64 +107,11 @@ const jsonLd = {
     },
     {
       "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "Quanto custa um site?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Nossos projetos de criação de site começam a partir de R$500, com o valor final definido conforme as funcionalidades e o escopo do seu projeto. Solicite um orçamento gratuito e sem compromisso pelo formulário desta página.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Em quanto tempo o site fica pronto?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "O prazo varia conforme a complexidade do projeto. Assim que enviamos o orçamento, você já recebe um cronograma claro, para saber exatamente quando o site ficará pronto.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "O site funciona no celular?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Sim. Todos os sites são 100% responsivos e desenvolvidos com abordagem mobile-first, garantindo uma boa experiência em celular, tablet e computador.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "O site terá botão para WhatsApp?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Sim. Todo site sai com botão de WhatsApp integrado e CTAs estratégicos posicionados ao longo da página, para transformar visitantes em conversas reais com sua empresa.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Preciso já possuir domínio?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Não. Se você ainda não tem domínio nem hospedagem, nós te orientamos e ajudamos a providenciar tudo durante o processo de criação do site.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Posso solicitar alterações?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Sim. Depois que o site é entregue, você recebe orientações para atualizar textos e informações, além de contar com suporte direto para ajustes.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Vocês atendem empresas de todo o Brasil?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Sim. Atendemos empresas de todo o Brasil — todo o processo de criação de site é feito remotamente, do orçamento até a entrega.",
-          },
-        },
-      ],
+      mainEntity: FAQ_ITEMS.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer },
+      })),
     },
   ],
 }

@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useId, useState } from "react"
 import Link from "next/link"
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import {
   ArrowRight,
   ChevronRight,
@@ -27,6 +27,8 @@ import WhatsAppButton from "@/components/WhatsAppButton"
 import { WhatsAppSVG } from "@/components/ui/WhatsAppSVG"
 import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { stagger, fadeUp, VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
+import { FaqPanel } from "@/components/ui/FaqPanel"
+import { FAQ_ITEMS } from "./faq"
 import { trackCriacaoSitesView } from "@/lib/analytics"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
 
@@ -259,46 +261,9 @@ function DiferenciaisSection() {
 
 // ─── Section: FAQ ───────────────────────────────────────────────────────────
 
-const FAQ_ITEMS = [
-  {
-    question: "Quanto custa um site?",
-    answer:
-      "Nossos projetos de criação de site começam a partir de R$500, com o valor final definido conforme as funcionalidades e o escopo do seu projeto. Solicite um orçamento gratuito e sem compromisso pelo formulário desta página.",
-  },
-  {
-    question: "Em quanto tempo o site fica pronto?",
-    answer:
-      "O prazo varia conforme a complexidade do projeto. Assim que enviamos o orçamento, você já recebe um cronograma claro, para saber exatamente quando o site ficará pronto.",
-  },
-  {
-    question: "O site funciona no celular?",
-    answer:
-      "Sim. Todos os sites são 100% responsivos e desenvolvidos com abordagem mobile-first, garantindo uma boa experiência em celular, tablet e computador.",
-  },
-  {
-    question: "O site terá botão para WhatsApp?",
-    answer:
-      "Sim. Todo site sai com botão de WhatsApp integrado e CTAs estratégicos posicionados ao longo da página, para transformar visitantes em conversas reais com sua empresa.",
-  },
-  {
-    question: "Preciso já possuir domínio?",
-    answer:
-      "Não. Se você ainda não tem domínio nem hospedagem, nós te orientamos e ajudamos a providenciar tudo durante o processo de criação do site.",
-  },
-  {
-    question: "Posso solicitar alterações?",
-    answer:
-      "Sim. Depois que o site é entregue, você recebe orientações para atualizar textos e informações, além de contar com suporte direto para ajustes.",
-  },
-  {
-    question: "Vocês atendem empresas de todo o Brasil?",
-    answer:
-      "Sim. Atendemos empresas de todo o Brasil — todo o processo de criação de site é feito remotamente, do orçamento até a entrega.",
-  },
-] as const
-
 function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const faqId = useId()
 
   return (
     <section className="relative py-20 lg:py-28 bg-[#030712] overflow-hidden">
@@ -346,6 +311,8 @@ function FaqSection() {
         >
           {FAQ_ITEMS.map((faq, i) => {
             const isOpen = openIndex === i
+            const buttonId = `${faqId}-q${i}`
+            const panelId = `${faqId}-a${i}`
             return (
               <div
                 key={i}
@@ -357,9 +324,11 @@ function FaqSection() {
               >
                 <button
                   type="button"
+                  id={buttonId}
                   className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-inset rounded-2xl"
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   aria-expanded={isOpen}
+                  aria-controls={panelId}
                 >
                   <span className="text-white font-medium text-sm leading-snug">
                     {faq.question}
@@ -378,21 +347,11 @@ function FaqSection() {
                   </motion.div>
                 </button>
 
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.28, ease: EASE }}
-                      className="overflow-hidden"
-                    >
-                      <p className="px-6 pb-5 text-gray-400 text-sm leading-[1.75]">
-                        {faq.answer}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <FaqPanel id={panelId} labelledBy={buttonId} isOpen={isOpen} durationMs={280}>
+                  <p className="px-6 pb-5 text-gray-400 text-sm leading-[1.75]">
+                    {faq.answer}
+                  </p>
+                </FaqPanel>
               </div>
             )
           })}

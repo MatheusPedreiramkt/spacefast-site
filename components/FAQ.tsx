@@ -1,15 +1,17 @@
 "use client"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useId, useState } from "react"
+import { motion } from "framer-motion"
 import { faqItems } from "@/lib/data"
 import { WHATSAPP_URL, WHATSAPP_MESSAGE_TEXT, WHATSAPP_NUMBER } from "@/lib/constants"
 import { ChevronDown } from "lucide-react"
+import { FaqPanel } from "@/components/ui/FaqPanel"
 import { VIEWPORT, EASE, SECTION_ANIM } from "@/lib/motion"
 import { openWhatsAppWithTracking } from "@/lib/cqc"
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const faqId = useId()
 
   return (
     <section className="relative py-20 lg:py-32 overflow-hidden">
@@ -55,9 +57,12 @@ export default function FAQ() {
           transition={{ duration: 0.65, delay: 0.12 }}
           className="max-w-3xl mx-auto space-y-2.5"
         >
-          {/* índices 0,1,2,5 — as 4 perguntas mais relevantes para conversão */}
-          {faqItems.filter((_, i) => [0, 1, 2, 5].includes(i)).map((faq, i) => {
+          {/* índices 0,1,2,4. O item 5 (pacote mensal R$897) fica fora até o preço e o
+              escopo serem validados; o item 4 (gestão de anúncios) é serviço ativo. */}
+          {faqItems.filter((_, i) => [0, 1, 2, 4].includes(i)).map((faq, i) => {
             const isOpen = openIndex === i
+            const buttonId = `${faqId}-q${i}`
+            const panelId = `${faqId}-a${i}`
             return (
               <div
                 key={i}
@@ -69,9 +74,11 @@ export default function FAQ() {
               >
                 <button
                   type="button"
+                  id={buttonId}
                   className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-inset rounded-2xl"
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   aria-expanded={isOpen}
+                  aria-controls={panelId}
                 >
                   <span className="text-white font-medium text-sm leading-snug">{faq.question}</span>
                   <motion.div
@@ -86,21 +93,11 @@ export default function FAQ() {
                   </motion.div>
                 </button>
 
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.28, ease: EASE }}
-                      className="overflow-hidden"
-                    >
-                      <p className="px-6 pb-5 text-gray-400 text-sm leading-[1.75]">
-                        {faq.answer}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <FaqPanel id={panelId} labelledBy={buttonId} isOpen={isOpen} durationMs={280}>
+                  <p className="px-6 pb-5 text-gray-400 text-sm leading-[1.75]">
+                    {faq.answer}
+                  </p>
+                </FaqPanel>
               </div>
             )
           })}

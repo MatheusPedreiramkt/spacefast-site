@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useId, useState } from "react"
 import Link from "next/link"
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import {
   ArrowDown,
   ArrowRight,
@@ -36,6 +36,8 @@ import Footer from "@/components/Footer"
 import OrcamentoForm from "@/components/OrcamentoForm"
 import WhatsAppButton from "@/components/WhatsAppButton"
 import { SECTION_ANIM, VIEWPORT, EASE, fadeUp, stagger } from "@/lib/motion"
+import { FaqPanel } from "@/components/ui/FaqPanel"
+import { FAQ_ITEMS } from "./faq"
 
 const PAINS = [
   "Várias planilhas para controlar partes diferentes da operação.",
@@ -157,39 +159,6 @@ const QUALIFICATION = [
   "Financeiro/operacional",
   "Automação de tarefas",
   "Outro processo",
-] as const
-
-const FAQ_ITEMS = [
-  {
-    question: "O que é um sistema personalizado?",
-    answer:
-      "É um sistema desenvolvido para atender processos específicos da empresa, como controle de clientes, propostas, tarefas, financeiro, operação ou acompanhamento interno.",
-  },
-  {
-    question: "Qual a diferença entre um sistema pronto e um sistema sob medida?",
-    answer:
-      "Um sistema pronto já nasce com regras definidas para muitos negócios. Um sistema sob medida é planejado em torno do processo real da sua empresa, quando há necessidades específicas.",
-  },
-  {
-    question: "Que tipos de sistemas vocês desenvolvem?",
-    answer:
-      "Podemos desenvolver CRMs personalizados, controles de orçamentos, dashboards, portais para clientes, gestão de tarefas, fluxos operacionais e automações conforme o escopo do projeto.",
-  },
-  {
-    question: "É possível integrar com ferramentas que minha empresa já utiliza?",
-    answer:
-      "Dependendo do projeto e das APIs disponíveis, podemos integrar com WhatsApp, e-mail, formulários, Google Sheets, meios de pagamento e outras ferramentas usadas pela empresa.",
-  },
-  {
-    question: "O sistema funciona pelo celular?",
-    answer:
-      "Sim. O sistema pode ser desenvolvido com experiência responsiva para uso no celular, tablet e computador, conforme a necessidade dos usuários.",
-  },
-  {
-    question: "Como é definido o valor de um sistema personalizado?",
-    answer:
-      "O valor depende das funcionalidades, quantidade de usuários, permissões, integrações, complexidade dos fluxos e nível de evolução previsto para o projeto.",
-  },
 ] as const
 
 function scrollToId(id: string) {
@@ -737,6 +706,7 @@ function QualificationSection({
 
 function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const faqId = useId()
 
   return (
     <section className="relative overflow-hidden bg-[#030712] py-20 lg:py-28">
@@ -751,30 +721,24 @@ function FaqSection() {
         <div className="mx-auto max-w-3xl space-y-2.5">
           {FAQ_ITEMS.map((faq, index) => {
             const isOpen = openIndex === index
+            const buttonId = `${faqId}-q${index}`
+            const panelId = `${faqId}-a${index}`
             return (
               <div key={faq.question} className="rounded-2xl border border-white/8 bg-white/[0.035]">
                 <button
                   type="button"
+                  id={buttonId}
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   className="flex w-full items-center justify-between gap-4 rounded-2xl px-6 py-5 text-left focus-visible:ring-2 focus-visible:ring-blue-400"
                   aria-expanded={isOpen}
+                  aria-controls={panelId}
                 >
                   <span className="text-sm font-semibold leading-snug text-white">{faq.question}</span>
                   <ChevronDown className={`h-4 w-4 shrink-0 text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`} aria-hidden />
                 </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.24, ease: EASE }}
-                      className="overflow-hidden"
-                    >
-                      <p className="px-6 pb-5 text-sm leading-[1.75] text-gray-400">{faq.answer}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <FaqPanel id={panelId} labelledBy={buttonId} isOpen={isOpen} durationMs={240}>
+                  <p className="px-6 pb-5 text-sm leading-[1.75] text-gray-400">{faq.answer}</p>
+                </FaqPanel>
               </div>
             )
           })}

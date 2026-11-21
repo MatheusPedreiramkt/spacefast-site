@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SITE_URL, EMAIL } from "@/lib/constants"
 import LandingPagesPage from "./LandingPagesPage"
+import { FAQ_ITEMS } from "./faq"
 
 const PAGE_URL = `${SITE_URL}/landing-pages`
 
@@ -55,39 +56,6 @@ export const metadata: Metadata = {
   },
 }
 
-const faqJsonLd = [
-  {
-    question: "O que é uma landing page?",
-    answer:
-      "Uma landing page é uma página criada para conduzir o visitante a uma ação específica, como solicitar orçamento, preencher um formulário, chamar no WhatsApp ou comprar.",
-  },
-  {
-    question: "Qual a diferença entre landing page e site?",
-    answer:
-      "O site apresenta a empresa de forma mais ampla, com várias informações e caminhos de navegação. A landing page tem foco em uma oferta ou campanha e reduz distrações para aumentar a conversão.",
-  },
-  {
-    question: "Posso usar a landing page no Google Ads?",
-    answer:
-      "Sim. Uma landing page pode ser estruturada para campanhas no Google Ads, alinhando anúncio, oferta, conteúdo e chamada para ação.",
-  },
-  {
-    question: "A landing page funciona no celular?",
-    answer:
-      "Sim. A página é planejada para boa experiência mobile, com leitura clara, carregamento rápido e botões de contato acessíveis.",
-  },
-  {
-    question: "É possível integrar com WhatsApp?",
-    answer:
-      "Sim. A landing page pode ter chamadas para WhatsApp, botões fixos e mensagens pré-preenchidas conforme a estratégia definida para o projeto.",
-  },
-  {
-    question: "Vocês configuram o rastreamento das conversões?",
-    answer:
-      "Quando faz parte do escopo do projeto, podemos configurar rastreamento com GTM, GA4, Meta Pixel e eventos importantes como cliques no WhatsApp e envio de formulários.",
-  },
-]
-
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -140,7 +108,7 @@ const jsonLd = {
     },
     {
       "@type": "FAQPage",
-      mainEntity: faqJsonLd.map((item) => ({
+      mainEntity: FAQ_ITEMS.map((item) => ({
         "@type": "Question",
         name: item.question,
         acceptedAnswer: {

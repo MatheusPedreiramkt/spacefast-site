@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useId, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import {
   ArrowDown,
   ArrowRight,
@@ -35,6 +35,8 @@ import OrcamentoForm from "@/components/OrcamentoForm"
 import WhatsAppButton from "@/components/WhatsAppButton"
 import { portfolioProjects } from "@/lib/data"
 import { SECTION_ANIM, VIEWPORT, EASE, fadeUp, stagger } from "@/lib/motion"
+import { FaqPanel } from "@/components/ui/FaqPanel"
+import { FAQ_ITEMS } from "./faq"
 
 const PROBLEMS = [
   "A página demora para carregar e perde visitantes antes da primeira leitura.",
@@ -104,39 +106,6 @@ const QUALIFICATION = [
   "Captar leads através de formulário",
   "Vender um produto ou serviço",
   "Usar em campanhas de Google ou Meta Ads",
-] as const
-
-const FAQ_ITEMS = [
-  {
-    question: "O que é uma landing page?",
-    answer:
-      "É uma página criada para uma ação específica, como solicitar orçamento, preencher um formulário, chamar no WhatsApp ou comprar. Ela reduz distrações e organiza a mensagem para conversão.",
-  },
-  {
-    question: "Qual a diferença entre landing page e site?",
-    answer:
-      "O site apresenta a empresa de forma ampla, com várias páginas e caminhos. A landing page é focada em uma oferta, campanha ou objetivo específico.",
-  },
-  {
-    question: "Posso usar a landing page no Google Ads?",
-    answer:
-      "Sim. A landing page pode ser estruturada para receber campanhas de Google Ads, mantendo coerência entre busca, anúncio, oferta e conversão.",
-  },
-  {
-    question: "A landing page funciona no celular?",
-    answer:
-      "Sim. A experiência mobile é parte central do projeto, porque grande parte dos cliques de campanhas vem do celular.",
-  },
-  {
-    question: "É possível integrar com WhatsApp?",
-    answer:
-      "Sim. Podemos incluir botões, chamadas e mensagens direcionadas para WhatsApp conforme a estratégia da página.",
-  },
-  {
-    question: "Vocês configuram o rastreamento das conversões?",
-    answer:
-      "Quando fizer parte do escopo, podem ser configurados GTM, GA4, Meta Pixel e eventos importantes, como cliques no WhatsApp e ações em formulários.",
-  },
 ] as const
 
 function scrollToId(id: string) {
@@ -727,6 +696,7 @@ function QualificationSection({
 
 function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const faqId = useId()
 
   return (
     <section className="relative overflow-hidden bg-[#030712] py-20 lg:py-28">
@@ -741,30 +711,24 @@ function FaqSection() {
         <div className="mx-auto max-w-3xl space-y-2.5">
           {FAQ_ITEMS.map((faq, index) => {
             const isOpen = openIndex === index
+            const buttonId = `${faqId}-q${index}`
+            const panelId = `${faqId}-a${index}`
             return (
               <div key={faq.question} className="rounded-2xl border border-white/8 bg-white/[0.035]">
                 <button
                   type="button"
+                  id={buttonId}
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   className="flex w-full items-center justify-between gap-4 rounded-2xl px-6 py-5 text-left focus-visible:ring-2 focus-visible:ring-blue-400"
                   aria-expanded={isOpen}
+                  aria-controls={panelId}
                 >
                   <span className="text-sm font-semibold leading-snug text-white">{faq.question}</span>
                   <ChevronDown className={`h-4 w-4 shrink-0 text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`} aria-hidden />
                 </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.24, ease: EASE }}
-                      className="overflow-hidden"
-                    >
-                      <p className="px-6 pb-5 text-sm leading-[1.75] text-gray-400">{faq.answer}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <FaqPanel id={panelId} labelledBy={buttonId} isOpen={isOpen} durationMs={240}>
+                  <p className="px-6 pb-5 text-sm leading-[1.75] text-gray-400">{faq.answer}</p>
+                </FaqPanel>
               </div>
             )
           })}
