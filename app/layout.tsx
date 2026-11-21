@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | SpaceFast",
   },
   description:
-    "Agência digital premium. Criamos sites rápidos, modernos e estratégicos para empresas que querem vender mais, gerar contatos e transmitir autoridade. Google Ads, Meta Ads, SEO e suporte incluso.",
+    "Criação de sites profissionais, landing pages, sistemas personalizados e gestão de anúncios para empresas. Rápidos, responsivos e integrados ao WhatsApp.",
   keywords: [
     "criação de sites profissionais", "agência digital", "landing page",
     "google ads", "facebook ads", "instagram ads", "marketing digital",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
       "Agência digital premium. Sites rápidos, modernos e focados em conversão para empresas que querem crescer na internet.",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "SpaceFast | Sites Profissionais que Geram Clientes",
     description: "Agência digital premium. Sites rápidos, modernos e focados em conversão.",
     creator: "@spacefastmkt",

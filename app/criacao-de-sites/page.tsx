@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { preload } from "react-dom"
+import { OG_IMAGE } from "@/lib/seo"
 import { SITE_URL, EMAIL } from "@/lib/constants"
 import CriacaoDeSitesPage from "./CriacaoDeSitesPage"
 import { FAQ_ITEMS } from "./faq"
@@ -9,7 +10,7 @@ const PAGE_URL = `${SITE_URL}/criacao-de-sites`
 export const metadata: Metadata = {
   title: "Criação de Sites Profissionais para Empresas",
   description:
-    "Criação de sites profissionais, rápidos, responsivos e estratégicos para empresas que querem transmitir credibilidade e gerar novos contatos. Conheça a SpaceFast.",
+    "Criação de sites profissionais, rápidos, responsivos e estratégicos para empresas que querem transmitir credibilidade e gerar novos contatos.",
   keywords: [
     "criação de sites",
     "criação de sites profissionais",
@@ -33,13 +34,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: "SpaceFast",
+    images: [OG_IMAGE],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Criação de Sites Profissionais para Empresas | SpaceFast",
     description:
       "Criação de sites profissionais, rápidos, responsivos e estratégicos para empresas que querem transmitir credibilidade e gerar novos contatos.",
     creator: "@spacefastmkt",
+    images: [OG_IMAGE],
   },
   robots: {
     index: true,

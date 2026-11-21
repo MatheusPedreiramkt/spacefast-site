@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { OG_IMAGE } from "@/lib/seo"
 import { SITE_URL, EMAIL } from "@/lib/constants"
 import SistemasPersonalizadosPage from "./SistemasPersonalizadosPage"
 import { FAQ_ITEMS } from "./faq"
@@ -35,12 +36,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: "SpaceFast",
+    images: [OG_IMAGE],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title,
     description,
     creator: "@spacefastmkt",
+    images: [OG_IMAGE],
   },
   robots: {
     index: true,
