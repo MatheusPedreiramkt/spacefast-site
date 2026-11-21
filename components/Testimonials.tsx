@@ -77,24 +77,8 @@ export default function Testimonials() {
           ))}
         </motion.div>
 
-        {/* Aggregate rating note */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={VIEWPORT}
-          transition={{ delay: 0.4, duration: 0.65 }}
-          className="mt-10 flex items-center justify-center gap-3"
-        >
-          <div className="flex gap-0.5" aria-hidden>
-            {Array.from({ length: 5 }).map((_, s) => (
-              <Star key={s} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            ))}
-          </div>
-          <p className="text-gray-500 text-sm">
-            <span className="text-white font-medium">5.0</span> de avaliação média · mais de{" "}
-            <span className="text-white font-medium">40</span> clientes atendidos
-          </p>
-        </motion.div>
+        {/* Nota agregada ("5.0 · mais de 40 clientes") removida até haver fonte
+            verificável, como avaliações do Perfil da Empresa no Google. */}
       </div>
     </section>
   )
