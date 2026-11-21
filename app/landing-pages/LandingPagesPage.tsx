@@ -250,6 +250,17 @@ function HeroSection() {
           transition: { duration: 0.55, delay, ease: EASE },
         }
 
+  // H1 sem fade a partir de opacity 0: o texto fica visível já no HTML do
+  // servidor (candidato a LCP), mantendo apenas o deslize de entrada.
+  const slide = (delay = 0) =>
+    prefersReduced
+      ? {}
+      : {
+          initial: { y: 18 },
+          animate: { y: 0 },
+          transition: { duration: 0.55, delay, ease: EASE },
+        }
+
   return (
     <section id="inicio" className="relative overflow-hidden bg-[#030712]">
       <div className="absolute inset-0 bg-grid bg-grid-fade opacity-50" />
@@ -265,7 +276,7 @@ function HeroSection() {
           </motion.div>
 
           <motion.h1
-            {...anim(0.08)}
+            {...slide(0.08)}
             className="mx-auto max-w-[18.5rem] text-[1.72rem] font-black leading-[1.12] tracking-tighter text-white sm:max-w-none sm:text-[3rem] sm:leading-[1.08] lg:mx-0 lg:text-[3.65rem]"
           >
             <span className="block sm:inline">Landing pages </span>

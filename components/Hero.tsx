@@ -183,6 +183,17 @@ export default function Hero() {
           transition: { duration: 0.55, delay, ease: EASE },
         }
 
+  // H1 sem fade a partir de opacity 0: o texto fica visível já no HTML do
+  // servidor (candidato a LCP), mantendo apenas o deslize de entrada.
+  const slideProps = (delay = 0) =>
+    prefersReduced
+      ? {}
+      : {
+          initial: { y: 18 },
+          animate: { y: 0 },
+          transition: { duration: 0.55, delay, ease: EASE },
+        }
+
   return (
     <section
       id="inicio"
@@ -221,7 +232,7 @@ export default function Hero() {
             </motion.div>
 
             {/* H1 */}
-            <motion.div {...animProps(0.1)}>
+            <motion.div {...slideProps(0.1)}>
               <h1 className="text-[2.6rem] sm:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem] font-black leading-[1.08] tracking-tighter">
                 <span className="text-white">Sua empresa precisa de um site</span>
                 <br />

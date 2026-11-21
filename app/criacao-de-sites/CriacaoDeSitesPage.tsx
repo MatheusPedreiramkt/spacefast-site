@@ -51,6 +51,17 @@ function HeroSEO() {
           transition: { duration: 0.55, delay, ease: EASE },
         }
 
+  // H1 sem fade a partir de opacity 0: o texto fica visível já no HTML do
+  // servidor (candidato a LCP), mantendo apenas o deslize de entrada.
+  const slide = (delay = 0) =>
+    prefersReduced
+      ? {}
+      : {
+          initial: { y: 18 },
+          animate: { y: 0 },
+          transition: { duration: 0.55, delay, ease: EASE },
+        }
+
   return (
     <section
       id="inicio"
@@ -84,17 +95,16 @@ function HeroSEO() {
             </motion.div>
 
             {/* H1 — headline com a keyword principal + preço acima da dobra */}
-            <motion.div {...anim(0.1)} className="order-2">
+            <motion.div {...slide(0.1)} className="order-2">
+              {/* Texto único: as quebras de linha do mobile vêm de <br> ocultos no desktop */}
               <h1 className="mx-auto text-[1.62rem] sm:max-w-none sm:text-[2.75rem] lg:text-[3.2rem] xl:text-[3.6rem] font-black leading-[1.08] sm:leading-[1.12] tracking-tighter lg:mx-0">
-                <span className="sm:hidden">
-                  <span className="block text-white">Sua empresa precisa</span>
-                  <span className="block text-white">de um site</span>
-                  <span className="block gradient-text-brand">que realmente gere</span>
-                  <span className="block gradient-text-brand">resultados?</span>
-                </span>
-                <span className="hidden sm:inline text-white">Sua empresa precisa de um site</span>
+                <span className="block sm:inline text-white">
+                  Sua empresa precisa<br className="sm:hidden" /> de um site
+                </span>{" "}
                 <br className="hidden sm:block" />
-                <span className="hidden sm:inline gradient-text-brand">que realmente gere resultados?</span>
+                <span className="block sm:inline gradient-text-brand">
+                  que realmente gere<br className="sm:hidden" /> resultados?
+                </span>
               </h1>
             </motion.div>
 
